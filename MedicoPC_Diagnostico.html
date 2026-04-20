@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Diagnóstico MedicoPC</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0b0b12;color:#e8e8f0;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;padding:20px}
+h1{font-size:18px;font-weight:700;color:#e8185a;margin-bottom:4px}
+.sub{font-size:12px;color:rgba(255,255,255,.35);margin-bottom:24px}
+.symptom-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:24px}
+.sym-btn{background:#1a1a26;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px 12px;cursor:pointer;text-align:left;transition:all .15s;color:#e8e8f0}
+.sym-btn:hover{border-color:#e8185a;background:#1f1f30}
+.sym-btn.active{border-color:#e8185a;background:rgba(232,24,90,.1)}
+.sym-icon{font-size:24px;margin-bottom:8px;display:block}
+.sym-name{font-size:12px;font-weight:600;display:block;margin-bottom:2px}
+.sym-desc{font-size:10px;color:rgba(255,255,255,.4);line-height:1.3}
+.tree{display:none}
+.tree.active{display:block}
+.q-card{background:#1a1a26;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px;margin-bottom:16px}
+.q-label{font-size:11px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.q-text{font-size:15px;font-weight:500;color:#e8e8f0;margin-bottom:16px;line-height:1.4}
+.options{display:flex;flex-direction:column;gap:8px}
+.opt-btn{background:#0f0f1a;border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 16px;cursor:pointer;text-align:left;font-size:13px;color:#e8e8f0;transition:all .15s}
+.opt-btn:hover{border-color:#e8185a;color:#fff}
+.result{background:#0f0f1a;border:1px solid rgba(0,200,130,.25);border-radius:14px;padding:20px;margin-bottom:16px}
+.result-title{font-size:16px;font-weight:700;color:#00c882;margin-bottom:6px}
+.result-diag{font-size:13px;color:rgba(255,255,255,.7);margin-bottom:16px;line-height:1.5}
+.tools-label{font-size:11px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.tool-tag{display:inline-block;background:rgba(29,63,206,.25);color:#7b9fff;font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;margin:3px}
+.urgency{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:6px;margin-bottom:12px}
+.urgency.alta{background:rgba(232,24,90,.2);color:#ff6b9e}
+.urgency.media{background:rgba(240,180,60,.15);color:#f0b43c}
+.urgency.baja{background:rgba(0,200,130,.15);color:#00c882}
+.action-row{display:flex;gap:8px;margin-top:16px}
+.btn-reset{background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:8px 16px;color:rgba(255,255,255,.5);font-size:12px;cursor:pointer}
+.btn-reset:hover{border-color:rgba(255,255,255,.35);color:#fff}
+.btn-new{background:#e8185a;border:none;border-radius:8px;padding:8px 16px;color:#fff;font-size:12px;font-weight:600;cursor:pointer}
+.breadcrumb{font-size:11px;color:rgba(255,255,255,.3);margin-bottom:16px}
+.breadcrumb span{color:rgba(255,255,255,.5)}
+</style>
+</head>
+<body>
+
+<h1>🩺 Diagnóstico MedicoPC</h1>
+<p class="sub">Selecciona el síntoma principal del cliente</p>
+
+<div class="symptom-grid" id="symptoms">
+<button class="sym-btn" onclick="startTree('lento')">
+<span class="sym-icon">🐢</span>
+<span class="sym-name">Va lento</span>
+<span class="sym-desc">PC tarda mucho en todo</span>
+</button>
+<button class="sym-btn" onclick="startTree('noarranca')">
+<span class="sym-icon">⚫</span>
+<span class="sym-name">No arranca</span>
+<span class="sym-desc">Pantalla negra, no inicia</span>
+</button>
+<button class="sym-btn" onclick="startTree('virus')">
+<span class="sym-icon">🦠</span>
+<span class="sym-name">Virus / Anuncios</span>
+<span class="sym-desc">Pop-ups, comportamiento raro</span>
+</button>
+<button class="sym-btn" onclick="startTree('bsod')">
+<span class="sym-icon">💙</span>
+<span class="sym-name">Pantalla azul</span>
+<span class="sym-desc">BSOD, reinicios repentinos</span>
+</button>
+<button class="sym-btn" onclick="startTree('calor')">
+<span class="sym-icon">🌡️</span>
+<span class="sym-name">Se calienta / apaga</span>
+<span class="sym-desc">Temperatura alta, apagados solos</span>
+</button>
+<button class="sym-btn" onclick="startTree('red')">
+<span class="sym-icon">📶</span>
+<span class="sym-name">Sin internet / red lenta</span>
+<span class="sym-desc">WiFi, ethernet, conexión</span>
+</button>
+<button class="sym-btn" onclick="startTree('disco')">
+<span class="sym-icon">💾</span>
+<span class="sym-name">Disco lleno / ruidoso</span>
+<span class="sym-desc">Sin espacio, ruidos mecánicos</span>
+</button>
+<button class="sym-btn" onclick="startTree('password')">
+<span class="sym-icon">🔐</span>
+<span class="sym-name">Contraseña olvidada</span>
+<span class="sym-desc">No puede entrar a Windows</span>
+</button>
+<button class="sym-btn" onclick="startTree('formateo')">
+<span class="sym-icon">🔄</span>
+<span class="sym-name">Quiere formatear</span>
+<span class="sym-desc">Reinstalar Windows desde cero</span>
+</button>
+<button class="sym-btn" onclick="startTree('archivos')">
+<span class="sym-icon">🗂️</span>
+<span class="sym-name">Archivos borrados</span>
+<span class="sym-desc">Fotos, documentos perdidos</span>
+</button>
+</div>
+
+<div id="tree-area"></div>
+
+<script>
+const TREES={
+lento:{
+steps:[
+{q:"¿Cuánto tiempo lleva lento?",opts:[{t:"Siempre fue lento",next:"lento_siempre"},{t:"Antes iba bien, empeoró",next:"lento_antes"}]},
+],
+lento_siempre:{
+steps:[{q:"¿Tiene SSD o HDD?",opts:[{t:"HDD (disco duro mecánico)",next:"r_ssd_upgrade"},{t:"SSD",next:"lento_ram"},{t:"No sé",next:"lento_check"}]}]
+},
+lento_antes:{
+steps:[{q:"¿Cuándo empeoró aproximadamente?",opts:[{t:"Tras instalar algo",next:"r_limpieza_software"},{t:"Solo con el tiempo",next:"lento_disco_check"},{t:"Después de un virus",next:"r_virus_lento"}]}]
+},
+lento_ram:{
+steps:[{q:"¿Cuánta RAM tiene?",opts:[{t:"4GB o menos",next:"r_ram_upgrade"},{t:"8GB o más",next:"r_limpieza_software"}]}]
+},
+lento_check:{result:true,title:"Revisar hardware base",urgency:"media",diag:"PC con specs bajas. Primero comprueba el tipo de disco y RAM para ver si vale la pena invertir o recomendar cambio de equipo.",tools:["CrystalDiskInfo","CrystalDiskMark","CPU-Z","HWiNFO64"]},
+lento_disco_check:{
+steps:[{q:"¿Uso de disco al 100% en el Administrador de tareas?",opts:[{t:"Sí, disco al 100%",next:"r_disco_100"},{t:"No, disco normal",next:"r_limpieza_software"}]}]
+},
+r_ssd_upgrade:{result:true,title:"Upgrade a SSD recomendado",urgency:"media",diag:"PC con HDD lento desde siempre. La solución más rentable es migrar a SSD. Clona el disco con Clonezilla, instala el SSD y el cliente nota el cambio como si fuera un PC nuevo.",tools:["CrystalDiskMark","Clonezilla","CrystalDiskInfo"]},
+r_limpieza_software:{result:true,title:"Limpieza de software y optimización",urgency:"baja",diag:"El PC se ha llenado de programas al inicio, basura, actualizaciones pendientes o malware. Limpieza completa: inicio de Windows, Malwarebytes, actualizaciones y revisión de programas instalados.",tools:["Malwarebytes portable","TreeSize Free","CCleaner portable"]},
+r_disco_100:{result:true,title:"Disco al 100% — revisar causas",urgency:"alta",diag:"Disco saturado al 100%. Causas: Windows Update atascado, antivirus escaneando, malware, o disco HDD muriendo. Revisa con CrystalDiskInfo primero.",tools:["CrystalDiskInfo","HWiNFO64","Malwarebytes portable"]},
+r_ram_upgrade:{result:true,title:"RAM insuficiente",urgency:"media",diag:"Con 4GB o menos en Windows 10/11 el sistema va sobrado de memoria siempre. Comprueba el tipo de RAM con CPU-Z y presupuesta ampliación.",tools:["CPU-Z","HWiNFO64"]},
+r_virus_lento:{result:true,title:"Malware causando lentitud",urgency:"alta",diag:"Probable malware activo consumiendo recursos. Escanea primero con Malwarebytes en modo seguro. Si no mejora, Kaspersky Rescue Disk offline.",tools:["Malwarebytes portable","Kaspersky Rescue Disk"]}
+},
+
+noarranca:{
+steps:[{q:"¿Qué ves en pantalla?",opts:[{t:"Pantalla completamente negra",next:"na_negro"},{t:"Logo de Windows y se queda colgado",next:"na_logo"},{t:"Mensaje de error texto",next:"r_boot_error"}]}],
+na_negro:{steps:[{q:"¿El PC enciende (luces, ventiladores)?",opts:[{t:"Sí enciende pero no hay imagen",next:"r_monitor_gpu"},{t:"No enciende nada",next:"r_hardware_muerto"}]}]},
+na_logo:{steps:[{q:"¿Hay sonidos raros al arrancar?",opts:[{t:"Sí, clics o chirridos",next:"r_disco_muerto"},{t:"No, silencioso",next:"r_windows_corrupto"}]}]},
+r_monitor_gpu:{result:true,title:"Problema de vídeo o monitor",urgency:"alta",diag:"PC enciende pero no hay imagen. Prueba con otro cable/monitor. Si sigue sin imagen, puede ser GPU muerta o RAM mal colocada. Quita y vuelve a colocar RAM.",tools:["HWiNFO64","GPU-Z"]},
+r_hardware_muerto:{result:true,title:"Fallo de hardware crítico",urgency:"alta",diag:"PC no da señales de vida. Revisa fuente de alimentación, cable de corriente y que el botón de encendido funcione. Puede ser fuente muerta.",tools:["Multímetro (externo)"]},
+r_disco_muerto:{result:true,title:"Disco duro muriendo",urgency:"alta",diag:"Sonidos mecánicos = disco muriendo. NO reinicies más. Arranca con Clonezilla para intentar clonar el disco antes de que muera del todo. Urgente.",tools:["Clonezilla","WinPE + AnyDesk"]},
+r_windows_corrupto:{result:true,title:"Windows corrupto",urgency:"media",diag:"Archivos de sistema dañados. Arranca con WinPE, intenta reparar con bootrec/sfc. Si no, valorar reinstalación limpia.",tools:["WinPE + AnyDesk","USB Windows Install"]},
+r_boot_error:{result:true,title:"Error de arranque",urgency:"media",diag:"Error en el gestor de arranque. Arranca con WinPE y ejecuta bootrec /fixmbr y bootrec /fixboot desde CMD.",tools:["WinPE + AnyDesk","NT Password Reset"]}
+},
+
+virus:{
+steps:[{q:"¿Qué síntomas tiene exactamente?",opts:[{t:"Pop-ups y anuncios por todos lados",next:"r_adware"},{t:"PC muy lento + procesos raros",next:"r_malware_activo"},{t:"Antivirus bloqueado o desactivado",next:"r_malware_grave"},{t:"Mensajes pidiendo dinero (ransomware)",next:"r_ransomware"}]}],
+r_adware:{result:true,title:"Adware / PUPs",urgency:"media",diag:"Adware instalado normalmente con software gratuito. Malwarebytes lo elimina en 10 minutos. Revisa también extensiones del navegador.",tools:["Malwarebytes portable"]},
+r_malware_activo:{result:true,title:"Malware activo en sistema",urgency:"alta",diag:"Malware consumiendo recursos. Arranca en modo seguro y ejecuta Malwarebytes. Si no lo elimina, usa Kaspersky Rescue Disk offline.",tools:["Malwarebytes portable","Kaspersky Rescue Disk"]},
+r_malware_grave:{result:true,title:"Malware grave — antivirus comprometido",urgency:"alta",diag:"Infección seria que ha desactivado defensas. Usa Kaspersky Rescue Disk arrancando desde USB para limpiar sin que el malware esté en memoria.",tools:["Kaspersky Rescue Disk","WinPE + AnyDesk"]},
+r_ransomware:{result:true,title:"RANSOMWARE — no pagues",urgency:"alta",diag:"Ransomware. NO pagues. Aísla el PC de la red inmediatamente. Comprueba ID Ransomware para ver si hay decryptor gratuito. Si no, valorar formateo y recuperación de backups.",tools:["Kaspersky Rescue Disk","Recuva portable"]}
+},
+
+bsod:{
+steps:[{q:"¿Con qué frecuencia ocurre?",opts:[{t:"Constantemente, no puedo usar el PC",next:"bsod_grave"},{t:"De vez en cuando",next:"bsod_leve"}]}],
+bsod_grave:{steps:[{q:"¿Cuándo empezaron los pantallazos?",opts:[{t:"Tras instalar hardware nuevo",next:"r_hardware_incompatible"},{t:"De repente sin cambiar nada",next:"r_ram_fallo"}]}]},
+bsod_leve:{steps:[{q:"¿Pasa haciendo algo específico?",opts:[{t:"Jugando o bajo carga gráfica",next:"r_gpu_fallo"},{t:"Al azar sin patrón",next:"r_ram_fallo"}]}]},
+r_hardware_incompatible:{result:true,title:"Incompatibilidad de hardware",urgency:"alta",diag:"BSOD tras instalar hardware. Retira el componente nuevo y prueba. Revisa drivers con el gestor de dispositivos.",tools:["HWiNFO64","CPU-Z"]},
+r_ram_fallo:{result:true,title:"RAM defectuosa",urgency:"alta",diag:"BSODs aleatorios suelen ser RAM. Ejecuta MemTest86 mínimo 2 pasadas completas. Si hay errores, localiza el módulo defectuoso quitándolos de uno en uno.",tools:["MemTest86","HWiNFO64"]},
+r_gpu_fallo:{result:true,title:"GPU con problemas",urgency:"alta",diag:"BSOD bajo carga gráfica = GPU o drivers. Prueba desinstalar drivers y reinstalar con DDU (Display Driver Uninstaller). Si sigue, problema de hardware.",tools:["GPU-Z","HWiNFO64"]}
+},
+
+calor:{
+steps:[{q:"¿Cuánto tiempo lleva con el problema?",opts:[{t:"Siempre se calentó mucho",next:"r_limpieza_polvo"},{t:"Antes no se calentaba tanto",next:"calor_check"}]}],
+calor_check:{steps:[{q:"¿Cuándo fue la última limpieza de polvo?",opts:[{t:"Nunca o hace años",next:"r_limpieza_polvo"},{t:"Hace poco, sigue caliente",next:"r_pasta_termica"}]}]},
+r_limpieza_polvo:{result:true,title:"Limpieza de polvo urgente",urgency:"alta",diag:"Acumulación de polvo bloqueando la refrigeración. Desmonta, limpia con aire comprimido ventiladores y disipadores. Comprueba temperaturas con HWiNFO64 antes y después.",tools:["HWiNFO64"]},
+r_pasta_termica:{result:true,title:"Pasta térmica agotada",urgency:"alta",diag:"Pasta térmica seca o en mal estado (normal cada 3-5 años). Desmonta el disipador, limpia la vieja pasta y aplica nueva. Temperatura bajará 15-30°C.",tools:["HWiNFO64"]}
+},
+
+red:{
+steps:[{q:"¿El problema es WiFi o cable?",opts:[{t:"WiFi lento o con cortes",next:"red_wifi"},{t:"Sin internet aunque conectado",next:"r_dns_reset"},{t:"Red local lenta (entre PCs)",next:"r_red_local"}]}],
+red_wifi:{steps:[{q:"¿Le pasa a todos los dispositivos o solo a este PC?",opts:[{t:"Solo a este PC",next:"r_driver_wifi"},{t:"A todos los dispositivos",next:"r_router"}]}]},
+r_dns_reset:{result:true,title:"Problema de DNS o IP",urgency:"baja",diag:"Conectado pero sin internet. Ejecuta: ipconfig /flushdns y netsh int ip reset. Si no funciona, cambia DNS a 8.8.8.8 (Google) o 1.1.1.1 (Cloudflare).",tools:["Angry IP Scanner"]},
+r_driver_wifi:{result:true,title:"Driver WiFi defectuoso",urgency:"media",diag:"Problema de drivers WiFi. Actualiza o reinstala el driver del adaptador. Descarga desde la web del fabricante del portátil.",tools:["Angry IP Scanner"]},
+r_router:{result:true,title:"Problema de router",urgency:"media",diag:"Problema en el router o la línea. Reinicia el router (desenchufa 30 seg). Si sigue, contacta con el ISP o revisa la configuración del router.",tools:["Angry IP Scanner","WireShark portable"]},
+r_red_local:{result:true,title:"Red local lenta",urgency:"baja",diag:"Escanea la red con Angry IP para ver todos los dispositivos. Puede haber un dispositivo consumiendo todo el ancho de banda o un switch defectuoso.",tools:["Angry IP Scanner","WireShark portable"]}
+},
+
+disco:{
+steps:[{q:"¿Cuál es el problema exacto?",opts:[{t:"Disco lleno, sin espacio",next:"r_disco_lleno"},{t:"Ruidos mecánicos (clics, chirridos)",next:"r_disco_muriendo"},{t:"Disco no aparece en Windows",next:"r_disco_invisible"}]}],
+r_disco_lleno:{result:true,title:"Disco lleno",urgency:"baja",diag:"Usa TreeSize para encontrar qué ocupa espacio. Normalmente: carpeta Downloads, Windows.old, temp, o backups olvidados. Limpia y libera.",tools:["TreeSize Free","7-Zip portable"]},
+r_disco_muriendo:{result:true,title:"Disco mecánico muriendo — urgente",urgency:"alta",diag:"Ruidos mecánicos = fallo inminente. CLONA EL DISCO AHORA con Clonezilla antes de que muera. Después sustituye por SSD. No esperes.",tools:["Clonezilla","CrystalDiskInfo"]},
+r_disco_invisible:{result:true,title:"Disco no detectado",urgency:"alta",diag:"Revisa conexiones SATA/power. Prueba en otra máquina. Si sigue sin aparecer, puede ser controlador muerto. CrystalDiskInfo puede detectarlo si hay comunicación.",tools:["CrystalDiskInfo","GParted"]}
+},
+
+password:{
+steps:[],
+result:true,title:"Resetear contraseña Windows",urgency:"baja",diag:"Arranca con USB Ventoy → NT Password Reset → selecciona el usuario → borra la contraseña. El cliente entra sin contraseña y pone una nueva.",tools:["NT Password Reset","WinPE + AnyDesk"]
+},
+
+formateo:{
+steps:[{q:"¿Ha hecho backup de sus datos?",opts:[{t:"Sí, tiene todo guardado",next:"r_formateo_directo"},{t:"No, tiene cosas importantes",next:"r_formateo_backup"}]}],
+r_formateo_directo:{result:true,title:"Formateo limpio",urgency:"baja",diag:"Arranca con USB Windows Install → formateo limpio → instala drivers → instala software base (Chrome, Office, Malwarebytes). Proceso: 1-2 horas.",tools:["USB Windows Install","Clonezilla","Malwarebytes portable"]},
+r_formateo_backup:{result:true,title:"Backup primero, formateo después",urgency:"media",diag:"NUNCA formatees sin backup. Copia documentos, fotos, escritorio, descargas a disco externo o USB. Después arranca el proceso de formateo.",tools:["Clonezilla","USB Windows Install"]}
+},
+
+archivos:{
+steps:[{q:"¿Cuándo se borraron?",opts:[{t:"Hace poco, hoy o ayer",next:"r_recuva_rapido"},{t:"Hace tiempo, semanas o meses",next:"r_recuva_lento"},{t:"El disco falló o se formateó",next:"r_recuva_dificil"}]}],
+r_recuva_rapido:{result:true,title:"Recuperación rápida posible",urgency:"alta",diag:"Borrado reciente = alta probabilidad de recuperación. Ejecuta Recuva AHORA, no guardes nada más en ese disco. Cuanto antes, mejor.",tools:["Recuva portable"]},
+r_recuva_lento:{result:true,title:"Recuperación posible con escaneo profundo",urgency:"media",diag:"Borrado antiguo = posible pero no seguro. Recuva en modo escaneo profundo. Puede tardar horas. Probabilidad media-baja si el disco ha seguido usándose.",tools:["Recuva portable"]},
+r_recuva_dificil:{result:true,title:"Recuperación difícil — caso grave",urgency:"alta",diag:"Disco formateado o con fallo. Recuva modo profundo primero. Si no recupera, necesitarías software profesional (R-Studio) o servicio de recuperación externo. Avisa al cliente del coste.",tools:["Recuva portable","CrystalDiskInfo"]}
+}
+};
+
+let currentTree=null;
+let currentNode=null;
+let breadcrumb=[];
+
+function startTree(id){
+document.querySelectorAll('.sym-btn').forEach(b=>b.classList.remove('active'));
+event.currentTarget.classList.add('active');
+currentTree=TREES[id];
+breadcrumb=[];
+if(currentTree.result){
+showResult(currentTree);
+}else{
+showStep(currentTree,0);
+}
+}
+
+function showStep(node,stepIdx){
+const step=node.steps[stepIdx];
+const area=document.getElementById('tree-area');
+let bc=breadcrumb.length?`<div class="breadcrumb">${breadcrumb.map(b=>`<span>${b}</span>`).join(' → ')}</div>`:'';
+area.innerHTML=bc+`<div class="q-card">
+<div class="q-label">Pregunta ${breadcrumb.length+1}</div>
+<div class="q-text">${step.q}</div>
+<div class="options">${step.opts.map(o=>`<button class="opt-btn" onclick="selectOpt('${o.next}','${o.t}')">${o.t}</button>`).join('')}</div>
+</div>`;
+}
+
+function selectOpt(nextId,label){
+breadcrumb.push(label);
+const node=currentTree[nextId];
+if(!node)return;
+if(node.result){showResult(node);}
+else{showStep(node,0);}
+}
+
+function showResult(node){
+const area=document.getElementById('tree-area');
+let bc=breadcrumb.length?`<div class="breadcrumb">${breadcrumb.map(b=>`<span>${b}</span>`).join(' → ')}</div>`:'';
+const urgClass=node.urgency==='alta'?'alta':node.urgency==='media'?'media':'baja';
+const urgText=node.urgency==='alta'?'Urgencia alta':node.urgency==='media'?'Urgencia media':'Baja urgencia';
+area.innerHTML=bc+`<div class="result">
+<span class="urgency ${urgClass}">${urgText}</span>
+<div class="result-title">✓ ${node.title}</div>
+<div class="result-diag">${node.diag}</div>
+<div class="tools-label">Herramientas a usar</div>
+<div>${node.tools.map(t=>`<span class="tool-tag">${t}</span>`).join('')}</div>
+<div class="action-row">
+<button class="btn-reset" onclick="resetTree()">← Volver al inicio</button>
+</div>
+</div>`;
+}
+
+function resetTree(){
+currentTree=null;currentNode=null;breadcrumb=[];
+document.getElementById('tree-area').innerHTML='';
+document.querySelectorAll('.sym-btn').forEach(b=>b.classList.remove('active'));
+}
+</script>
+</body>
+</html>
