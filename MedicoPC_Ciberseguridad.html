@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ciberseguridad MedicoPC</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0b0b12;color:#e8e8f0;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;padding:20px;padding-bottom:40px}
+h1{font-size:18px;font-weight:700;color:#e8185a;margin-bottom:4px}
+.sub{font-size:12px;color:rgba(255,255,255,.35);margin-bottom:20px}
+
+.tab-bar{display:flex;gap:6px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px}
+.tab{display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;color:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.08);background:#1a1a26;transition:all .15s;font-family:inherit;white-space:nowrap}
+.tab:hover{color:#e8e8f0;border-color:rgba(232,24,90,.4)}
+.tab.active{color:#fff;background:rgba(232,24,90,.15);border-color:#e8185a}
+
+.section{display:none}
+.section.active{display:block}
+
+.intro-card{background:#1a1a26;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px 20px;margin-bottom:20px}
+.intro-title{font-size:16px;font-weight:700;color:#e8e8f0;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.intro-text{font-size:13px;color:rgba(255,255,255,.6);line-height:1.55}
+.intro-text b{color:#e8e8f0}
+
+.progress-card{background:#1a1a26;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:14px;position:sticky;top:10px;z-index:5;backdrop-filter:blur(10px);background:rgba(26,26,38,.95)}
+.progress-info{flex:1}
+.progress-label{font-size:10px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.08em}
+.progress-text{font-size:13px;font-weight:600;color:#e8e8f0;margin-top:2px}
+.progress-bar{height:6px;background:#0f0f1a;border-radius:3px;overflow:hidden;margin-top:8px}
+.progress-fill{height:100%;background:linear-gradient(90deg,#e8185a,#00c882);transition:width .3s}
+.progress-percent{font-size:20px;font-weight:700;color:#00c882;min-width:55px;text-align:right}
+
+.group{background:#1a1a26;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px 20px;margin-bottom:14px}
+.group-title{font-size:13px;font-weight:700;color:#e8185a;margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:10px}
+.group-sub{font-size:11.5px;color:rgba(255,255,255,.38);margin-bottom:14px;line-height:1.45}
+
+.item{display:flex;align-items:flex-start;gap:10px;padding:11px 12px;border-radius:10px;cursor:pointer;background:#0f0f1a;border:1px solid rgba(255,255,255,.06);margin-bottom:6px;transition:all .15s}
+.item:hover{border-color:rgba(232,24,90,.3)}
+.item.checked{opacity:.6;background:rgba(0,200,130,.08);border-color:rgba(0,200,130,.25)}
+.item.checked .item-main{text-decoration:line-through;color:rgba(255,255,255,.5)}
+.item-check{flex-shrink:0;width:20px;height:20px;border-radius:6px;border:1.5px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;transition:all .15s;margin-top:1px}
+.item.checked .item-check{background:#00c882;border-color:#00c882}
+.item-check::after{content:"✓";color:#0b0b12;font-size:14px;font-weight:700;opacity:0}
+.item.checked .item-check::after{opacity:1}
+.item-body{flex:1;min-width:0}
+.item-main{font-size:13px;font-weight:500;line-height:1.4;color:#e8e8f0;display:block}
+.item-note{font-size:11.5px;color:rgba(255,255,255,.4);line-height:1.45;margin-top:3px}
+.item.checked .item-note{color:rgba(255,255,255,.25)}
+
+.badge{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;letter-spacing:.08em;margin-right:8px;vertical-align:middle;text-transform:uppercase}
+.badge-critico{background:rgba(232,24,90,.2);color:#ff6b9e}
+.badge-gratis{background:rgba(0,200,130,.15);color:#00c882}
+.badge-pago{background:rgba(240,180,60,.15);color:#f0b43c}
+.badge-pyme{background:rgba(123,159,255,.15);color:#7b9fff}
+
+.svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-bottom:18px}
+.svc-card{background:#1a1a26;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px 18px}
+.svc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px}
+.svc-name{font-size:14px;font-weight:700;color:#e8e8f0}
+.svc-tag{font-size:10px;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
+.svc-price{font-size:16px;font-weight:700;color:#e8185a;white-space:nowrap}
+.svc-price small{display:block;font-size:10px;color:rgba(255,255,255,.4);font-weight:400;margin-top:1px}
+.svc-desc{font-size:12.5px;color:rgba(255,255,255,.55);line-height:1.5;margin-bottom:10px}
+.svc-list{list-style:none;padding:0;margin:0}
+.svc-list li{font-size:12px;color:rgba(255,255,255,.6);padding:4px 0 4px 18px;position:relative;line-height:1.4}
+.svc-list li::before{content:"✓";color:#00c882;font-weight:700;position:absolute;left:0}
+
+.audit-card{background:#1a1a26;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px 20px;margin-bottom:14px}
+.audit-title{font-size:14px;font-weight:700;color:#e8185a;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.audit-list{display:flex;flex-direction:column;gap:4px}
+.audit-list li{font-size:12.5px;color:rgba(255,255,255,.6);padding:6px 0 6px 22px;position:relative;line-height:1.5;list-style:none}
+.audit-list li::before{content:"→";color:#e8185a;position:absolute;left:4px;font-weight:700}
+
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.tool-card{background:#1a1a26;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px 16px}
+.tool-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
+.tool-name{font-size:13px;font-weight:700;color:#e8e8f0}
+.tool-desc{font-size:11.5px;color:rgba(255,255,255,.55);line-height:1.45;margin-bottom:8px}
+.tool-use{font-size:11px;color:rgba(255,255,255,.4);line-height:1.45;padding-top:8px;border-top:1px solid rgba(255,255,255,.06)}
+.tool-use b{color:#00c882;font-weight:600}
+
+.cat-title{font-size:11px;font-weight:700;color:#e8185a;margin:20px 0 10px;text-transform:uppercase;letter-spacing:.08em;display:flex;align-items:center;gap:10px}
+.cat-title::before{content:"";width:18px;height:2px;background:#e8185a;border-radius:2px}
+.cat-title:first-of-type{margin-top:0}
+
+.tip-card{background:linear-gradient(135deg,rgba(232,24,90,.08),rgba(0,200,130,.05));border:1px solid rgba(232,24,90,.2);border-radius:12px;padding:14px 16px;margin-top:16px;font-size:12.5px;color:rgba(255,255,255,.65);line-height:1.55}
+.tip-card b{color:#ff6b9e}
+</style>
+</head>
+<body>
+
+<h1>🔐 Ciberseguridad MedicoPC</h1>
+<p class="sub">Tu protección, la de tus clientes y las herramientas para ofrecerlo</p>
+
+<div class="tab-bar">
+  <button class="tab active" data-tab="propia">🛡️ Seguridad MedicoPC</button>
+  <button class="tab" data-tab="cliente">💼 Servicio al cliente</button>
+  <button class="tab" data-tab="arsenal">🔧 Arsenal USB</button>
+</div>
+
+<!-- SECCIÓN 1 -->
+<div class="section active" id="sec-propia">
+  <div class="intro-card">
+    <div class="intro-title">🛡️ Proteger la casa antes de vender seguridad</div>
+    <div class="intro-text">Si tú no estás protegido, un solo incidente puede cerrar MedicoPC de la noche a la mañana. <b>Pérdida de base de datos de clientes, acceso a equipos que toques, reputación arrastrada.</b> Este checklist es tu línea base mínima antes de ofrecer ciberseguridad a terceros.</div>
+  </div>
+
+  <div class="progress-card" id="prog-propia">
+    <div class="progress-info">
+      <div class="progress-label">Estado de protección MedicoPC</div>
+      <div class="progress-text" id="prog-text-propia">0 de 0</div>
+      <div class="progress-bar"><div class="progress-fill" id="prog-fill-propia" style="width:0%"></div></div>
+    </div>
+    <div class="progress-percent" id="prog-pct-propia">0%</div>
+  </div>
+
+  <div id="groups-propia"></div>
+</div>
+
+<!-- SECCIÓN 2 -->
+<div class="section" id="sec-cliente">
+  <div class="intro-card">
+    <div class="intro-title">💼 Cómo vender ciberseguridad a pymes</div>
+    <div class="intro-text">El 60% de las pymes españolas han sufrido un ciberataque y la mayoría no tiene protección básica. Tu <b>auditoría de 75€</b> abre la puerta a servicios recurrentes mucho más rentables que el soporte puntual. Aquí tienes el catálogo, el guion de auditoría y las preguntas clave.</div>
+  </div>
+
+  <div class="cat-title">Catálogo de servicios a ofrecer</div>
+  <div class="svc-grid" id="svc-grid"></div>
+
+  <div class="cat-title">Guion de auditoría pyme (75€)</div>
+  <div id="audit-container"></div>
+
+  <div class="tip-card">
+    <b>Truco comercial:</b> nunca presentes la auditoría como gasto, preséntala como seguro. "Un ataque medio a una pyme cuesta entre 5.000€ y 50.000€. La auditoría cuesta 75€ y te dice exactamente qué hay que proteger primero." La mayoría dice sí al oírlo así.
+  </div>
+</div>
+
+<!-- SECCIÓN 3 -->
+<div class="section" id="sec-arsenal">
+  <div class="intro-card">
+    <div class="intro-title">🔧 Ampliar el Arsenal USB con herramientas de seguridad</div>
+    <div class="intro-text">Tu G.SUITE ya cubre lo básico (Malwarebytes, Kaspersky Rescue, WinPE, Recuva). Estas herramientas adicionales <b>te permiten auditar y resolver incidentes de ciberseguridad</b> sin depender de internet en casa del cliente. Todas gratuitas o con versión portable.</div>
+  </div>
+
+  <div id="arsenal-container"></div>
+
+  <div class="tip-card">
+    <b>Estructura recomendada del USB:</b> carpeta <code>\\Seguridad\\</code> con subcarpetas <i>Analisis · Hardening · Offline · Forense · Monitorizacion</i>. Mantén un <code>README.txt</code> con la versión de cada herramienta y la fecha de última actualización — crítico si haces un informe forense.
+  </div>
+</div>
+
+<script>
+const DATA_PROPIA = [
+  {
+    title: "Cuentas y contraseñas",
+    sub: "Tus credenciales son la llave del negocio. Si caen, cae todo.",
+    items: [
+      {t:"Gestor de contraseñas activo (Bitwarden, 1Password, KeePassXC)", n:"Bitwarden gratis cubre el 99% de casos. Obligatorio para no reutilizar contraseñas.", c:true},
+      {t:"2FA en todas las cuentas críticas (email, banco, GitHub, hosting, dominio)", n:"Usa app autenticadora (Authy, 2FAS) o llave física (YubiKey). SMS sólo como último recurso.", c:true},
+      {t:"Contraseñas únicas en cada servicio (nada de reciclar 2-3)", n:"El mayor vector de ataque a pymes es la reutilización de contraseñas filtradas en otras webs."},
+      {t:"Revisar haveibeenpwned.com con tus emails principales cada 3 meses", n:"Te avisa si alguna de tus credenciales está en filtraciones conocidas."},
+      {t:"Cuenta de administrador separada de la cuenta diaria en Windows", n:"Trabajar siempre con usuario estándar; elevar sólo cuando se necesite."}
+    ]
+  },
+  {
+    title: "Equipos y datos",
+    sub: "El PC del técnico contiene credenciales, facturas y datos de todos los clientes.",
+    items: [
+      {t:"Cifrado de disco con BitLocker activado en el PC de trabajo", n:"Sin cifrado, un robo del portátil expone la base de datos completa de clientes.", c:true},
+      {t:"Windows Defender + Malwarebytes Premium o similar funcionando siempre", n:"No trabajar con antivirus desactivado 'por velocidad'. Nunca."},
+      {t:"Firewall activo (Windows Defender Firewall o similar)", n:"Revisar reglas de entrada de vez en cuando. Bloquear todo lo no necesario."},
+      {t:"Backup automático 3-2-1: 3 copias, 2 medios, 1 off-site", n:"Ej. disco interno + NAS local + Backblaze/Google Drive cifrado. Probar restauración cada 3 meses.", c:true},
+      {t:"Windows y todo el software actualizado (Windows Update + patch manager)", n:"Activar actualizaciones automáticas. El software sin parches es el vector nº1."},
+      {t:"USB arsenal SIEMPRE cifrado con VeraCrypt (contiene credenciales y datos de clientes)", n:"Si lo pierdes, que no puedan leerlo.", c:true},
+      {t:"Máquina virtual aislada para analizar archivos sospechosos de clientes", n:"Nunca abras un adjunto de cliente en tu PC principal. VirtualBox + snapshot limpio."}
+    ]
+  },
+  {
+    title: "Comunicaciones con clientes",
+    sub: "Atacar al técnico suplantando a un cliente (o al revés) es un clásico.",
+    items: [
+      {t:"Dominio propio con email (@medicopc.es) y SPF + DKIM + DMARC configurados", n:"Evita que alguien suplante tu dominio para estafar a tus clientes."},
+      {t:"Nunca pedir contraseñas de clientes por WhatsApp o email sin cifrar", n:"Si necesitas credenciales, mejor pídelas por teléfono o entrégalas en persona."},
+      {t:"Cifrar facturas y presupuestos con datos sensibles antes de enviar (PDF con contraseña)", n:"Sobre todo RGPD: si envías datos personales, cífralos o usa enlace temporal."},
+      {t:"Firma profesional en emails con web, teléfono y disclaimer", n:"Ayuda a que el cliente detecte suplantaciones de tu email."},
+      {t:"Verificar URLs antes de clicar en emails, sobre todo 'bancos' y 'hosting'", n:"Ataque clásico: phishing a autónomo con 'tu factura de hosting'."}
+    ]
+  },
+  {
+    title: "Legal y RGPD",
+    sub: "Manejas datos personales de clientes. RGPD te aplica sí o sí.",
+    items: [
+      {t:"Registro de actividades de tratamiento (lista de qué datos guardas y para qué)", n:"Plantilla de la AEPD gratis. Obligatorio aunque seas autónomo unipersonal.", c:true},
+      {t:"Cláusula RGPD en presupuestos/facturas (consentimiento para guardar datos)", n:"Un párrafo básico en el pie de factura. Legal y barato."},
+      {t:"Política de privacidad publicada en la web (aunque la web sea simple)", n:"Obligatoria si recoges cualquier dato vía formulario, contacto, etc."},
+      {t:"Acuerdo de confidencialidad para clientes pyme si accedes a datos sensibles", n:"Un NDA de una página. Te protege legalmente si hay incidente."},
+      {t:"Seguro de responsabilidad civil profesional contratado", n:"Si provocas daños en equipos del cliente, te cubre. ~200€/año.", c:true}
+    ]
+  },
+  {
+    title: "Procedimientos y buenas prácticas",
+    sub: "Rutinas que reducen el riesgo al mínimo sin esfuerzo extra.",
+    items: [
+      {t:"Antes de devolver un PC de cliente: escanear en busca de malware y revisar logs"},
+      {t:"Tras cada intervención: borrar cachés/credenciales temporales del cliente en tu PC", n:"Si usaste AnyDesk, TeamViewer, remotos guardados... limpiar."},
+      {t:"Log de intervenciones: qué hiciste, cuándo y qué accedió", n:"Te cubre si el cliente dice 'me has roto/cogido X'. Ya lo tienes en MedicoPC_Clientes."},
+      {t:"Política clara de precios y alcance por escrito antes de tocar nada", n:"Evita disputas y hace la relación más profesional."},
+      {t:"Revisar accesos remotos cada mes: quién tiene qué, revocar lo que no uses"}
+    ]
+  }
+];
+
+const SERVICIOS_CLIENTE = [
+  {tag:"Diagnóstico · Pago único", name:"Auditoría de seguridad pyme", price:"75€", priceSmall:"por empresa",
+   desc:"Revisión completa del estado del negocio. Entregas informe semáforo + plan de acción priorizado.",
+   incs:["Contraseñas, actualizaciones, antivirus","Backups, permisos, WiFi, email, puertos","Informe PDF con criticidad de cada fallo","Base para presupuestar paquete Protección"]},
+  {tag:"Implementación · Pago único", name:"Paquete Protección Empresarial", price:"299€", priceSmall:"hasta 5 PCs · +30€/PC extra",
+   desc:"Todo lo básico implementado en una visita. Lo que encontró la auditoría, resuelto.",
+   incs:["Gestor contraseñas + 2FA en cuentas clave","Antivirus empresa + política unificada","Backups automáticos cifrados","BitLocker/VeraCrypt en portátiles"]},
+  {tag:"Formación · Por sesión", name:"Anti-phishing para empleados", price:"75€", priceSmall:"por sesión (hasta 10 personas)",
+   desc:"El 90% de ataques entran por un empleado. Una hora que puede salvar el negocio.",
+   incs:["Identificar emails y webs falsas","Contraseñas seguras y 2FA","Qué hacer si pincharon algo","Material de apoyo imprimible"]},
+  {tag:"Recurrente · Mensual", name:"Monitorización de seguridad", price:"+15€", priceSmall:"/ PC · mes (sobre mantenimiento)",
+   desc:"Añadido al mantenimiento pyme. Detectas problemas antes de que el cliente los note.",
+   incs:["Revisión mensual de cada equipo","Alertas ante malware o actividad sospechosa","Verificación de backups y contraseñas","Informe mensual de seguridad"]},
+  {tag:"Urgencias · Por hora", name:"Respuesta a incidente", price:"90€", priceSmall:"/ hora (mínimo 2h)",
+   desc:"Ransomware, hackeo, empleado que pinchó algo raro. Frenas el daño en horas.",
+   incs:["Aislamiento inmediato del equipo","Análisis y eliminación de amenaza","Recuperación desde backup","Informe forense + prevención"]},
+  {tag:"Compliance · Pago único", name:"Adaptación RGPD básica", price:"150€", priceSmall:"pyme pequeña",
+   desc:"Plantillas y procedimientos básicos RGPD para que la empresa cumpla sin complicaciones.",
+   incs:["Registro de actividades de tratamiento","Política de privacidad en web","Cláusula RGPD en contratos","Plantilla de consentimiento"]}
+];
+
+const AUDIT_SECTIONS = [
+  {title:"🔑 Credenciales y accesos", items:[
+    "¿Usan gestor de contraseñas o están en Excel/post-its?",
+    "¿Reutilizan contraseñas entre servicios?",
+    "¿Tienen 2FA en email, banco, ERP y herramientas críticas?",
+    "¿Cuántos usuarios tienen privilegios de administrador?",
+    "¿Se revisan accesos al incorporar/despedir empleados?"
+  ]},
+  {title:"💾 Backups y recuperación", items:[
+    "¿Hacen backup? ¿Con qué frecuencia y automático o manual?",
+    "¿Los backups están cifrados y en otro sitio físico (o nube)?",
+    "¿Alguien ha probado alguna vez restaurar? ¿Cuándo?",
+    "¿Qué pasaría si el servidor principal se rompe mañana?",
+    "Estimar coste/día de parada del negocio (para justificar inversión)"
+  ]},
+  {title:"🛡️ Protección endpoint", items:[
+    "¿Qué antivirus usan? ¿Licencia pro o gratuito? ¿Mismo en todos los PCs?",
+    "¿Windows y software actualizados automáticamente?",
+    "¿Firewall activado en todos los equipos?",
+    "¿BitLocker o cifrado en portátiles que salgan de la oficina?",
+    "¿Hay algún PC con Windows 7/8.1 aún en producción? (crítico)"
+  ]},
+  {title:"📧 Email y phishing", items:[
+    "¿Dominio propio o gmail/hotmail para el negocio?",
+    "¿SPF, DKIM y DMARC configurados en el dominio?",
+    "¿Han caído alguna vez en un phishing? ¿Qué pasó?",
+    "¿Los empleados saben identificar un email sospechoso?",
+    "Revisar si el dominio aparece en mxtoolbox.com con errores"
+  ]},
+  {title:"📶 Red e infraestructura", items:[
+    "¿WiFi con WPA2/WPA3 y contraseña fuerte? ¿Red de invitados separada?",
+    "¿Router con firmware actualizado? ¿Contraseña de admin cambiada?",
+    "¿Hay puertos expuestos al exterior sin necesidad?",
+    "¿VPN para teletrabajo o RDP expuesto a internet? (crítico si RDP)",
+    "¿Switch/router gestionable con logs, o todo consumer?"
+  ]},
+  {title:"📋 Legal y procedimientos", items:[
+    "¿Tienen registro RGPD de actividades de tratamiento?",
+    "¿Política de privacidad en la web?",
+    "¿Formación a empleados en ciberseguridad alguna vez?",
+    "¿Protocolo escrito de qué hacer si hay un incidente?",
+    "¿Seguro de ciberriesgo contratado? (pregunta clave en pymes medianas)"
+  ]}
+];
+
+const ARSENAL = [
+  {cat:"Análisis y detección", tools:[
+    {n:"Malwarebytes portable", d:"Antimalware gold standard. Ya lo tienes, asegúrate de mantenerlo en última versión.", u:"Uso: escaneo completo tras cualquier sospecha de malware o popups."},
+    {n:"ESET Online Scanner", d:"Segunda opinión gratuita. Detecta lo que Malwarebytes a veces deja pasar.", u:"Uso: tras un escaneo Malwarebytes para tener doble check."},
+    {n:"RogueKiller", d:"Especializado en rootkits, scripts maliciosos y modificaciones de registro.", u:"Uso: cuando sospechas que el malware se reinstala solo tras limpieza."},
+    {n:"Autoruns (Sysinternals)", d:"Lista TODO lo que arranca con Windows: servicios, tareas, DLLs, drivers.", u:"Uso: localizar persistencia de malware que los AVs no ven."},
+    {n:"Process Explorer (Sysinternals)", d:"Administrador de tareas con esteroides. Firma digital, VirusTotal integrado.", u:"Uso: investigar procesos sospechosos en caliente."}
+  ]},
+  {cat:"Hardening y configuración segura", tools:[
+    {n:"Hardentools (Security Without Borders)", d:"Desactiva funciones Windows/Office peligrosas (macros, OLE, etc.) en un clic.", u:"Uso: tras formateo o en equipos de oficina para reducir superficie de ataque."},
+    {n:"O&O ShutUp10++", d:"Desactiva telemetría y funciones invasivas de Windows 10/11.", u:"Uso: en formateos de clientes paranoicos con privacidad."},
+    {n:"KeePassXC portable", d:"Gestor de contraseñas offline. Para entregar al cliente junto con sus credenciales.", u:"Uso: cuando el cliente se niega a usar nube (muy común en pymes mayores)."},
+    {n:"VeraCrypt portable", d:"Cifrado de archivos y volúmenes. Alternativa a BitLocker en Windows Home.", u:"Uso: cifrar USB del técnico y carpetas sensibles de clientes."}
+  ]},
+  {cat:"Forense y análisis offline", tools:[
+    {n:"Kaspersky Rescue Disk", d:"Arranca desde USB antes que Windows y limpia malware activo. Ya lo tienes.", u:"Uso: cuando el AV del sistema está bloqueado por el malware."},
+    {n:"FTK Imager", d:"Clona discos bit a bit para preservar evidencia antes de tocar nada.", u:"Uso: obligatorio en casos de incidente forense antes de analizar."},
+    {n:"NirSoft Web Browser Pass View", d:"Extrae contraseñas guardadas en navegadores desde disco offline.", u:"Uso: recuperar credenciales del cliente cuando no puede iniciar Windows."},
+    {n:"Event Log Explorer", d:"Analiza logs de Windows en caliente o desde disco offline.", u:"Uso: reconstruir la cronología de un incidente."}
+  ]},
+  {cat:"Red y comunicaciones", tools:[
+    {n:"Wireshark portable", d:"Captura y analiza tráfico de red en detalle.", u:"Uso: detectar conexiones extrañas desde el equipo del cliente."},
+    {n:"nmap portable (Zenmap)", d:"Escaneo de red y puertos. Imprescindible en auditorías pyme.", u:"Uso: ver qué servicios están expuestos en la red del cliente."},
+    {n:"Angry IP Scanner", d:"Inventario rápido de dispositivos en la red. Ya lo tienes en G.SUITE.", u:"Uso: primer paso en cualquier auditoría de red."},
+    {n:"MXToolbox (web)", d:"Revisa SPF, DKIM, DMARC y blacklists de dominios. Apunta URL en USB.", u:"Uso: incluir en informe de auditoría email del cliente."}
+  ]},
+  {cat:"Backup y recuperación", tools:[
+    {n:"Clonezilla Live", d:"Clonación de discos imagen a imagen. Ya lo tienes en G.SUITE.", u:"Uso: backup de disco cliente antes de cualquier intervención destructiva."},
+    {n:"Macrium Reflect Free", d:"Backup de Windows a imagen, más amigable que Clonezilla para clientes.", u:"Uso: dejar configurado en equipos de cliente para que haga backups solos."},
+    {n:"Veeam Agent Free", d:"Backup cifrado con programación. Buena opción para pymes con 1-2 servidores.", u:"Uso: recomendación estándar en pymes que contratan mantenimiento."},
+    {n:"Recuva / PhotoRec portable", d:"Recuperación de datos borrados. Ya los tienes, no olvides PhotoRec.", u:"Uso: recuperar documentos perdidos o tras formateos accidentales."}
+  ]},
+  {cat:"Utilidades de seguridad", tools:[
+    {n:"HaveIBeenPwned (web)", d:"Comprueba si emails/contraseñas están en filtraciones conocidas.", u:"Uso: paso 1 de cualquier auditoría — mete email del cliente y flipa."},
+    {n:"Bitwarden (CLI o cuenta empresa)", d:"Gestor de contraseñas para recomendar e implantar en clientes pyme.", u:"Uso: servicio incluido en Paquete Protección Empresarial (299€)."},
+    {n:"Cryptomator portable", d:"Cifra carpetas para Dropbox/OneDrive sin complicaciones.", u:"Uso: clientes que quieren nube pero con datos sensibles."},
+    {n:"Ventoy con múltiples ISOs", d:"USB multi-boot con Windows Install, Kaspersky Rescue, Clonezilla, Hiren's.", u:"Uso: tu USB principal. Si no lo tienes así, reconfigúralo ya."}
+  ]}
+];
+
+const state = {tab:'propia', checked:{propia:{}}};
+const STORAGE_KEY = 'medicopc_ciber_propia_v1';
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) state.checked.propia = JSON.parse(raw) || {};
+  } catch(e) {}
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.checked.propia));
+}
+
+function escapeHtml(s) {
+  return (s||'').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+function renderPropia() {
+  const c = document.getElementById('groups-propia');
+  let total = 0, done = 0;
+  let html = '';
+  DATA_PROPIA.forEach((group, gi) => {
+    html += '<div class="group">' +
+      '<div class="group-title">' + escapeHtml(group.title) + '</div>' +
+      '<div class="group-sub">' + escapeHtml(group.sub) + '</div>';
+    group.items.forEach((item, ii) => {
+      total++;
+      const key = gi + '-' + ii;
+      const isChecked = !!state.checked.propia[key];
+      if (isChecked) done++;
+      const badge = item.c ? '<span class="badge badge-critico">Crítico</span>' : '';
+      const note = item.n ? '<div class="item-note">' + escapeHtml(item.n) + '</div>' : '';
+      html += '<div class="item' + (isChecked ? ' checked' : '') + '" onclick="toggleItem(' + gi + ',' + ii + ')">' +
+        '<div class="item-check"></div>' +
+        '<div class="item-body"><span class="item-main">' + badge + escapeHtml(item.t) + '</span>' + note + '</div>' +
+      '</div>';
+    });
+    html += '</div>';
+  });
+  c.innerHTML = html;
+  const pct = total ? Math.round(done*100/total) : 0;
+  document.getElementById('prog-text-propia').textContent = done + ' de ' + total + ' medidas aplicadas';
+  document.getElementById('prog-fill-propia').style.width = pct + '%';
+  document.getElementById('prog-pct-propia').textContent = pct + '%';
+}
+
+function toggleItem(gi, ii) {
+  const key = gi + '-' + ii;
+  state.checked.propia[key] = !state.checked.propia[key];
+  saveState();
+  renderPropia();
+}
+
+function renderCliente() {
+  const grid = document.getElementById('svc-grid');
+  grid.innerHTML = SERVICIOS_CLIENTE.map(s => {
+    return '<div class="svc-card">' +
+      '<div class="svc-head">' +
+        '<div><div class="svc-name">' + escapeHtml(s.name) + '</div><div class="svc-tag">' + escapeHtml(s.tag) + '</div></div>' +
+        '<div class="svc-price">' + s.price + '<small>' + escapeHtml(s.priceSmall) + '</small></div>' +
+      '</div>' +
+      '<div class="svc-desc">' + escapeHtml(s.desc) + '</div>' +
+      '<ul class="svc-list">' + s.incs.map(i => '<li>' + escapeHtml(i) + '</li>').join('') + '</ul>' +
+    '</div>';
+  }).join('');
+
+  const audit = document.getElementById('audit-container');
+  audit.innerHTML = AUDIT_SECTIONS.map(sec => {
+    return '<div class="audit-card">' +
+      '<div class="audit-title">' + escapeHtml(sec.title) + '</div>' +
+      '<ul class="audit-list">' + sec.items.map(i => '<li>' + escapeHtml(i) + '</li>').join('') + '</ul>' +
+    '</div>';
+  }).join('');
+}
+
+function renderArsenal() {
+  const c = document.getElementById('arsenal-container');
+  c.innerHTML = ARSENAL.map(cat => {
+    return '<div class="cat-title">' + escapeHtml(cat.cat) + '</div>' +
+      '<div class="tool-grid">' +
+        cat.tools.map(t => {
+          return '<div class="tool-card">' +
+            '<div class="tool-head"><div class="tool-name">' + escapeHtml(t.n) + '</div></div>' +
+            '<div class="tool-desc">' + escapeHtml(t.d) + '</div>' +
+            '<div class="tool-use"><b>→</b> ' + escapeHtml(t.u) + '</div>' +
+          '</div>';
+        }).join('') +
+      '</div>';
+  }).join('');
+}
+
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+  state.tab = t.dataset.tab;
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + state.tab).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}));
+
+loadState();
+renderPropia();
+renderCliente();
+renderArsenal();
+</script>
+
+</body>
+</html>
