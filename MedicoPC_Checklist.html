@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Checklist MedicoPC</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0b0b12;color:#e8e8f0;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;padding:20px}
+h1{font-size:18px;font-weight:700;color:#e8185a;margin-bottom:4px}
+.sub{font-size:12px;color:rgba(255,255,255,.35);margin-bottom:24px}
+.type-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:24px}
+.type-btn{background:#1a1a26;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px 12px;cursor:pointer;text-align:left;transition:all .15s;color:#e8e8f0}
+.type-btn:hover{border-color:#e8185a;background:#1f1f30}
+.type-btn.active{border-color:#e8185a;background:rgba(232,24,90,.1)}
+.type-icon{font-size:24px;margin-bottom:8px;display:block}
+.type-name{font-size:12px;font-weight:600;display:block;margin-bottom:2px}
+.type-desc{font-size:10px;color:rgba(255,255,255,.4);line-height:1.3}
+
+.progress-card{background:#1a1a26;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:16px}
+.progress-info{flex:1}
+.progress-label{font-size:11px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.progress-text{font-size:14px;font-weight:600;color:#e8e8f0}
+.progress-bar{height:8px;background:#0f0f1a;border-radius:4px;overflow:hidden;margin-top:10px}
+.progress-fill{height:100%;background:linear-gradient(90deg,#e8185a,#00c882);transition:width .3s;border-radius:4px}
+.progress-percent{font-size:22px;font-weight:700;color:#00c882;min-width:60px;text-align:right}
+
+.phase-card{background:#1a1a26;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px;margin-bottom:16px}
+.phase-title{font-size:13px;font-weight:700;color:#e8185a;margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em}
+.phase-sub{font-size:11px;color:rgba(255,255,255,.35);margin-bottom:14px}
+
+.item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;background:#0f0f1a;border:1px solid rgba(255,255,255,.06);margin-bottom:6px;transition:all .15s}
+.item:hover{border-color:rgba(232,24,90,.3)}
+.item.checked{opacity:.6;background:rgba(0,200,130,.08);border-color:rgba(0,200,130,.25)}
+.item.checked .item-text{text-decoration:line-through;color:rgba(255,255,255,.5)}
+.item-check{flex-shrink:0;width:20px;height:20px;border-radius:6px;border:1.5px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;transition:all .15s;margin-top:1px}
+.item.checked .item-check{background:#00c882;border-color:#00c882}
+.item-check::after{content:"✓";color:#0b0b12;font-size:14px;font-weight:700;opacity:0;transition:opacity .15s}
+.item.checked .item-check::after{opacity:1}
+.item-text{font-size:13px;line-height:1.45;color:#e8e8f0;flex:1}
+
+.badge-critico{display:inline-block;background:rgba(232,24,90,.2);color:#ff6b9e;font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;letter-spacing:.08em;margin-right:8px;vertical-align:middle}
+
+.action-row{display:flex;gap:8px;margin-top:16px}
+.btn-reset{background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:8px 16px;color:rgba(255,255,255,.5);font-size:12px;cursor:pointer}
+.btn-reset:hover{border-color:rgba(255,255,255,.35);color:#fff}
+.btn-clear{background:#e8185a;border:none;border-radius:8px;padding:8px 16px;color:#fff;font-size:12px;font-weight:600;cursor:pointer}
+.btn-clear:hover{background:#d01450}
+</style>
+</head>
+<body>
+
+<h1>📋 Checklist MedicoPC</h1>
+<p class="sub">Selecciona el tipo de intervención</p>
+
+<div class="type-grid" id="types">
+  <button class="type-btn" data-id="formateo" onclick="showChecklist('formateo')">
+    <span class="type-icon">🔄</span>
+    <span class="type-name">Formateo</span>
+    <span class="type-desc">Reinstalación limpia de Windows</span>
+  </button>
+  <button class="type-btn" data-id="virus" onclick="showChecklist('virus')">
+    <span class="type-icon">🦠</span>
+    <span class="type-name">Virus</span>
+    <span class="type-desc">Limpieza de malware</span>
+  </button>
+  <button class="type-btn" data-id="hardware" onclick="showChecklist('hardware')">
+    <span class="type-icon">⚙️</span>
+    <span class="type-name">Hardware</span>
+    <span class="type-desc">Diagnóstico y reparación</span>
+  </button>
+  <button class="type-btn" data-id="red" onclick="showChecklist('red')">
+    <span class="type-icon">📶</span>
+    <span class="type-name">Red</span>
+    <span class="type-desc">Conectividad y WiFi</span>
+  </button>
+  <button class="type-btn" data-id="rendimiento" onclick="showChecklist('rendimiento')">
+    <span class="type-icon">⚡</span>
+    <span class="type-name">Rendimiento</span>
+    <span class="type-desc">Optimización PC lento</span>
+  </button>
+  <button class="type-btn" data-id="recuperacion" onclick="showChecklist('recuperacion')">
+    <span class="type-icon">🗂️</span>
+    <span class="type-name">Recuperación</span>
+    <span class="type-desc">Datos borrados o perdidos</span>
+  </button>
+</div>
+
+<div id="checklist-container"></div>
+
+<script>
+const CHECKLISTS = {
+  formateo: {
+    title: "Formateo / Reinstalación Windows",
+    phases: [
+      {title:"Fase 1 — Preparación previa", sub:"Backup y material antes de tocar nada", items:[
+        {t:"Backup completo de Documentos, Escritorio, Descargas y Archivos de programa relevantes", c:true},
+        {t:"Backup de favoritos y contraseñas guardadas del navegador", c:true},
+        {t:"Anotar licencias de software instalado (Office, Adobe, etc.)"},
+        {t:"Verificar clave de producto de Windows (ShowKeyPlus)"},
+        {t:"USB Windows Install preparado (Ventoy o Rufus + ISO oficial)"},
+        {t:"Confirmar con el cliente que se pierde todo lo no respaldado"}
+      ]},
+      {title:"Fase 2 — Formateo e instalación", sub:"Proceso destructivo, sin vuelta atrás", items:[
+        {t:"Verificar que el USB seleccionado en el BIOS es el correcto antes de formatear", c:true},
+        {t:"Borrar todas las particiones antiguas desde el instalador"},
+        {t:"Crear partición nueva y dejar que Windows la formatee"},
+        {t:"Instalación limpia hasta llegar al escritorio"},
+        {t:"Saltar cuenta Microsoft si el cliente prefiere cuenta local"},
+        {t:"Primera conexión a internet para updates iniciales"}
+      ]},
+      {title:"Fase 3 — Post-instalación", sub:"Dejar el PC listo para usar", items:[
+        {t:"Instalar drivers: chipset, GPU, red, audio (desde web del fabricante)"},
+        {t:"Windows Update hasta completar todas las actualizaciones"},
+        {t:"Instalar navegador preferido del cliente (Chrome / Firefox / Edge)"},
+        {t:"Instalar Office / LibreOffice según licencia"},
+        {t:"Instalar Malwarebytes gratuito como protección extra"},
+        {t:"Restaurar datos del backup a sus carpetas originales"},
+        {t:"Verificar que Windows queda activado correctamente"},
+        {t:"Reinicio final y comprobación general"}
+      ]}
+    ]
+  },
+
+  virus: {
+    title: "Limpieza de virus / malware",
+    phases: [
+      {title:"Fase 1 — Evaluación y aislamiento", sub:"Contener antes de limpiar", items:[
+        {t:"Desconectar el PC de la red (WiFi + cable) para evitar propagación", c:true},
+        {t:"Identificar síntomas: popups, lentitud, antivirus bloqueado, ransomware"},
+        {t:"Revisar procesos sospechosos en Administrador de tareas"},
+        {t:"Comprobar programas instalados recientemente (Panel de control)"},
+        {t:"Revisar extensiones instaladas en todos los navegadores"}
+      ]},
+      {title:"Fase 2 — Limpieza activa", sub:"Eliminación de amenazas", items:[
+        {t:"Arrancar Windows en Modo Seguro con funciones de red"},
+        {t:"Escaneo completo con Malwarebytes portable actualizado"},
+        {t:"Escaneo con AdwCleaner para PUPs y adware residual"},
+        {t:"Si el antivirus está bloqueado o hay ransomware: Kaspersky Rescue Disk offline desde USB", c:true},
+        {t:"Limpiar extensiones sospechosas del navegador y resetear su configuración"},
+        {t:"Ejecutar sfc /scannow y DISM /Online /Cleanup-Image /RestoreHealth"}
+      ]},
+      {title:"Fase 3 — Verificación y prevención", sub:"Blindar el sistema", items:[
+        {t:"Escaneo final con Windows Defender actualizado (debe salir limpio)"},
+        {t:"Avisar al cliente para cambiar contraseñas importantes desde OTRO dispositivo", c:true},
+        {t:"Activar Windows Defender en tiempo real + protección en la nube"},
+        {t:"Instalar uBlock Origin en el navegador del cliente"},
+        {t:"Explicar al cliente cómo evitar reinfección (no abrir adjuntos, no instalar cracks)"}
+      ]}
+    ]
+  },
+
+  hardware: {
+    title: "Diagnóstico y reparación hardware",
+    phases: [
+      {title:"Fase 1 — Diagnóstico inicial", sub:"Identificar el componente fallón", items:[
+        {t:"Temperaturas de CPU, GPU y disco con HWiNFO64"},
+        {t:"Estado SMART del disco con CrystalDiskInfo"},
+        {t:"Test de RAM con MemTest86 (mínimo 2 pasadas completas)"},
+        {t:"Revisar Visor de eventos de Windows: errores de hardware, WHEA"},
+        {t:"Si hay síntomas de disco muriendo (clics, chirridos): NO apagar, clonar con Clonezilla ya", c:true}
+      ]},
+      {title:"Fase 2 — Intervención física", sub:"Desarmar y revisar", items:[
+        {t:"Desconectar la corriente y descargar electricidad estática antes de abrir", c:true},
+        {t:"Limpieza de polvo con aire comprimido (ventiladores y disipadores)"},
+        {t:"Revisar cables SATA y de alimentación (reasentar si parecen sueltos)"},
+        {t:"Reasentar módulos de RAM (quitar y volver a poner)"},
+        {t:"Verificar que todos los ventiladores giran correctamente"},
+        {t:"Cambiar pasta térmica si tiene más de 3 años o hay temperaturas altas"}
+      ]},
+      {title:"Fase 3 — Verificación", sub:"Confirmar que el fallo está resuelto", items:[
+        {t:"Arranque correcto y POST sin errores"},
+        {t:"Temperaturas bajo carga con Prime95 + FurMark"},
+        {t:"Test de estabilidad mínimo 30 minutos sin crashes ni reinicios"},
+        {t:"Documentar piezas cambiadas y conservar factura"},
+        {t:"Entregar al cliente con explicación clara de lo sustituido"}
+      ]}
+    ]
+  },
+
+  red: {
+    title: "Problemas de red / conectividad",
+    phases: [
+      {title:"Fase 1 — Diagnóstico de conexión", sub:"Localizar dónde se corta", items:[
+        {t:"Comprobar cables físicos conectados correctamente / WiFi activado"},
+        {t:"ipconfig /all para ver IP, gateway y DNS asignados"},
+        {t:"Ping al router (192.168.1.1 o la puerta de enlace real)"},
+        {t:"Ping a 8.8.8.8 (Google DNS, test sin resolución)"},
+        {t:"Ping a google.com (test con resolución DNS)"}
+      ]},
+      {title:"Fase 2 — Resolución por capas", sub:"Resetear la pila de red", items:[
+        {t:"ipconfig /flushdns"},
+        {t:"netsh int ip reset"},
+        {t:"netsh winsock reset"},
+        {t:"Reiniciar el PC obligatoriamente tras los reset (sin esto no se aplican)", c:true},
+        {t:"Cambiar DNS manualmente a 8.8.8.8 / 1.1.1.1"},
+        {t:"Actualizar o reinstalar el driver de la tarjeta de red"}
+      ]},
+      {title:"Fase 3 — Router y línea", sub:"Descartar problema externo", items:[
+        {t:"Reiniciar el router (desenchufado 30 segundos)"},
+        {t:"Probar con cable ethernet si el problema era en WiFi"},
+        {t:"Verificar con otros dispositivos (si todos fallan, es el router / ISP)"},
+        {t:"Revisar configuración del router: canal WiFi libre, seguridad WPA2/3"},
+        {t:"Si persiste: contactar ISP y pedir revisión de línea"}
+      ]}
+    ]
+  },
+
+  rendimiento: {
+    title: "Optimización de rendimiento",
+    phases: [
+      {title:"Fase 1 — Análisis", sub:"Medir antes de tocar nada", items:[
+        {t:"Uso de CPU, RAM y disco en tiempo real (Administrador de tareas)"},
+        {t:"Lista de programas al inicio (pestaña Inicio del Administrador)"},
+        {t:"Espacio libre en disco C: (debe ser >15%)"},
+        {t:"Tipo de disco: HDD vs SSD (CrystalDiskMark)"},
+        {t:"Estado SMART del disco con CrystalDiskInfo"}
+      ]},
+      {title:"Fase 2 — Limpieza de software", sub:"Quitar lo que sobra", items:[
+        {t:"Desinstalar programas innecesarios o no usados"},
+        {t:"Deshabilitar programas pesados al inicio de Windows"},
+        {t:"Limpieza de archivos temporales (Storage Sense o CCleaner)"},
+        {t:"Análisis con TreeSize Free para localizar grandes consumidores de espacio"},
+        {t:"Escaneo con Malwarebytes (descartar que sea malware ralentizando)"},
+        {t:"Windows Update completo (incluye updates de drivers)"}
+      ]},
+      {title:"Fase 3 — Optimización / hardware", sub:"Cuando el software ya no da más", items:[
+        {t:"Si el disco es HDD: presupuestar upgrade a SSD (la mejor mejora posible)", c:true},
+        {t:"Ampliar RAM si tiene <8GB en Windows 10/11"},
+        {t:"Ajustar efectos visuales a 'Rendimiento' en propiedades del sistema"},
+        {t:"Cambiar pasta térmica si las temperaturas altas causan throttling"},
+        {t:"Benchmark antes/después para mostrar la mejora al cliente"}
+      ]}
+    ]
+  },
+
+  recuperacion: {
+    title: "Recuperación de datos",
+    phases: [
+      {title:"Fase 1 — Evaluación", sub:"Prevenir daño mayor", items:[
+        {t:"NO escribir nada más en el disco afectado (se sobreescribe lo borrado)", c:true},
+        {t:"Identificar exactamente qué se perdió y cuándo ocurrió"},
+        {t:"Verificar la Papelera de reciclaje"},
+        {t:"Comprobar OneDrive / Google Drive / Dropbox / backups previos"},
+        {t:"Estado SMART del disco (CrystalDiskInfo) para descartar fallo físico"}
+      ]},
+      {title:"Fase 2 — Recuperación por software", sub:"Primera línea de intento", items:[
+        {t:"Si es el disco de sistema: arrancar desde USB (WinPE) para no seguir escribiendo", c:true},
+        {t:"Recuva en modo rápido sobre la partición afectada"},
+        {t:"Recuva en modo escaneo profundo si el rápido no encuentra nada"},
+        {t:"PhotoRec para casos extremos o particiones dañadas"},
+        {t:"Guardar los archivos recuperados en OTRO disco (nunca en el mismo)"}
+      ]},
+      {title:"Fase 3 — Casos graves", sub:"Cuando el software no llega", items:[
+        {t:"Si el disco tiene fallos físicos (clics, sectores corruptos): NO insistir, empeora"},
+        {t:"Evaluar y presupuestar servicio profesional de recuperación (200-2000€)"},
+        {t:"Informar honestamente al cliente de probabilidades y coste"},
+        {t:"Documentar qué se ha podido recuperar en una lista clara"},
+        {t:"Recomendar sistema de backup 3-2-1 para que no vuelva a ocurrir"}
+      ]}
+    ]
+  }
+};
+
+let currentType = null;
+const state = {};
+
+function showChecklist(typeId) {
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.querySelector('.type-btn[data-id="' + typeId + '"]');
+  if (btn) btn.classList.add('active');
+  currentType = typeId;
+  if (!state[typeId]) state[typeId] = {};
+  render();
+  document.getElementById('checklist-container').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function render() {
+  const data = CHECKLISTS[currentType];
+  const checked = state[currentType] || {};
+  let total = 0, done = 0;
+  data.phases.forEach((p, pi) => p.items.forEach((_, ii) => {
+    total++;
+    if (checked[pi + '-' + ii]) done++;
+  }));
+  const pct = total ? Math.round(done * 100 / total) : 0;
+
+  let html = '<div class="progress-card">' +
+    '<div class="progress-info">' +
+      '<div class="progress-label">' + data.title + '</div>' +
+      '<div class="progress-text">' + done + ' de ' + total + ' completados</div>' +
+      '<div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div>' +
+    '</div>' +
+    '<div class="progress-percent">' + pct + '%</div>' +
+  '</div>';
+
+  data.phases.forEach((phase, pi) => {
+    html += '<div class="phase-card">' +
+      '<div class="phase-title">' + phase.title + '</div>' +
+      '<div class="phase-sub">' + phase.sub + '</div>';
+    phase.items.forEach((item, ii) => {
+      const key = pi + '-' + ii;
+      const isChecked = !!checked[key];
+      const critico = item.c ? '<span class="badge-critico">CRÍTICO</span>' : '';
+      html += '<div class="item' + (isChecked ? ' checked' : '') + '" onclick="toggleItem(' + pi + ',' + ii + ')">' +
+        '<div class="item-check"></div>' +
+        '<div class="item-text">' + critico + item.t + '</div>' +
+      '</div>';
+    });
+    html += '</div>';
+  });
+
+  html += '<div class="action-row">' +
+    '<button class="btn-reset" onclick="clearChecklist()">← Volver</button>' +
+    '<button class="btn-clear" onclick="resetProgress()">Limpiar progreso</button>' +
+  '</div>';
+
+  document.getElementById('checklist-container').innerHTML = html;
+}
+
+function toggleItem(pi, ii) {
+  const key = pi + '-' + ii;
+  if (!state[currentType]) state[currentType] = {};
+  state[currentType][key] = !state[currentType][key];
+  render();
+}
+
+function resetProgress() {
+  if (confirm('¿Seguro que quieres limpiar todo el progreso de este checklist?')) {
+    state[currentType] = {};
+    render();
+  }
+}
+
+function clearChecklist() {
+  currentType = null;
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('checklist-container').innerHTML = '';
+}
+</script>
+
+</body>
+</html>
