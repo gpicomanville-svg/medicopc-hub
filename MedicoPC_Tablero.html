@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tablero — MedicoPC</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0b0b12;color:#e8e8f0;font-family:'Segoe UI',system-ui,sans-serif;padding:16px;min-height:100vh}
+.section{margin-bottom:2rem}
+.section-header{display:flex;align-items:center;gap:8px;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:.5px solid rgba(255,255,255,.1)}
+.section-title{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:10px}
+.card{background:#1a1a26;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px;cursor:pointer;transition:border-color .15s;position:relative;user-select:none}
+.card:hover{border-color:rgba(255,255,255,.2)}
+.card.done{opacity:.35}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.card-emoji{font-size:22px;line-height:1}
+.check{width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(255,255,255,.25);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.card.done .check{background:#00c882;border-color:#00c882}
+.check-inner{width:8px;height:8px;border-radius:50%;background:#fff;opacity:0;transition:opacity .15s}
+.card.done .check-inner{opacity:1}
+.card-title{font-size:13px;font-weight:600;color:#e8e8f0;margin-bottom:4px;line-height:1.3}
+.card-sub{font-size:11px;color:rgba(255,255,255,.45);line-height:1.4;margin-bottom:10px}
+.badge{display:inline-block;font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;line-height:1.4}
+.badge.red{background:rgba(232,24,90,.2);color:#ff6b9e}
+.badge.amber{background:rgba(240,180,60,.18);color:#f0b43c}
+.badge.blue{background:rgba(29,63,206,.25);color:#7b9fff}
+.badge.green{background:rgba(0,200,130,.18);color:#00c882}
+.badge.gray{background:rgba(255,255,255,.1);color:rgba(255,255,255,.55)}
+.badge.teal{background:rgba(0,180,200,.18);color:#4dd8e8}
+.badge.purple{background:rgba(130,80,220,.2);color:#b08fff}
+.badge.coral{background:rgba(220,80,60,.2);color:#ff9480}
+.add-btn{display:flex;align-items:center;justify-content:center;gap:6px;background:transparent;border:1px dashed rgba(255,255,255,.15);border-radius:12px;padding:14px;cursor:pointer;color:rgba(255,255,255,.3);font-size:12px;transition:all .15s;min-height:60px;width:100%}
+.add-btn:hover{border-color:rgba(255,255,255,.35);color:rgba(255,255,255,.6)}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;z-index:100}
+.modal{background:#1a1a26;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:22px;width:340px;max-width:95vw}
+.modal h3{font-size:14px;font-weight:600;margin-bottom:16px;color:#e8e8f0}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:11px;color:rgba(255,255,255,.45);margin-bottom:4px}
+.field input,.field select,.field textarea{width:100%;font-size:13px;padding:7px 10px;border:1px solid rgba(255,255,255,.1);border-radius:8px;background:#0f0f1a;color:#e8e8f0}
+.field textarea{resize:vertical;min-height:56px}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+.btn{font-size:12px;padding:6px 14px;border-radius:8px;cursor:pointer;border:1px solid rgba(255,255,255,.15);background:transparent;color:#e8e8f0}
+.btn.primary{background:#e8185a;border-color:#e8185a;color:#fff;font-weight:600}
+.btn:hover{opacity:.85}
+</style>
+</head>
+<body>
+<div id="board"></div>
+
+<div id="modal" style="display:none" class="modal-bg">
+<div class="modal">
+<h3>Nueva tarjeta</h3>
+<div class="field"><label>Sección</label>
+<select id="f-section" style="background:#0f0f1a;color:#e8e8f0">
+<option value="0">🚨 URGENTE — TÚ</option>
+<option value="1">⚡ PRÓXIMOS — TÚ</option>
+<option value="2">🔧 EN COLA — YO (CLAUDE)</option>
+<option value="3">💤 EN PAUSA / PERSONAL</option>
+</select></div>
+<div class="field"><label>Emoji</label><input id="f-emoji" placeholder="🔧" maxlength="2"/></div>
+<div class="field"><label>Título</label><input id="f-title" placeholder="Alta Hacienda"/></div>
+<div class="field"><label>Descripción</label><textarea id="f-sub" placeholder="Detalle..."></textarea></div>
+<div class="field"><label>Badge texto</label><input id="f-badge" placeholder="Bloquea operar"/></div>
+<div class="field"><label>Badge color</label>
+<select id="f-color" style="background:#0f0f1a;color:#e8e8f0">
+<option value="red">Rojo</option>
+<option value="amber">Ámbar</option>
+<option value="blue">Azul</option>
+<option value="green">Verde</option>
+<option value="teal">Teal</option>
+<option value="gray">Gris</option>
+<option value="purple">Morado</option>
+<option value="coral">Coral</option>
+</select></div>
+<div class="modal-actions">
+<button class="btn" onclick="closeModal()">Cancelar</button>
+<button class="btn primary" onclick="saveCard()">Añadir</button>
+</div>
+</div>
+</div>
+
+<script>
+const SECTIONS=[
+{id:'urgente',icon:'🚨',label:'URGENTE — TÚ'},
+{id:'proximos',icon:'⚡',label:'PRÓXIMOS — TÚ'},
+{id:'claude',icon:'🔧',label:'EN COLA — YO (CLAUDE)'},
+{id:'pausa',icon:'💤',label:'EN PAUSA / PERSONAL'}
+];
+
+const DEFAULT_CARDS=[
+{id:'c1',section:0,emoji:'🏛️',title:'Alta Hacienda',sub:'Modelo 037 + TGSS importass',badge:'Bloquea operar',color:'red'},
+{id:'c2',section:0,emoji:'🛡️',title:'Seguro RC',sub:'80–200€/año · antes del 1er cliente presencial',badge:'Bloquea presencial',color:'red'},
+{id:'c3',section:0,emoji:'📱',title:'Móvil empresa',sub:'Samsung A35 o Xiaomi Redmi Note 13',badge:'Desbloquea WhatsApp Business',color:'amber'},
+{id:'c4',section:1,emoji:'⭐',title:'5 reseñas Google',sub:'Pedir a conocidos · SEO local',badge:'Alta visibilidad',color:'blue'},
+{id:'c5',section:1,emoji:'🛒',title:'Wallapop republica',sub:'Cuenta empresa cuando tengas móvil',badge:'Canal activo',color:'teal'},
+{id:'c6',section:1,emoji:'📮',title:'Verificación postal',sub:'Google Business · carta 5–14 días',badge:'Esperando',color:'amber'},
+{id:'c7',section:2,emoji:'💬',title:'MCP WhatsApp texto',sub:'"Doctor PC" → "MedicoPC" en mensaje pre-rellenado',badge:'15 min',color:'blue'},
+{id:'c8',section:2,emoji:'🔨',title:'MCP v3',sub:'10 tools nuevas pendientes',badge:'Sesión portátil',color:'gray'},
+{id:'c9',section:2,emoji:'🗂️',title:'Flyer + tarjetas',sub:'Vicálvaro · ~10€ impresión',badge:'Diseño listo',color:'green'},
+{id:'c10',section:2,emoji:'🔑',title:'Token PAT Netlify',sub:'Vence 27/04 · renovar pronto',badge:'7 días',color:'red'},
+{id:'c11',section:2,emoji:'📄',title:'Facturación v2',sub:'Clientes guardados · CSV · backup',badge:'Cuando quieras',color:'gray'},
+{id:'c12',section:2,emoji:'🔍',title:'Repaso global empresa',sub:'Legal · fiscal · comercial · técnico',badge:'Gran sesión',color:'teal'},
+{id:'c13',section:3,emoji:'💰',title:'Ingresos Pasivos',sub:'Etsy + KDP · arrancar cuando quieras',badge:'Día 1',color:'green'},
+{id:'c14',section:3,emoji:'🥽',title:'Claude Wearable',sub:'Ray-Ban Meta · Fase 0 gratis',badge:'Cuando mole',color:'blue'},
+{id:'c15',section:3,emoji:'📚',title:'Libro fantasía',sub:'Tu mujer trae el libro de referencia',badge:'Esperando',color:'amber'},
+{id:'c16',section:3,emoji:'🏠',title:'App Casa',sub:'Expo · Supabase · Android first',badge:'En pausa',color:'gray'},
+];
+
+function load(){try{return JSON.parse(localStorage.getItem('mpc_board'))||{cards:[...DEFAULT_CARDS],done:{}}}catch(e){return{cards:[...DEFAULT_CARDS],done:{}}}}
+function save(s){localStorage.setItem('mpc_board',JSON.stringify(s))}
+
+let state=load();
+
+function render(){
+const board=document.getElementById('board');
+board.innerHTML='';
+SECTIONS.forEach((sec,idx)=>{
+const cards=state.cards.filter(c=>c.section===idx);
+const sd=document.createElement('div');
+sd.className='section';
+sd.innerHTML=`<div class="section-header"><span>${sec.icon}</span><span class="section-title">${sec.label}</span></div>`;
+const grid=document.createElement('div');
+grid.className='grid';
+cards.forEach(card=>{
+const done=!!state.done[card.id];
+const el=document.createElement('div');
+el.className='card'+(done?' done':'');
+el.innerHTML=`<div class="card-top"><span class="card-emoji">${card.emoji}</span><div class="check"><div class="check-inner"></div></div></div><div class="card-title">${card.title}</div><div class="card-sub">${card.sub}</div>${card.badge?`<span class="badge ${card.color}">${card.badge}</span>`:''}`;
+el.querySelector('.check').addEventListener('click',e=>{e.stopPropagation();state.done[card.id]=!state.done[card.id];save(state);render();});
+grid.appendChild(el);
+});
+const add=document.createElement('button');
+add.className='add-btn';
+add.textContent='+ añadir';
+add.addEventListener('click',()=>{document.getElementById('f-section').value=idx;document.getElementById('modal').style.display='flex';});
+grid.appendChild(add);
+sd.appendChild(grid);
+board.appendChild(sd);
+});
+}
+
+function closeModal(){document.getElementById('modal').style.display='none'}
+function saveCard(){
+const title=document.getElementById('f-title').value.trim();
+if(!title)return;
+state.cards.push({id:'c'+Date.now(),section:parseInt(document.getElementById('f-section').value),emoji:document.getElementById('f-emoji').value||'📌',title,sub:document.getElementById('f-sub').value.trim(),badge:document.getElementById('f-badge').value.trim(),color:document.getElementById('f-color').value});
+save(state);render();closeModal();
+['f-emoji','f-title','f-sub','f-badge'].forEach(id=>document.getElementById(id).value='');
+}
+
+render();
+</script>
+</body>
+</html>

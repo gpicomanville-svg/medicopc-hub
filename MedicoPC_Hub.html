@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MedicoPC — Centro de Mando</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:#0b0b12;font-family:'Segoe UI',system-ui,sans-serif}
+#layout{display:flex;flex-direction:column;height:100%}
+#topbar{display:flex;align-items:center;height:46px;background:#0d0d1a;border-bottom:1px solid rgba(232,24,90,.2);padding:0 16px;gap:2px;flex-shrink:0}
+.logo{font-size:14px;font-weight:700;color:#e8185a;letter-spacing:-.03em;margin-right:16px;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.logo-dot{width:8px;height:8px;background:#e8185a;border-radius:50%;box-shadow:0 0 8px #e8185a}
+.tab{display:flex;align-items:center;gap:7px;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:500;color:rgba(255,255,255,.4);border:none;background:transparent;transition:all .15s;white-space:nowrap;letter-spacing:.01em}
+.tab:hover{color:rgba(255,255,255,.75);background:rgba(255,255,255,.06)}
+.tab.active{color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.1)}
+.tab-icon{font-size:13px}
+.spacer{flex:1}
+.meta{font-size:11px;color:rgba(255,255,255,.2);margin-right:8px}
+#frame-container{flex:1;position:relative}
+.frame{position:absolute;inset:0;width:100%;height:100%;border:none;display:none;background:#0b0b12}
+.frame.active{display:block}
+.ext-panel{position:absolute;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px;background:#0b0b12}
+.ext-panel.active{display:flex}
+.ext-btn{padding:12px 28px;background:#e8185a;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;letter-spacing:.02em}
+.ext-btn:hover{opacity:.85}
+.ext-note{font-size:12px;color:rgba(255,255,255,.3)}
+</style>
+</head>
+<body>
+<div id="layout">
+  <div id="topbar">
+    <div class="logo"><div class="logo-dot"></div>MedicoPC</div>
+    <button class="tab active" data-tab="tablero"><span class="tab-icon">📋</span>Tablero</button>
+    <button class="tab" data-tab="gsuite"><span class="tab-icon">⚡</span>G.SUITE</button>
+    <button class="tab" data-tab="facturacion"><span class="tab-icon">💰</span>Facturación</button>
+    <button class="tab" data-tab="web"><span class="tab-icon">🌐</span>Web</button>
+    <div class="spacer"></div>
+    <span class="meta" id="clock"></span>
+  </div>
+  <div id="frame-container">
+    <iframe class="frame active" id="frame-tablero" src="/MedicoPC_Tablero.html"></iframe>
+    <iframe class="frame" id="frame-gsuite" src=""></iframe>
+    <iframe class="frame" id="frame-facturacion" src=""></iframe>
+    <div class="ext-panel" id="frame-web">
+      <div style="font-size:48px">🌐</div>
+      <div style="font-size:18px;font-weight:600;color:#fff">MedicoPC Web</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.4);margin-bottom:8px">medicopc.es no permite incrustarse en iframes</div>
+      <button class="ext-btn" onclick="window.open('https://medicopc.es','_blank')">Abrir medicopc.es →</button>
+      <span class="ext-note">Se abre en nueva pestaña</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const URLS={
+  tablero:'/MedicoPC_Tablero.html',
+  gsuite:'/G.SUITE.html',
+  facturacion:'/MedicoPC_Facturacion.html',
+  web:null
+};
+
+const tabs=document.querySelectorAll('.tab');
+let active=localStorage.getItem('mpc_hub_tab')||'tablero';
+activate(active);
+
+tabs.forEach(t=>t.addEventListener('click',()=>{
+  activate(t.dataset.tab);
+  localStorage.setItem('mpc_hub_tab',t.dataset.tab);
+}));
+
+function activate(id){
+  active=id;
+  tabs.forEach(t=>t.classList.toggle('active',t.dataset.tab===id));
+  document.querySelectorAll('.frame,.ext-panel').forEach(f=>f.classList.remove('active'));
+  const el=document.getElementById('frame-'+id);
+  if(el){
+    el.classList.add('active');
+    if(el.tagName==='IFRAME'&&el.getAttribute('src')===''&&URLS[id]){
+      el.src=URLS[id];
+    }
+  }
+}
+
+function tick(){
+  const now=new Date();
+  document.getElementById('clock').textContent=now.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+}
+tick();setInterval(tick,30000);
+</script>
+</body>
+</html>

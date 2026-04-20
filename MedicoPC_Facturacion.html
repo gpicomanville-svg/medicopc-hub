@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedicoPC — Facturación</title>
+<meta name="theme-color" content="#0b0b12">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MedicoPC">
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0b12;--surface:#121228;--surface2:#1a1a35;--border:#1e1e40;--pink:#e8185a;--green:#00c882;--amber:#f0b43c;--red:#ef4444;--text:#e2e8f0;--muted:#64748b;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Poppins',sans-serif;min-height:100vh;}
+.app{display:grid;grid-template-columns:260px 1fr;min-height:100vh;}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.sidebar-logo{padding:20px 18px 14px;border-bottom:1px solid var(--border);}
+.logo-text{font-family:'Lora',serif;font-size:19px;color:#fff;}
+.logo-text span{color:var(--pink);}
+.logo-sub{font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
+.sidebar-nav{padding:10px 0;flex:1;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 18px;cursor:pointer;font-size:13px;color:var(--muted);transition:all .15s;border-left:2px solid transparent;}
+.nav-item:hover{color:var(--text);background:rgba(255,255,255,.03);}
+.nav-item.active{color:#fff;border-left-color:var(--pink);background:rgba(232,24,90,.07);}
+.sidebar-stats{padding:14px 18px;border-top:1px solid var(--border);}
+.stat-row{display:flex;justify-content:space-between;margin-bottom:6px;}
+.stat-label{font-size:11px;color:var(--muted);}
+.stat-val{font-size:11px;font-weight:600;color:var(--green);}
+.main{padding:28px;overflow-y:auto;}
+.page{display:none;}.page.active{display:block;}
+.page-header{margin-bottom:22px;}
+.page-title{font-family:'Lora',serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:3px;}
+.page-sub{font-size:12px;color:var(--muted);}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.form-grid.cols3{grid-template-columns:1fr 1fr 1fr;}
+.form-full{grid-column:1/-1;}
+.field-group{display:flex;flex-direction:column;gap:4px;}
+.field-label{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
+.field-input{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 11px;color:var(--text);font-family:'Poppins',sans-serif;font-size:13px;outline:none;transition:border-color .15s;width:100%;}
+.field-input:focus{border-color:var(--pink);}
+select.field-input{cursor:pointer;}
+.section-title{font-size:11px;color:var(--pink);font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin:18px 0 10px;padding-bottom:5px;border-bottom:1px solid var(--border);}
+.cli-row{display:flex;gap:8px;margin-bottom:10px;align-items:center;}
+.cli-row select{flex:1;}
+.lines-header{display:grid;grid-template-columns:3fr 70px 100px 100px 32px;gap:6px;margin-bottom:5px;font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;}
+.line-row{display:grid;grid-template-columns:3fr 70px 100px 100px 32px;gap:6px;margin-bottom:5px;align-items:center;}
+.line-total{font-size:13px;color:var(--amber);font-weight:600;padding:8px 10px;}
+.btn-remove{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:5px;color:var(--red);cursor:pointer;width:32px;height:32px;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.btn-remove:hover{background:rgba(239,68,68,.25);}
+.totals-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin:14px 0;max-width:300px;margin-left:auto;}
+.total-row{display:flex;justify-content:space-between;margin-bottom:7px;font-size:13px;}
+.total-row.final{margin-bottom:0;padding-top:9px;border-top:1px solid var(--border);font-weight:600;}
+.total-label{color:var(--muted);}
+.total-val{color:var(--text);}
+.total-row.final .total-val{color:var(--green);font-size:17px;}
+.btn-row{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;}
+.btn{padding:9px 16px;border-radius:6px;border:none;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;}
+.btn-primary{background:var(--pink);color:#fff;}.btn-primary:hover{background:#c2144d;}
+.btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border);}.btn-secondary:hover{border-color:var(--pink);color:var(--pink);}
+.btn-success{background:rgba(0,200,130,.1);color:var(--green);border:1px solid rgba(0,200,130,.25);}.btn-success:hover{background:rgba(0,200,130,.2);}
+.btn-danger{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.2);}.btn-danger:hover{background:rgba(239,68,68,.2);}
+.btn-add{background:rgba(0,200,130,.08);color:var(--green);border:1px solid rgba(0,200,130,.2);margin-bottom:10px;}.btn-add:hover{background:rgba(0,200,130,.18);}
+.btn-sm{padding:5px 11px;font-size:11px;}
+.invoice-list{display:flex;flex-direction:column;gap:8px;}
+.invoice-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;transition:border-color .15s;}
+.invoice-card:hover{border-color:rgba(232,24,90,.4);}
+.inv-top{display:grid;grid-template-columns:auto 1fr auto auto;gap:14px;align-items:center;}
+.inv-num{font-size:13px;font-weight:700;color:#fff;font-family:monospace;}
+.inv-client{font-size:13px;color:var(--text);}
+.inv-date{font-size:11px;color:var(--muted);margin-top:2px;}
+.inv-amount{font-size:14px;font-weight:700;color:var(--green);}
+.inv-status{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:20px;white-space:nowrap;}
+.status-paid{background:rgba(0,200,130,.12);color:var(--green);border:1px solid rgba(0,200,130,.3);}
+.status-pending{background:rgba(240,180,60,.12);color:var(--amber);border:1px solid rgba(240,180,60,.3);}
+.inv-actions{display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);flex-wrap:wrap;}
+.empty-state{text-align:center;padding:48px 20px;color:var(--muted);}
+.empty-state .icon{font-size:40px;margin-bottom:10px;}
+.empty-state p{font-size:13px;}
+.client-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:8px;}
+.client-info .name{font-size:14px;font-weight:600;color:#fff;}
+.client-info .detail{font-size:11px;color:var(--muted);margin-top:3px;}
+.client-actions{display:flex;gap:6px;flex-shrink:0;}
+.quarter-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px 20px;margin-bottom:12px;}
+.quarter-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.q-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px;}
+.q-stat{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:11px 13px;}
+.q-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;}
+.q-val{font-size:15px;font-weight:700;}
+.q-alert{background:rgba(240,180,60,.07);border:1px solid rgba(240,180,60,.2);border-radius:6px;padding:10px 14px;font-size:12px;color:var(--amber);line-height:1.7;}
+.preview-wrap{background:#fff;border-radius:8px;padding:44px;color:#1a1a2e;max-width:680px;margin:0 auto;font-family:'Poppins',sans-serif;}
+.prev-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:34px;}
+.prev-logo{font-family:'Lora',serif;font-size:24px;font-weight:700;color:#1a1a2e;}
+.prev-logo span{color:#e8185a;}
+.prev-factura{text-align:right;}
+.prev-factura h2{font-size:18px;font-weight:700;color:#1a1a2e;}
+.prev-factura .num{font-size:13px;color:#e8185a;font-weight:600;margin-top:2px;}
+.prev-factura .date{font-size:12px;color:#64748b;margin-top:2px;}
+.prev-parties{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-bottom:26px;}
+.party-label{font-size:10px;color:#64748b;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;font-weight:600;}
+.party-name{font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:3px;}
+.party-detail{font-size:12px;color:#475569;line-height:1.7;}
+.prev-table{width:100%;border-collapse:collapse;margin-bottom:20px;}
+.prev-table th{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.07em;text-align:left;padding:7px 0;border-bottom:2px solid #e2e8f0;}
+.prev-table th:last-child,.prev-table td:last-child{text-align:right;}
+.prev-table td{padding:9px 0;font-size:13px;color:#1a1a2e;border-bottom:1px solid #f1f5f9;vertical-align:top;}
+.prev-table td:last-child{font-weight:600;}
+.prev-totals{max-width:240px;margin-left:auto;}
+.prev-total-row{display:flex;justify-content:space-between;padding:4px 0;font-size:13px;}
+.prev-total-row.final{border-top:2px solid #1a1a2e;margin-top:5px;padding-top:8px;font-weight:700;font-size:15px;}
+.prev-total-row .label{color:#64748b;}
+.prev-total-row .val{color:#1a1a2e;}
+.prev-total-row.final .val{color:#e8185a;}
+.irpf-label{color:#ef4444!important;}
+.irpf-val-p{color:#ef4444!important;}
+.prev-pago{background:#f8fafc;border:1px solid #e2e8f0;border-radius:5px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#475569;}
+.prev-footer{margin-top:28px;padding-top:14px;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8;}
+.backup-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px 20px;margin-bottom:12px;}
+.backup-title{font-size:14px;font-weight:600;color:#fff;margin-bottom:5px;}
+.backup-desc{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6;}
+@media print{
+  body{background:#fff;}.app{display:block;}
+  .sidebar,.btn-row,.page-header,.inv-actions{display:none;}
+  .main{padding:0;}.page{display:block!important;}
+  #page-preview{display:block!important;}
+  #page-new,#page-list,#page-clients,#page-trimestral,#page-backup{display:none!important;}
+  .preview-wrap{box-shadow:none;max-width:100%;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text">Medico<span>PC</span></div>
+    <div class="logo-sub">Facturación v2</div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-item active" onclick="goTo('new')" id="nav-new"><span>➕</span> Nueva factura</div>
+    <div class="nav-item" onclick="goTo('list')" id="nav-list"><span>📋</span> Mis facturas</div>
+    <div class="nav-item" onclick="goTo('clients')" id="nav-clients"><span>👥</span> Clientes</div>
+    <div class="nav-item" onclick="goTo('trimestral')" id="nav-trimestral"><span>📊</span> Trimestral</div>
+    <div class="nav-item" onclick="goTo('preview')" id="nav-preview"><span>👁️</span> Vista previa</div>
+    <div class="nav-item" onclick="goTo('backup')" id="nav-backup"><span>⚙️</span> Backup / CSV</div>
+    <div id="install-btn-wrap" style="padding:10px 18px;display:none;">
+      <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="installApp()">📲 Instalar app</button>
+    </div>
+  </div>
+  <div class="sidebar-stats">
+    <div class="stat-row"><span class="stat-label">Facturas</span><span class="stat-val" id="stat-total">0</span></div>
+    <div class="stat-row"><span class="stat-label">Total facturado</span><span class="stat-val" id="stat-amount">0,00 €</span></div>
+    <div class="stat-row"><span class="stat-label">Pendiente cobro</span><span class="stat-val" id="stat-pending" style="color:var(--amber)">0,00 €</span></div>
+    <div class="stat-row"><span class="stat-label">Clientes guardados</span><span class="stat-val" id="stat-clients">0</span></div>
+  </div>
+</div>
+
+<div class="main">
+  <!-- NUEVA FACTURA -->
+  <div class="page active" id="page-new">
+    <div class="page-header"><div class="page-title">Nueva factura</div><div class="page-sub">Rellena los datos y genera la factura</div></div>
+    <div class="section-title">Datos de la factura</div>
+    <div class="form-grid cols3">
+      <div class="field-group"><label class="field-label">Número</label><input class="field-input" id="inv-num"/></div>
+      <div class="field-group"><label class="field-label">Fecha</label><input class="field-input" type="date" id="inv-date"/></div>
+      <div class="field-group"><label class="field-label">Forma de pago</label>
+        <select class="field-input" id="inv-pago">
+          <option>Efectivo</option><option>Bizum (+34 640 126 543)</option><option>Transferencia bancaria</option>
+        </select>
+      </div>
+    </div>
+    <div class="section-title">Cliente</div>
+    <div class="cli-row">
+      <select class="field-input" id="cli-select" onchange="fillFromClient()"><option value="">— Cliente guardado —</option></select>
+      <button class="btn btn-success btn-sm" onclick="saveCurrentClient()">💾 Guardar cliente</button>
+    </div>
+    <div class="form-grid">
+      <div class="field-group"><label class="field-label">Nombre / Razón social</label><input class="field-input" id="cli-nombre" placeholder="Nombre"/></div>
+      <div class="field-group"><label class="field-label">NIF / CIF</label><input class="field-input" id="cli-nif" placeholder="12345678A"/></div>
+      <div class="field-group form-full"><label class="field-label">Dirección</label><input class="field-input" id="cli-dir" placeholder="Calle, número, ciudad, CP"/></div>
+      <div class="field-group"><label class="field-label">Email</label><input class="field-input" id="cli-email" placeholder="cliente@email.com"/></div>
+      <div class="field-group"><label class="field-label">Tipo</label>
+        <select class="field-input" id="cli-tipo" onchange="updateIRPF()">
+          <option value="particular">Particular (sin retención IRPF)</option>
+          <option value="pyme">Empresa / Profesional (con retención IRPF)</option>
+        </select>
+      </div>
+    </div>
+    <div class="section-title">Servicio rápido</div>
+    <div id="quick-btns" style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;">
+      <button class="btn btn-secondary btn-sm" onclick="quickAdd('Diagnóstico y reparación PC',50)">🔍 Diagnóstico 50€</button>
+      <button class="btn btn-secondary btn-sm" onclick="quickAdd('Eliminación de virus y malware',50)">🦠 Virus 50€</button>
+      <button class="btn btn-secondary btn-sm" onclick="quickAdd('Limpieza interna + pasta térmica',60)">🧹 Limpieza 60€</button>
+      <button class="btn btn-secondary btn-sm" onclick="quickAdd('Soporte remoto — resolución de incidencia',50)">💻 Remoto 50€</button>
+      <button class="btn btn-secondary btn-sm" onclick="quickAdd('Instalación y configuración de software',50)">⚙️ Software 50€</button>
+      <button class="btn btn-secondary btn-sm" onclick="quickAdd('Sustitución de disco HDD por SSD',75)">💾 SSD 75€</button>
+      <button class="btn btn-secondary btn-sm" onclick="quickAdd('Ampliación de memoria RAM',60)">🔧 RAM 60€</button>
+      <button class="btn btn-secondary btn-sm" onclick="quickAdd('Configuración de red y router',50)">📡 Red 50€</button>
+      <button class="btn btn-secondary btn-sm" onclick="quickAdd('Auditoría de rendimiento pyme',75)">📊 Auditoría 75€</button>
+      <button class="btn btn-secondary btn-sm" onclick="quickAdd('Desplazamiento a domicilio',15)">🚗 Desplazamiento 15€</button>
+    </div>
+    <div class="section-title">Líneas de servicio</div>
+    <div class="lines-header"><span>Descripción</span><span>Qty</span><span>Precio unit.</span><span>Total</span><span></span></div>
+    <div id="lines-container"></div>
+    <button class="btn btn-add" onclick="addLine()">+ Añadir línea</button>
+    <div class="section-title">Impuestos</div>
+    <div class="form-grid cols3" style="max-width:460px;margin-bottom:4px;">
+      <div class="field-group"><label class="field-label">IVA (%)</label><input class="field-input" type="number" id="iva-pct" value="21" onchange="calcTotals()"/></div>
+      <div class="field-group" id="irpf-group"><label class="field-label">Retención IRPF (%)</label>
+        <select class="field-input" id="irpf-pct" onchange="calcTotals()">
+          <option value="0">Sin retención</option><option value="7">7% (autónomo nuevo)</option><option value="15" selected>15% (general)</option>
+        </select>
+      </div>
+    </div>
+    <div class="totals-box">
+      <div class="total-row"><span class="total-label">Base imponible</span><span class="total-val" id="t-base">0,00 €</span></div>
+      <div class="total-row"><span class="total-label" id="lbl-iva">IVA (21%)</span><span class="total-val" id="t-iva">0,00 €</span></div>
+      <div class="total-row" id="t-irpf-row" style="display:none"><span class="total-label" style="color:var(--red)" id="lbl-irpf">Retención IRPF</span><span class="total-val" style="color:var(--red)" id="t-irpf">-0,00 €</span></div>
+      <div class="total-row final"><span class="total-label" style="color:#fff">TOTAL A PAGAR</span><span class="total-val" id="t-total">0,00 €</span></div>
+    </div>
+    <div class="field-group" style="max-width:560px;margin-bottom:12px;">
+      <label class="field-label">Notas (opcional)</label>
+      <input class="field-input" id="inv-notas" placeholder="Garantía 48h. Si no lo arreglamos, no cobramos."/>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveAndPreview()">👁️ Vista previa / Imprimir</button>
+      <button class="btn btn-secondary" onclick="saveInvoice(false)">💾 Guardar borrador</button>
+      <button class="btn btn-success" onclick="saveInvoice(true)">✅ Guardar cobrada</button>
+      <button class="btn btn-secondary" onclick="resetForm()">🗑️ Limpiar</button>
+    </div>
+  </div>
+
+  <!-- LISTA -->
+  <div class="page" id="page-list">
+    <div class="page-header"><div class="page-title">Mis facturas</div><div class="page-sub">Historial completo</div></div>
+    <div id="invoice-list-container"></div>
+  </div>
+
+  <!-- CLIENTES -->
+  <div class="page" id="page-clients">
+    <div class="page-header"><div class="page-title">Clientes guardados</div><div class="page-sub">Selecciónalos en nueva factura para autocompletar</div></div>
+    <div id="clients-container"></div>
+  </div>
+
+  <!-- TRIMESTRAL -->
+  <div class="page" id="page-trimestral">
+    <div class="page-header"><div class="page-title">Resumen trimestral</div><div class="page-sub">Lo que declaras en modelo 303 (IVA) y modelo 130 (IRPF)</div></div>
+    <div id="trimestral-container"></div>
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="page" id="page-preview">
+    <div class="page-header"><div class="page-title">Vista previa</div><div class="page-sub">Así se verá la factura impresa</div></div>
+    <div class="btn-row" style="margin-bottom:16px;">
+      <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir / PDF</button>
+      <button class="btn btn-secondary" onclick="goTo('new')">← Editar</button>
+    </div>
+    <div class="preview-wrap" id="preview-content"></div>
+  </div>
+
+  <!-- BACKUP -->
+  <div class="page" id="page-backup">
+    <div class="page-header"><div class="page-title">Backup y exportación</div><div class="page-sub">Exporta, importa y haz copias de seguridad</div></div>
+    <div class="backup-card">
+      <div class="backup-title">📤 Exportar CSV (para gestoría)</div>
+      <div class="backup-desc">Todas las facturas en formato CSV. Ábrelo en Excel o Google Sheets.</div>
+      <button class="btn btn-success" onclick="exportCSV()">⬇️ Descargar CSV</button>
+    </div>
+    <div class="backup-card">
+      <div class="backup-title">💾 Backup completo (JSON)</div>
+      <div class="backup-desc">Exporta facturas + clientes. Guárdalo en Drive como copia de seguridad o para usarlo en otro dispositivo.</div>
+      <button class="btn btn-secondary" onclick="exportBackup()">⬇️ Exportar backup</button>
+    </div>
+    <div class="backup-card">
+      <div class="backup-title">📥 Restaurar backup</div>
+      <div class="backup-desc" style="color:var(--amber)">⚠️ Sobreescribirá todos los datos actuales. Haz un backup antes.</div>
+      <input type="file" id="backup-file" accept=".json" style="color:var(--muted);font-size:12px;margin-top:8px;" onchange="importBackup(this)"/>
+    </div>
+    <div class="backup-card" style="border-color:rgba(239,68,68,.3)">
+      <div class="backup-title" style="color:var(--red)">🗑️ Borrar todos los datos</div>
+      <div class="backup-desc">Elimina todas las facturas y clientes. Irreversible.</div>
+      <button class="btn btn-danger" onclick="clearAll()">Borrar todo</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+let invoices  = JSON.parse(localStorage.getItem('mpc_invoices')   || '[]');
+let customers = JSON.parse(localStorage.getItem('mpc_customers')  || '[]');
+let lineCount = 0;
+let previewData = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('inv-date').value = new Date().toISOString().split('T')[0];
+  updateInvNumber(); addLine(); calcTotals(); updateStats(); updateIRPF(); renderClientSelect();
+  loadFromURL();
+});
+
+function updateInvNumber() {
+  const y = new Date().getFullYear(), n = invoices.length + 1;
+  document.getElementById('inv-num').value = `MPC-${y}-${String(n).padStart(3,'0')}`;
+}
+
+function goTo(page) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.getElementById('nav-'+page).classList.add('active');
+  if(page==='list') renderList();
+  if(page==='clients') renderClients();
+  if(page==='trimestral') renderTrimestral();
+  if(page==='preview') renderPreview();
+}
+
+function addLine() {
+  lineCount++;
+  const id = lineCount, div = document.createElement('div');
+  div.className='line-row'; div.id='line-'+id;
+  div.innerHTML=`<input class="field-input" placeholder="Descripción" id="ldesc-${id}"/>
+    <input class="field-input" type="number" value="1" min="1" id="lqty-${id}" onchange="calcTotals()"/>
+    <input class="field-input" type="number" value="0" step="0.01" id="lprice-${id}" onchange="calcTotals()"/>
+    <div class="line-total" id="ltotal-${id}">0,00 €</div>
+    <button class="btn-remove" onclick="removeLine(${id})">✕</button>`;
+  document.getElementById('lines-container').appendChild(div);
+  calcTotals();
+}
+
+function removeLine(id) { const el=document.getElementById('line-'+id); if(el){el.remove();calcTotals();} }
+
+function getLines() {
+  return Array.from(document.querySelectorAll('.line-row')).map(row=>{
+    const id=row.id.split('-')[1];
+    const desc=document.getElementById('ldesc-'+id)?.value||'';
+    const qty=parseFloat(document.getElementById('lqty-'+id)?.value)||0;
+    const price=parseFloat(document.getElementById('lprice-'+id)?.value)||0;
+    return {desc,qty,price,total:qty*price};
+  }).filter(l=>l.desc||l.total>0);
+}
+
+function calcTotals() {
+  let base=0;
+  document.querySelectorAll('.line-row').forEach(row=>{
+    const id=row.id.split('-')[1];
+    const qty=parseFloat(document.getElementById('lqty-'+id)?.value)||0;
+    const price=parseFloat(document.getElementById('lprice-'+id)?.value)||0;
+    const tot=qty*price; base+=tot;
+    const el=document.getElementById('ltotal-'+id);
+    if(el) el.textContent=fmt(tot);
+  });
+  const ivaPct=parseFloat(document.getElementById('iva-pct').value)||21;
+  const irpfPct=parseFloat(document.getElementById('irpf-pct').value)||0;
+  const iva=base*ivaPct/100, irpf=base*irpfPct/100, total=base+iva-irpf;
+  document.getElementById('t-base').textContent=fmt(base);
+  document.getElementById('t-iva').textContent=fmt(iva);
+  document.getElementById('t-irpf').textContent='-'+fmt(irpf);
+  document.getElementById('t-total').textContent=fmt(total);
+  document.getElementById('lbl-iva').textContent=`IVA (${ivaPct}%)`;
+  const ir=document.getElementById('t-irpf-row');
+  if(irpfPct>0){ir.style.display='flex';document.getElementById('lbl-irpf').textContent=`Retención IRPF (${irpfPct}%)`;}
+  else ir.style.display='none';
+}
+
+function updateIRPF() {
+  const tipo=document.getElementById('cli-tipo').value;
+  const g=document.getElementById('irpf-group'), s=document.getElementById('irpf-pct');
+  if(tipo==='particular'){g.style.opacity='.4';g.style.pointerEvents='none';s.value='0';}
+  else{g.style.opacity='1';g.style.pointerEvents='auto';if(s.value==='0')s.value='15';}
+  calcTotals();
+}
+
+function fmt(n){return n.toFixed(2).replace('.',',')+' €';}
+
+function getCurrentData(paid) {
+  const lines=getLines();
+  const ivaPct=parseFloat(document.getElementById('iva-pct').value)||21;
+  const irpfPct=parseFloat(document.getElementById('irpf-pct').value)||0;
+  const base=lines.reduce((s,l)=>s+l.total,0);
+  const iva=base*ivaPct/100, irpf=base*irpfPct/100, total=base+iva-irpf;
+  return {
+    id:Date.now(), num:document.getElementById('inv-num').value,
+    date:document.getElementById('inv-date').value, pago:document.getElementById('inv-pago').value,
+    cliente:{nombre:document.getElementById('cli-nombre').value, nif:document.getElementById('cli-nif').value,
+      dir:document.getElementById('cli-dir').value, email:document.getElementById('cli-email').value,
+      tipo:document.getElementById('cli-tipo').value},
+    lines, ivaPct, irpfPct, base, iva, irpf, total,
+    notas:document.getElementById('inv-notas').value, paid:paid||false, createdAt:new Date().toISOString()
+  };
+}
+
+function saveInvoice(paid) {
+  const inv=getCurrentData(paid), idx=invoices.findIndex(i=>i.num===inv.num);
+  if(idx>=0) invoices[idx]=inv; else invoices.push(inv);
+  persist(); alert(paid?'✅ Factura guardada como cobrada':'💾 Borrador guardado');
+}
+
+function saveAndPreview() {
+  const inv=getCurrentData(false), idx=invoices.findIndex(i=>i.num===inv.num);
+  if(idx>=0) invoices[idx]=inv; else invoices.push(inv);
+  previewData=inv; persist(); goTo('preview');
+}
+
+function persist() { localStorage.setItem('mpc_invoices',JSON.stringify(invoices)); updateStats(); }
+
+function updateStats() {
+  document.getElementById('stat-total').textContent=invoices.length;
+  document.getElementById('stat-amount').textContent=fmt(invoices.reduce((s,i)=>s+(i.total||0),0));
+  document.getElementById('stat-pending').textContent=fmt(invoices.filter(i=>!i.paid).reduce((s,i)=>s+(i.total||0),0));
+  document.getElementById('stat-clients').textContent=customers.length;
+}
+
+function resetForm() {
+  ['cli-nombre','cli-nif','cli-dir','cli-email','inv-notas'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('cli-tipo').value='particular';
+  document.getElementById('cli-select').value='';
+  document.getElementById('lines-container').innerHTML='';
+  lineCount=0; addLine(); updateInvNumber(); updateIRPF(); calcTotals();
+}
+
+function renderList() {
+  const c=document.getElementById('invoice-list-container');
+  if(!invoices.length){c.innerHTML='<div class="empty-state"><div class="icon">📄</div><p>No hay facturas todavía.</p></div>';return;}
+  const sorted=[...invoices].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  c.innerHTML='<div class="invoice-list">'+sorted.map(inv=>`
+    <div class="invoice-card">
+      <div class="inv-top">
+        <div class="inv-num">${inv.num}</div>
+        <div><div class="inv-client">${inv.cliente.nombre||'Sin nombre'}</div><div class="inv-date">${inv.date} · ${inv.pago}</div></div>
+        <div class="inv-amount">${fmt(inv.total)}</div>
+        <div class="inv-status ${inv.paid?'status-paid':'status-pending'}">${inv.paid?'Cobrada':'Pendiente'}</div>
+      </div>
+      <div class="inv-actions">
+        <button class="btn btn-secondary btn-sm" onclick="loadInvoice('${inv.num}')">✏️ Editar</button>
+        <button class="btn btn-secondary btn-sm" onclick="duplicateInvoice('${inv.num}')">📋 Duplicar</button>
+        <button class="btn btn-secondary btn-sm" onclick="previewInv('${inv.num}')">👁️ Ver</button>
+        <button class="btn ${inv.paid?'btn-secondary':'btn-success'} btn-sm" onclick="togglePaid('${inv.num}')">${inv.paid?'↩ Pendiente':'✅ Cobrada'}</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteInvoice('${inv.num}')">🗑️ Borrar</button>
+      </div>
+    </div>`).join('')+'</div>';
+}
+
+function loadInvoice(num) {
+  const inv=invoices.find(i=>i.num===num); if(!inv) return;
+  document.getElementById('inv-num').value=inv.num;
+  document.getElementById('inv-date').value=inv.date;
+  document.getElementById('inv-pago').value=inv.pago;
+  document.getElementById('cli-nombre').value=inv.cliente.nombre;
+  document.getElementById('cli-nif').value=inv.cliente.nif;
+  document.getElementById('cli-dir').value=inv.cliente.dir;
+  document.getElementById('cli-email').value=inv.cliente.email;
+  document.getElementById('cli-tipo').value=inv.cliente.tipo;
+  document.getElementById('iva-pct').value=inv.ivaPct;
+  document.getElementById('irpf-pct').value=inv.irpfPct;
+  document.getElementById('inv-notas').value=inv.notas||'';
+  document.getElementById('lines-container').innerHTML=''; lineCount=0;
+  inv.lines.forEach(l=>{addLine();document.getElementById('ldesc-'+lineCount).value=l.desc;document.getElementById('lqty-'+lineCount).value=l.qty;document.getElementById('lprice-'+lineCount).value=l.price;});
+  updateIRPF(); calcTotals(); goTo('new');
+}
+
+function duplicateInvoice(num) { loadInvoice(num); updateInvNumber(); document.getElementById('inv-date').value=new Date().toISOString().split('T')[0]; }
+
+function previewInv(num) { const inv=invoices.find(i=>i.num===num); if(!inv) return; previewData=inv; goTo('preview'); }
+
+function togglePaid(num) {
+  const idx=invoices.findIndex(i=>i.num===num); if(idx<0) return;
+  invoices[idx].paid=!invoices[idx].paid; persist(); renderList();
+}
+
+function deleteInvoice(num) {
+  if(!confirm(`¿Borrar la factura ${num}? No se puede deshacer.`)) return;
+  invoices=invoices.filter(i=>i.num!==num); persist(); renderList();
+}
+
+function renderClientSelect() {
+  const sel=document.getElementById('cli-select');
+  sel.innerHTML='<option value="">— Cliente guardado —</option>';
+  customers.forEach((c,i)=>{const o=document.createElement('option');o.value=i;o.textContent=c.nombre+(c.nif?` (${c.nif})`:'')+' · '+(c.tipo==='pyme'?'Empresa':'Particular');sel.appendChild(o);});
+}
+
+function fillFromClient() {
+  const idx=document.getElementById('cli-select').value; if(idx==='') return;
+  const c=customers[parseInt(idx)]; if(!c) return;
+  document.getElementById('cli-nombre').value=c.nombre;
+  document.getElementById('cli-nif').value=c.nif;
+  document.getElementById('cli-dir').value=c.dir;
+  document.getElementById('cli-email').value=c.email;
+  document.getElementById('cli-tipo').value=c.tipo;
+  updateIRPF();
+}
+
+function saveCurrentClient() {
+  const nombre=document.getElementById('cli-nombre').value.trim();
+  if(!nombre){alert('Introduce el nombre del cliente');return;}
+  const c={nombre,nif:document.getElementById('cli-nif').value,dir:document.getElementById('cli-dir').value,email:document.getElementById('cli-email').value,tipo:document.getElementById('cli-tipo').value};
+  const idx=customers.findIndex(x=>x.nombre.toLowerCase()===nombre.toLowerCase());
+  if(idx>=0) customers[idx]=c; else customers.push(c);
+  localStorage.setItem('mpc_customers',JSON.stringify(customers));
+  renderClientSelect(); updateStats(); alert('✅ Cliente guardado: '+nombre);
+}
+
+function renderClients() {
+  const c=document.getElementById('clients-container');
+  if(!customers.length){c.innerHTML='<div class="empty-state"><div class="icon">👥</div><p>No hay clientes guardados.<br>Añádelos desde "Nueva factura".</p></div>';return;}
+  c.innerHTML=customers.map((cli,i)=>`
+    <div class="client-card">
+      <div class="client-info">
+        <div class="name">${cli.nombre}</div>
+        <div class="detail">${cli.nif||'Sin NIF'} · ${cli.email||'Sin email'} · ${cli.tipo==='pyme'?'Empresa':'Particular'}</div>
+        ${cli.dir?`<div class="detail">${cli.dir}</div>`:''}
+      </div>
+      <div class="client-actions">
+        <button class="btn btn-secondary btn-sm" onclick="useClient(${i})">📋 Usar</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteClient(${i})">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+function useClient(i) {
+  const c=customers[i];
+  document.getElementById('cli-nombre').value=c.nombre;
+  document.getElementById('cli-nif').value=c.nif;
+  document.getElementById('cli-dir').value=c.dir;
+  document.getElementById('cli-email').value=c.email;
+  document.getElementById('cli-tipo').value=c.tipo;
+  updateIRPF(); goTo('new');
+}
+
+function deleteClient(i) {
+  if(!confirm(`¿Borrar cliente "${customers[i].nombre}"?`)) return;
+  customers.splice(i,1); localStorage.setItem('mpc_customers',JSON.stringify(customers));
+  renderClientSelect(); renderClients(); updateStats();
+}
+
+function renderTrimestral() {
+  const c=document.getElementById('trimestral-container');
+  if(!invoices.length){c.innerHTML='<div class="empty-state"><div class="icon">📊</div><p>No hay facturas todavía.</p></div>';return;}
+  const quarters={};
+  invoices.forEach(inv=>{
+    if(!inv.date) return;
+    const d=new Date(inv.date), year=d.getFullYear(), q=Math.floor(d.getMonth()/3)+1, key=`${year}-Q${q}`;
+    if(!quarters[key]) quarters[key]={year,q,count:0,base:0,iva:0,irpf:0,total:0};
+    quarters[key].count++;
+    quarters[key].base+=inv.base||0; quarters[key].iva+=inv.iva||0;
+    quarters[key].irpf+=inv.irpf||0; quarters[key].total+=inv.total||0;
+  });
+  const qNames={1:'Enero–Marzo',2:'Abril–Junio',3:'Julio–Septiembre',4:'Octubre–Diciembre'};
+  const deadlines={1:'20 abril',2:'20 julio',3:'20 octubre',4:'30 enero (año sig.)'};
+  c.innerHTML=Object.keys(quarters).sort().reverse().map(key=>{
+    const qd=quarters[key];
+    const irpfEst=Math.max(0, qd.base*0.20 - qd.irpf);
+    return `<div class="quarter-card">
+      <div class="quarter-title">${qd.year} · T${qd.q} — ${qNames[qd.q]} <span style="font-size:10px;background:rgba(232,24,90,.12);color:var(--pink);border:1px solid rgba(232,24,90,.3);padding:2px 10px;border-radius:20px;font-weight:600">${qd.count} factura${qd.count!==1?'s':''}</span></div>
+      <div class="q-grid">
+        <div class="q-stat"><div class="q-label">Base imponible</div><div class="q-val" style="color:var(--text)">${fmt(qd.base)}</div></div>
+        <div class="q-stat"><div class="q-label">IVA repercutido</div><div class="q-val" style="color:var(--amber)">${fmt(qd.iva)}</div></div>
+        <div class="q-stat"><div class="q-label">IRPF retenido</div><div class="q-val" style="color:var(--red)">${fmt(qd.irpf)}</div></div>
+        <div class="q-stat"><div class="q-label">Total cobrado</div><div class="q-val" style="color:var(--green)">${fmt(qd.total)}</div></div>
+      </div>
+      <div class="q-alert">
+        📋 <strong>Modelo 303 (IVA):</strong> declara <strong>${fmt(qd.iva)}</strong> de IVA repercutido · Plazo: <strong>${deadlines[qd.q]}</strong><br>
+        📋 <strong>Modelo 130 (IRPF):</strong> pago fraccionado estimado ≈ <strong>${fmt(irpfEst)}</strong> (20% base menos retenciones ya aplicadas)
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderPreview() {
+  const inv=previewData||getCurrentData(false);
+  const irpfLine=inv.irpfPct>0?`<div class="prev-total-row"><span class="label irpf-label">Retención IRPF (${inv.irpfPct}%)</span><span class="val irpf-val-p">-${fmt(inv.irpf)}</span></div>`:'';
+  document.getElementById('preview-content').innerHTML=`
+    <div class="prev-header">
+      <div><div class="prev-logo">Medico<span>PC</span></div>
+        <div style="font-size:11px;color:#64748b;margin-top:5px;">Guillermo Pico Manville · NIF 50559869G<br>Madrid, España · hola@medicopc.es<br>+34 640 126 543 · medicopc.es</div></div>
+      <div class="prev-factura"><h2>FACTURA</h2><div class="num">${inv.num}</div><div class="date">Fecha: ${inv.date}</div></div>
+    </div>
+    <div class="prev-parties">
+      <div><div class="party-label">Emisor</div><div class="party-name">MedicoPC</div>
+        <div class="party-detail">Guillermo Pico Manville<br>NIF: 50559869G<br>Madrid, España<br>hola@medicopc.es</div></div>
+      <div><div class="party-label">Cliente</div><div class="party-name">${inv.cliente.nombre||'—'}</div>
+        <div class="party-detail">${inv.cliente.nif?'NIF/CIF: '+inv.cliente.nif+'<br>':''}${inv.cliente.dir?inv.cliente.dir+'<br>':''}${inv.cliente.email||''}</div></div>
+    </div>
+    <table class="prev-table">
+      <thead><tr><th>Descripción</th><th style="text-align:right">Qty</th><th style="text-align:right">Precio</th><th>Total</th></tr></thead>
+      <tbody>${inv.lines.map(l=>`<tr><td>${l.desc}</td><td style="text-align:right">${l.qty}</td><td style="text-align:right">${fmt(l.price)}</td><td>${fmt(l.total)}</td></tr>`).join('')}</tbody>
+    </table>
+    <div class="prev-totals">
+      <div class="prev-total-row"><span class="label">Base imponible</span><span class="val">${fmt(inv.base)}</span></div>
+      <div class="prev-total-row"><span class="label">IVA (${inv.ivaPct}%)</span><span class="val">${fmt(inv.iva)}</span></div>
+      ${irpfLine}
+      <div class="prev-total-row final"><span class="label">TOTAL</span><span class="val">${fmt(inv.total)}</span></div>
+    </div>
+    <div style="margin-top:22px;">
+      <div class="prev-pago"><strong>Forma de pago:</strong> ${inv.pago}</div>
+      ${inv.notas?`<div class="prev-pago"><strong>Notas:</strong> ${inv.notas}</div>`:''}
+    </div>
+    <div class="prev-footer">MedicoPC · Guillermo Pico Manville · NIF 50559869G · hola@medicopc.es · medicopc.es · Madrid<br>Documento emitido conforme a la normativa fiscal española vigente.</div>`;
+}
+
+function exportCSV() {
+  if(!invoices.length){alert('No hay facturas para exportar');return;}
+  const rows=[['Número','Fecha','Cliente','NIF Cliente','Base','IVA %','IVA €','IRPF %','IRPF €','Total','Pagada','Forma de pago']];
+  invoices.forEach(inv=>rows.push([inv.num,inv.date,inv.cliente.nombre,inv.cliente.nif,inv.base.toFixed(2),inv.ivaPct,inv.iva.toFixed(2),inv.irpfPct,inv.irpf.toFixed(2),inv.total.toFixed(2),inv.paid?'Sí':'No',inv.pago]));
+  const csv=rows.map(r=>r.map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  download('MedicoPC_facturas.csv','text/csv','\uFEFF'+csv);
+}
+
+function exportBackup() {
+  download('MedicoPC_backup_'+new Date().toISOString().split('T')[0]+'.json','application/json',JSON.stringify({invoices,customers,exportedAt:new Date().toISOString()},null,2));
+}
+
+function importBackup(input) {
+  const file=input.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try {
+      const data=JSON.parse(e.target.result);
+      if(!confirm(`¿Importar? Se sobreescribirán ${invoices.length} facturas y ${customers.length} clientes.`)) return;
+      invoices=data.invoices||[]; customers=data.customers||[];
+      localStorage.setItem('mpc_invoices',JSON.stringify(invoices));
+      localStorage.setItem('mpc_customers',JSON.stringify(customers));
+      updateStats(); renderClientSelect(); alert(`✅ Restaurado: ${invoices.length} facturas, ${customers.length} clientes`);
+    } catch{alert('❌ Archivo no válido');}
+  };
+  reader.readAsText(file);
+}
+
+function clearAll() {
+  if(!confirm('¿Borrar TODOS los datos? Haz backup primero.')) return;
+  invoices=[]; customers=[];
+  localStorage.removeItem('mpc_invoices'); localStorage.removeItem('mpc_customers');
+  updateStats(); renderClientSelect(); alert('Datos borrados');
+}
+
+function download(name,type,content) {
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([content],{type}));
+  a.download=name; a.click();
+}
+
+function quickAdd(desc, price) {
+  const rows = document.querySelectorAll('.line-row');
+  let used = false;
+  for (const row of rows) {
+    const id = row.id.split('-')[1];
+    const d = document.getElementById('ldesc-'+id);
+    const p = document.getElementById('lprice-'+id);
+    if (d && d.value === '' && (!p || parseFloat(p.value) === 0)) {
+      d.value = desc;
+      document.getElementById('lprice-'+id).value = price;
+      calcTotals(); used = true; break;
+    }
+  }
+  if (!used) {
+    addLine();
+    document.getElementById('ldesc-'+lineCount).value = desc;
+    document.getElementById('lprice-'+lineCount).value = price;
+    calcTotals();
+  }
+}
+
+function loadFromURL() {
+  const p = new URLSearchParams(window.location.search);
+  if (!p.has('cliente') && !p.has('servicio')) return;
+  if (p.get('cliente')) document.getElementById('cli-nombre').value = p.get('cliente');
+  if (p.get('nif'))     document.getElementById('cli-nif').value    = p.get('nif');
+  if (p.get('dir'))     document.getElementById('cli-dir').value    = p.get('dir');
+  if (p.get('email'))   document.getElementById('cli-email').value  = p.get('email');
+  if (p.get('tipo'))    document.getElementById('cli-tipo').value   = p.get('tipo');
+  if (p.get('pago')) document.getElementById('inv-pago').value = p.get('pago');
+  if (p.get('notas')) document.getElementById('inv-notas').value = p.get('notas');
+  document.getElementById('lines-container').innerHTML = '';
+  lineCount = 0;
+  const servicios = p.getAll('servicio');
+  const precios   = p.getAll('precio');
+  const cantidades= p.getAll('qty');
+  if (servicios.length > 0) {
+    servicios.forEach((s, i) => {
+      addLine();
+      document.getElementById('ldesc-'+lineCount).value  = s;
+      document.getElementById('lprice-'+lineCount).value = precios[i] || 0;
+      if (cantidades[i]) document.getElementById('lqty-'+lineCount).value = cantidades[i];
+    });
+  } else {
+    addLine();
+  }
+  updateIRPF(); calcTotals();
+  if (p.get('autoprev') === '1') {
+    setTimeout(() => saveAndPreview(), 300);
+  }
+  window.history.replaceState({}, '', window.location.pathname);
+}
+
+const manifest = {
+  name: 'MedicoPC Facturación',
+  short_name: 'MedicoPC',
+  description: 'Sistema de facturación MedicoPC',
+  start_url: '.',
+  display: 'standalone',
+  background_color: '#0b0b12',
+  theme_color: '#0b0b12',
+  icons: [
+    { src: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" fill="%230b0b12" rx="32"/><text x="50%" y="55%" font-size="100" text-anchor="middle" dominant-baseline="middle">🩺</text></svg>', sizes: '192x192', type: 'image/svg+xml' },
+    { src: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="%230b0b12" rx="80"/><text x="50%" y="55%" font-size="280" text-anchor="middle" dominant-baseline="middle">🩺</text></svg>', sizes: '512x512', type: 'image/svg+xml' }
+  ]
+};
+const manifestBlob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+const manifestURL = URL.createObjectURL(manifestBlob);
+const manifestLink = document.createElement('link');
+manifestLink.rel = 'manifest'; manifestLink.href = manifestURL;
+document.head.appendChild(manifestLink);
+
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    const CACHE = 'mpc-v1';
+    self.addEventListener('install', e => {
+      e.waitUntil(caches.open(CACHE).then(c => c.addAll(['/'])));
+      self.skipWaiting();
+    });
+    self.addEventListener('fetch', e => {
+      e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).catch(() => caches.match('/'))));
+    });
+  `;
+  const swBlob = new Blob([swCode], {type:'text/javascript'});
+  const swURL = URL.createObjectURL(swBlob);
+  navigator.serviceWorker.register(swURL).catch(()=>{});
+}
+
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); deferredPrompt = e;
+  document.getElementById('install-btn-wrap').style.display = 'block';
+});
+window.addEventListener('appinstalled', () => {
+  document.getElementById('install-btn-wrap').style.display = 'none';
+});
+
+function installApp() {
+  if (!deferredPrompt) {
+    alert('Para instalar:\n📱 Móvil: menú del navegador → "Añadir a pantalla de inicio"\n💻 PC Chrome: icono ⊕ en la barra de direcciones');
+    return;
+  }
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
+}
+</script>
+</body>
+</html>
