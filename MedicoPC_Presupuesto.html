@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Presupuesto MedicoPC</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0b0b12;color:#e8e8f0;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;padding:20px;padding-bottom:140px}
+h1{font-size:18px;font-weight:700;color:#e8185a;margin-bottom:4px}
+.sub{font-size:12px;color:rgba(255,255,255,.35);margin-bottom:24px}
+
+.section{margin-bottom:20px}
+.section-title{font-size:12px;font-weight:700;color:#e8185a;margin-bottom:10px;text-transform:uppercase;letter-spacing:.08em;display:flex;align-items:center;gap:8px}
+.section-title::before{content:"";flex:0 0 18px;height:2px;background:#e8185a;border-radius:2px}
+
+.client-card{background:#1a1a26;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.client-card input{background:#0f0f1a;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 12px;color:#e8e8f0;font-size:13px;font-family:inherit;width:100%}
+.client-card input:focus{outline:none;border-color:#e8185a}
+.client-card input::placeholder{color:rgba(255,255,255,.3)}
+
+.services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.svc-btn{background:#1a1a26;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;cursor:pointer;text-align:left;transition:all .15s;color:#e8e8f0;position:relative}
+.svc-btn:hover{border-color:#e8185a;background:#1f1f30}
+.svc-btn.active{border-color:#00c882;background:rgba(0,200,130,.08)}
+.svc-name{font-size:12px;font-weight:600;margin-bottom:4px;padding-right:20px}
+.svc-desc{font-size:10px;color:rgba(255,255,255,.4);line-height:1.3;margin-bottom:8px}
+.svc-price-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.svc-price{font-size:14px;font-weight:700;color:#e8185a}
+.svc-btn.active .svc-price{color:#00c882}
+.svc-qty{display:none;align-items:center;gap:4px;background:#0f0f1a;border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:2px 4px}
+.svc-btn.active .svc-qty{display:inline-flex}
+.qty-btn{background:transparent;border:none;color:#e8e8f0;width:18px;height:18px;border-radius:4px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.qty-btn:hover{background:rgba(255,255,255,.1)}
+.qty-val{font-size:11px;font-weight:600;min-width:14px;text-align:center}
+
+.parts-list{background:#1a1a26;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px}
+.part-row{display:grid;grid-template-columns:1fr 100px 36px;gap:8px;margin-bottom:8px;align-items:center}
+.part-row input{background:#0f0f1a;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 12px;color:#e8e8f0;font-size:13px;font-family:inherit;width:100%}
+.part-row input:focus{outline:none;border-color:#e8185a}
+.part-row input::placeholder{color:rgba(255,255,255,.3)}
+.part-row input[type=number]{text-align:right}
+.btn-remove{background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:rgba(255,255,255,.4);font-size:16px;cursor:pointer;width:36px;height:38px;display:flex;align-items:center;justify-content:center}
+.btn-remove:hover{border-color:#e8185a;color:#ff6b9e}
+.btn-add-part{background:transparent;border:1px dashed rgba(255,255,255,.2);border-radius:8px;color:rgba(255,255,255,.5);padding:10px;width:100%;font-size:12px;cursor:pointer;font-family:inherit;margin-top:6px}
+.btn-add-part:hover{border-color:#e8185a;color:#e8185a}
+
+.options-card{background:#1a1a26;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px}
+.opt-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.opt-row:last-child{margin-bottom:0}
+.opt-label{font-size:12px;color:rgba(255,255,255,.7)}
+.opt-input{background:#0f0f1a;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 12px;color:#e8e8f0;font-size:13px;font-family:inherit;width:90px;text-align:right}
+.opt-input:focus{outline:none;border-color:#e8185a}
+
+.summary{position:fixed;bottom:0;left:0;right:0;background:#0f0f1a;border-top:1px solid rgba(255,255,255,.08);padding:14px 20px;z-index:10}
+.summary-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.total-block{flex:1;min-width:180px}
+.total-label{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em}
+.total-value{font-size:24px;font-weight:700;color:#00c882;line-height:1.1}
+.total-detail{font-size:11px;color:rgba(255,255,255,.45);margin-top:2px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:none;border-radius:10px;padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px}
+.btn-copy{background:rgba(255,255,255,.08);color:#e8e8f0;border:1px solid rgba(255,255,255,.1)}
+.btn-copy:hover{background:rgba(255,255,255,.14)}
+.btn-wa{background:#25d366;color:#0b0b12}
+.btn-wa:hover{background:#1ebe57}
+.btn-reset{background:transparent;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.55)}
+.btn-reset:hover{border-color:#e8185a;color:#ff6b9e}
+
+.toast{position:fixed;top:20px;right:20px;background:#00c882;color:#0b0b12;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600;opacity:0;transform:translateY(-10px);transition:all .25s;pointer-events:none;z-index:20}
+.toast.show{opacity:1;transform:translateY(0)}
+
+@media (max-width:600px){
+  .client-card{grid-template-columns:1fr}
+  .summary-inner{flex-direction:column;align-items:stretch}
+  .actions{justify-content:stretch}
+  .btn{flex:1;justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<h1>💰 Presupuesto MedicoPC</h1>
+<p class="sub">Calculadora rápida — servicios, piezas y total con margen</p>
+
+<div class="section">
+  <div class="section-title">Cliente</div>
+  <div class="client-card">
+    <input id="cli-nombre" type="text" placeholder="Nombre del cliente (opcional)">
+    <input id="cli-tel" type="tel" placeholder="Teléfono (ej. 612345678)">
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Servicios</div>
+  <div class="services-grid" id="services-grid"></div>
+</div>
+
+<div class="section">
+  <div class="section-title">Piezas / Material</div>
+  <div class="parts-list">
+    <div id="parts-container"></div>
+    <button class="btn-add-part" onclick="addPart()">+ Añadir pieza</button>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Ajustes</div>
+  <div class="options-card">
+    <div class="opt-row">
+      <span class="opt-label">Margen sobre piezas (%)</span>
+      <input id="opt-margen" class="opt-input" type="number" min="0" max="100" value="20" oninput="render()">
+    </div>
+    <div class="opt-row">
+      <span class="opt-label">Descuento global (€)</span>
+      <input id="opt-descuento" class="opt-input" type="number" min="0" value="0" oninput="render()">
+    </div>
+    <div class="opt-row">
+      <span class="opt-label">Aplicar IVA 21%</span>
+      <input id="opt-iva" type="checkbox" onchange="render()" style="width:20px;height:20px;accent-color:#e8185a;cursor:pointer">
+    </div>
+  </div>
+</div>
+
+<div class="summary">
+  <div class="summary-inner">
+    <div class="total-block">
+      <div class="total-label">Total presupuesto</div>
+      <div class="total-value" id="total-value">0 €</div>
+      <div class="total-detail" id="total-detail"></div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-reset" onclick="resetAll()">↺ Limpiar</button>
+      <button class="btn btn-copy" onclick="copyResumen()">📋 Copiar</button>
+      <button class="btn btn-wa" onclick="enviarWhatsApp()">💬 WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Copiado al portapapeles</div>
+
+<script>
+const SERVICIOS = [
+  {id:"diag",      nombre:"Diagnóstico",                desc:"Revisión completa del equipo",     precio:25},
+  {id:"limp",      nombre:"Limpieza software",          desc:"Optimización + arranque",           precio:40},
+  {id:"virus",     nombre:"Eliminación virus",          desc:"Malware + ransomware",              precio:60},
+  {id:"formateo",  nombre:"Formateo + Windows",         desc:"Instalación limpia + drivers",      precio:70},
+  {id:"password",  nombre:"Recuperar contraseña",       desc:"Reseteo de cuenta Windows",         precio:35},
+  {id:"recdatos",  nombre:"Recuperación datos",         desc:"Archivos borrados (software)",      precio:80},
+  {id:"polvo",     nombre:"Limpieza polvo + pasta",     desc:"Desmontaje + pasta térmica",        precio:50},
+  {id:"mo",        nombre:"Mano de obra montaje",       desc:"Cambio componente HW",              precio:40},
+  {id:"red",       nombre:"Configuración red",          desc:"Router / WiFi / cableado",          precio:35},
+  {id:"software",  nombre:"Instalación software",       desc:"Office + navegador + básicos",      precio:30},
+  {id:"backup",    nombre:"Backup de datos",            desc:"Copia a disco externo",             precio:40},
+  {id:"despl",     nombre:"Desplazamiento Madrid",      desc:"Zona centro (dentro M-30)",         precio:15},
+  {id:"desplfuera",nombre:"Desplazamiento periferia",   desc:"Fuera M-30 / periferia",            precio:25},
+  {id:"remoto",    nombre:"Asistencia remota (hora)",   desc:"AnyDesk / TeamViewer",              precio:30}
+];
+
+const state = {
+  servicios: {},
+  piezas: []
+};
+
+function renderServicios() {
+  const grid = document.getElementById('services-grid');
+  grid.innerHTML = SERVICIOS.map(s => {
+    const active = state.servicios[s.id];
+    const qty = active ? active.qty : 1;
+    return `<div class="svc-btn${active ? ' active' : ''}" onclick="toggleSvc(event,'${s.id}')">
+      <div class="svc-name">${s.nombre}</div>
+      <div class="svc-desc">${s.desc}</div>
+      <div class="svc-price-row">
+        <span class="svc-price">${s.precio} €</span>
+        <span class="svc-qty" onclick="event.stopPropagation()">
+          <button class="qty-btn" onclick="changeQty('${s.id}',-1)">−</button>
+          <span class="qty-val">${qty}</span>
+          <button class="qty-btn" onclick="changeQty('${s.id}',1)">+</button>
+        </span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleSvc(e, id) {
+  if (state.servicios[id]) delete state.servicios[id];
+  else state.servicios[id] = {qty:1};
+  renderServicios();
+  render();
+}
+
+function changeQty(id, delta) {
+  const s = state.servicios[id];
+  if (!s) return;
+  s.qty = Math.max(1, s.qty + delta);
+  renderServicios();
+  render();
+}
+
+function renderPiezas() {
+  const c = document.getElementById('parts-container');
+  c.innerHTML = state.piezas.map((p, i) => `
+    <div class="part-row">
+      <input type="text" placeholder="Nombre de la pieza (ej. SSD 500GB)" value="${escapeHtml(p.nombre)}" oninput="updatePart(${i},'nombre',this.value)">
+      <input type="number" min="0" step="0.01" placeholder="€ coste" value="${p.coste ?? ''}" oninput="updatePart(${i},'coste',this.value)">
+      <button class="btn-remove" onclick="removePart(${i})" title="Quitar">×</button>
+    </div>
+  `).join('');
+}
+
+function addPart() {
+  state.piezas.push({nombre:'', coste:0});
+  renderPiezas();
+  const inputs = document.querySelectorAll('.part-row input[type=text]');
+  if (inputs.length) inputs[inputs.length-1].focus();
+}
+
+function updatePart(i, field, value) {
+  if (field === 'coste') state.piezas[i].coste = parseFloat(value) || 0;
+  else state.piezas[i][field] = value;
+  render();
+}
+
+function removePart(i) {
+  state.piezas.splice(i, 1);
+  renderPiezas();
+  render();
+}
+
+function calc() {
+  let svcTotal = 0;
+  const svcLines = [];
+  SERVICIOS.forEach(s => {
+    const sel = state.servicios[s.id];
+    if (sel) {
+      const line = s.precio * sel.qty;
+      svcTotal += line;
+      svcLines.push({nombre:s.nombre, qty:sel.qty, precio:s.precio, total:line});
+    }
+  });
+
+  const margen = Math.max(0, parseFloat(document.getElementById('opt-margen').value) || 0);
+  let piezasBase = 0;
+  const piezaLines = [];
+  state.piezas.forEach(p => {
+    if (p.nombre.trim() || p.coste > 0) {
+      const conMargen = p.coste * (1 + margen/100);
+      piezasBase += p.coste;
+      piezaLines.push({nombre:p.nombre||'Pieza sin nombre', coste:p.coste, conMargen});
+    }
+  });
+  const piezasTotal = piezaLines.reduce((a,b)=>a+b.conMargen,0);
+
+  const descuento = Math.max(0, parseFloat(document.getElementById('opt-descuento').value) || 0);
+  const subtotal = svcTotal + piezasTotal - descuento;
+  const iva = document.getElementById('opt-iva').checked;
+  const total = iva ? subtotal * 1.21 : subtotal;
+
+  return {svcLines, svcTotal, piezaLines, piezasBase, piezasMargen: piezasTotal - piezasBase, piezasTotal, margen, descuento, subtotal, iva, total};
+}
+
+function render() {
+  const c = calc();
+  document.getElementById('total-value').textContent = formatEur(Math.max(0, c.total));
+  const parts = [];
+  if (c.svcTotal) parts.push('Servicios ' + formatEur(c.svcTotal));
+  if (c.piezasTotal) parts.push('Piezas ' + formatEur(c.piezasTotal));
+  if (c.descuento) parts.push('− Dto ' + formatEur(c.descuento));
+  if (c.iva) parts.push('IVA 21%');
+  document.getElementById('total-detail').textContent = parts.join(' · ');
+}
+
+function formatEur(n) {
+  return (Math.round(n*100)/100).toLocaleString('es-ES', {minimumFractionDigits:0, maximumFractionDigits:2}) + ' €';
+}
+
+function escapeHtml(s) {
+  return (s||'').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+function generarResumen() {
+  const c = calc();
+  const nombre = document.getElementById('cli-nombre').value.trim();
+  const lines = [];
+  lines.push('*PRESUPUESTO MedicoPC*');
+  if (nombre) lines.push('Cliente: ' + nombre);
+  lines.push('');
+  if (c.svcLines.length) {
+    lines.push('*Servicios*');
+    c.svcLines.forEach(s => {
+      const q = s.qty > 1 ? ' x' + s.qty : '';
+      lines.push('• ' + s.nombre + q + ' — ' + formatEur(s.total));
+    });
+    lines.push('');
+  }
+  if (c.piezaLines.length) {
+    lines.push('*Piezas*');
+    c.piezaLines.forEach(p => {
+      lines.push('• ' + p.nombre + ' — ' + formatEur(p.conMargen));
+    });
+    lines.push('');
+  }
+  if (c.descuento) lines.push('Descuento: −' + formatEur(c.descuento));
+  if (c.iva) lines.push('IVA 21% incluido');
+  lines.push('');
+  lines.push('*TOTAL: ' + formatEur(Math.max(0, c.total)) + '*');
+  return lines.join('\n');
+}
+
+function copyResumen() {
+  const txt = generarResumen();
+  navigator.clipboard.writeText(txt).then(() => showToast('Copiado al portapapeles'))
+    .catch(() => {
+      const ta = document.createElement('textarea');
+      ta.value = txt; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta);
+      showToast('Copiado');
+    });
+}
+
+function enviarWhatsApp() {
+  const tel = document.getElementById('cli-tel').value.replace(/\D/g,'');
+  const txt = encodeURIComponent(generarResumen());
+  let url;
+  if (tel) {
+    const num = tel.startsWith('34') || tel.length > 9 ? tel : '34' + tel;
+    url = 'https://wa.me/' + num + '?text=' + txt;
+  } else {
+    url = 'https://wa.me/?text=' + txt;
+  }
+  window.open(url, '_blank');
+}
+
+function resetAll() {
+  if (!confirm('¿Limpiar todo el presupuesto?')) return;
+  state.servicios = {};
+  state.piezas = [];
+  document.getElementById('cli-nombre').value = '';
+  document.getElementById('cli-tel').value = '';
+  document.getElementById('opt-margen').value = 20;
+  document.getElementById('opt-descuento').value = 0;
+  document.getElementById('opt-iva').checked = false;
+  renderServicios();
+  renderPiezas();
+  render();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+renderServicios();
+renderPiezas();
+render();
+</script>
+
+</body>
+</html>
