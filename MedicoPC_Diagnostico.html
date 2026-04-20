@@ -97,6 +97,26 @@ h1{font-size:18px;font-weight:700;color:#e8185a;margin-bottom:4px}
 <span class="sym-name">Archivos borrados</span>
 <span class="sym-desc">Fotos, documentos perdidos</span>
 </button>
+<button class="sym-btn" onclick="startTree('hackeada')">
+<span class="sym-icon">👤</span>
+<span class="sym-name">Cuenta hackeada</span>
+<span class="sym-desc">Email, redes, banco comprometidos</span>
+</button>
+<button class="sym-btn" onclick="startTree('filtrada')">
+<span class="sym-icon">📢</span>
+<span class="sym-name">Contraseña filtrada</span>
+<span class="sym-desc">Aviso de filtración o extorsión</span>
+</button>
+<button class="sym-btn" onclick="startTree('acceso_pc')">
+<span class="sym-icon">🕵️</span>
+<span class="sym-name">Acceso sin permiso</span>
+<span class="sym-desc">Alguien controla mi PC</span>
+</button>
+<button class="sym-btn" onclick="startTree('ransomware')">
+<span class="sym-icon">🔒</span>
+<span class="sym-name">Ransomware</span>
+<span class="sym-desc">Archivos cifrados, piden rescate</span>
+</button>
 </div>
 
 <div id="tree-area"></div>
@@ -194,6 +214,35 @@ steps:[{q:"¿Cuándo se borraron?",opts:[{t:"Hace poco, hoy o ayer",next:"r_recu
 r_recuva_rapido:{result:true,title:"Recuperación rápida posible",urgency:"alta",diag:"Borrado reciente = alta probabilidad de recuperación. Ejecuta Recuva AHORA, no guardes nada más en ese disco. Cuanto antes, mejor.",tools:["Recuva portable"]},
 r_recuva_lento:{result:true,title:"Recuperación posible con escaneo profundo",urgency:"media",diag:"Borrado antiguo = posible pero no seguro. Recuva en modo escaneo profundo. Puede tardar horas. Probabilidad media-baja si el disco ha seguido usándose.",tools:["Recuva portable"]},
 r_recuva_dificil:{result:true,title:"Recuperación difícil — caso grave",urgency:"alta",diag:"Disco formateado o con fallo. Recuva modo profundo primero. Si no recupera, necesitarías software profesional (R-Studio) o servicio de recuperación externo. Avisa al cliente del coste.",tools:["Recuva portable","CrystalDiskInfo"]}
+},
+
+hackeada:{
+steps:[{q:"¿Qué cuenta crees que está comprometida?",opts:[{t:"Email (Gmail, Outlook, etc.)",next:"r_email_hack"},{t:"Redes sociales (Instagram, Facebook, WhatsApp)",next:"r_social_hack"},{t:"Banca online",next:"r_banco_hack"},{t:"Varias cuentas a la vez",next:"r_master_hack"}]}],
+r_email_hack:{result:true,title:"Email comprometido",urgency:"alta",diag:"Desde OTRO dispositivo limpio: cambia la contraseña y activa 2FA. Revisa filtros, reglas de reenvío y dispositivos/sesiones activas (suelen dejar reenvío oculto para seguir leyendo). Comprueba el email en HaveIBeenPwned. Si el PC pudo ser origen, escanea con Malwarebytes + revisa Autoruns por infostealers.",tools:["HaveIBeenPwned","Malwarebytes portable","Autoruns"]},
+r_social_hack:{result:true,title:"Red social comprometida",urgency:"alta",diag:"Cambia contraseña desde otro dispositivo, activa 2FA, cierra todas las sesiones activas y revisa apps conectadas con permisos. Verifica el email asociado (a veces el atacante lo cambia primero). Comprueba HaveIBeenPwned por si la caída viene de una filtración reutilizada.",tools:["HaveIBeenPwned","Malwarebytes portable"]},
+r_banco_hack:{result:true,title:"Banca comprometida — urgente",urgency:"alta",diag:"PRIMERO: llama al banco para bloquear tarjeta/cuenta. Después analiza el PC OFFLINE con Kaspersky Rescue Disk (posible troyano bancario). RKill para parar procesos maliciosos y Malwarebytes para limpieza. No vuelvas a entrar al banco desde el PC hasta estar 100% limpio.",tools:["Kaspersky Rescue Disk","Malwarebytes portable","RKill","Process Hacker"]},
+r_master_hack:{result:true,title:"Infostealer probable — CRÍTICO",urgency:"alta",diag:"Si caen varias cuentas a la vez, casi seguro hay malware infostealer en el PC (RedLine, Raccoon, etc.) robando credenciales del navegador. ORDEN: 1) Kaspersky Rescue offline para limpiar, 2) RKill + Autoruns para matar persistencia, 3) Malwarebytes + Process Hacker para verificar, 4) después, SOLO después, cambiar contraseñas desde otro dispositivo. 2FA en todas las cuentas importantes.",tools:["Kaspersky Rescue Disk","RKill","Autoruns","Malwarebytes portable","Process Hacker","HaveIBeenPwned"]}
+},
+
+filtrada:{
+steps:[{q:"¿Cómo te has enterado de la filtración?",opts:[{t:"Aviso del navegador / gestor de contraseñas",next:"r_filtrada_leve"},{t:"Email de extorsión pidiendo dinero",next:"r_filtrada_extorsion"},{t:"Sospecha, quiero comprobarlo",next:"r_filtrada_check"}]}],
+r_filtrada_leve:{result:true,title:"Filtración confirmada",urgency:"media",diag:"Contraseña expuesta en filtración de algún servicio. Cambiala EN TODOS los sitios donde la reutilices (el vector principal es la reutilización). Activa 2FA en cuentas críticas. Recomienda instalar un gestor de contraseñas para no volver a reutilizar. Si aparece el email en muchas filtraciones, considera que el email ya es público.",tools:["HaveIBeenPwned"]},
+r_filtrada_extorsion:{result:true,title:"Email de extorsión (sextorsión)",urgency:"baja",diag:"El típico 'tengo vídeo tuyo y tu contraseña es XXX'. NO es que te hayan hackeado: la contraseña viene de una filtración antigua masiva. NO PAGAR nunca. Cambiar esa contraseña en todos los sitios donde la reutilices, activar 2FA y marcar el email como spam. Si la contraseña mostrada ya no la usas, ignorar.",tools:["HaveIBeenPwned"]},
+r_filtrada_check:{result:true,title:"Auditoría de filtraciones",urgency:"baja",diag:"Mete el email en HaveIBeenPwned.com: te dice en cuántas y cuáles filtraciones está. Por cada filtración relevante, cambia la contraseña en ese sitio y cualquier otro donde la repitas. Activa 2FA en email, banca y redes. Considera un gestor de contraseñas de ahora en adelante.",tools:["HaveIBeenPwned"]}
+},
+
+acceso_pc:{
+steps:[{q:"¿Qué está pasando exactamente?",opts:[{t:"El ratón se mueve solo / se abren ventanas",next:"r_remoto_activo"},{t:"Veo programas raros instalados o archivos movidos",next:"r_intruso_historial"},{t:"Proceso o conexión sospechosa en el Administrador",next:"r_proceso_sospechoso"}]}],
+r_remoto_activo:{result:true,title:"Control remoto activo — CRÍTICO",urgency:"alta",diag:"DESCONECTA INTERNET YA (cable + WiFi). Con el cable fuera revisa AnyDesk, TeamViewer, Chrome Remote Desktop, RDP y escritorio remoto en servicios. Con Process Hacker identifica el proceso de control y su PID; con Autoruns busca persistencia. RKill antes de limpiar. Malwarebytes full scan. Si quedan dudas, formateo limpio + cambiar TODAS las contraseñas desde otro equipo.",tools:["RKill","Process Hacker","Autoruns","Malwarebytes portable","Kaspersky Rescue Disk"]},
+r_intruso_historial:{result:true,title:"Rastro de intrusión — investigar",urgency:"alta",diag:"Aíslalo de la red. Abre Visor de eventos (eventvwr) para ver inicios de sesión y horas sospechosas. Autoruns para localizar persistencia reciente (orden por fecha). Process Hacker para examinar procesos actuales. Revisa programas instalados recientes y tareas programadas. Malwarebytes full scan. Cambiar contraseñas después de limpiar.",tools:["Autoruns","Process Hacker","Malwarebytes portable","RKill"]},
+r_proceso_sospechoso:{result:true,title:"Proceso sospechoso identificado",urgency:"alta",diag:"Con Process Hacker: click derecho en el proceso → Properties → pestaña Image para ver la ruta y firma; pestaña TCP/IP para ver conexiones activas. Sube el ejecutable a VirusTotal. Si confirma malware: RKill para parar el proceso y su protección, Autoruns para eliminar persistencia en inicio/servicios/tareas, Malwarebytes full scan. Si reaparece tras reinicio, Kaspersky Rescue offline.",tools:["Process Hacker","RKill","Autoruns","Malwarebytes portable","Kaspersky Rescue Disk"]}
+},
+
+ransomware:{
+steps:[{q:"¿Cómo está el equipo ahora mismo?",opts:[{t:"Sigue cifrando, veo archivos cambiando",next:"r_rans_activo"},{t:"Ya terminó, hay nota de rescate",next:"r_rans_terminado"},{t:"Sólo algunos archivos raros, sospecho",next:"r_rans_parcial"}]}],
+r_rans_activo:{result:true,title:"Ransomware en ejecución — APAGAR YA",urgency:"alta",diag:"APAGA el equipo tirando del cable o manteniendo el botón 5s. Cuanto antes pares la CPU, menos archivos se cifran. NO reinicies. Aisla de la red el resto de equipos. Arranca después SÓLO con Kaspersky Rescue Disk desde USB (nunca con el Windows infectado). Evalúa daño sobre la copia antes de tocar nada.",tools:["Kaspersky Rescue Disk"]},
+r_rans_terminado:{result:true,title:"Ransomware consumado — no pagar",urgency:"alta",diag:"Aísla el equipo de la red. Identifica la variante en nomoreransom.org / ID Ransomware (subir nota + archivo cifrado); si hay decryptor gratuito, usarlo. NO PAGAR: financia al grupo y no garantiza nada. Evalúa backups anteriores al cifrado. Kaspersky Rescue offline para limpiar antes de restaurar. La vía limpia suele ser formateo + restaurar desde backup + cambiar todas las contraseñas.",tools:["Kaspersky Rescue Disk","Recuva portable","Malwarebytes portable"]},
+r_rans_parcial:{result:true,title:"Inicio de cifrado o malware similar",urgency:"alta",diag:"Puede ser ransomware empezando o malware distinto. Desconecta de la red de inmediato. Con Process Hacker busca procesos con alta actividad de disco o en carpetas de usuario. RKill para parar lo sospechoso. Autoruns para cortar persistencia. Análisis offline con Kaspersky Rescue para descartar rootkit. Malwarebytes full scan. Si hay pérdida de datos, Recuva en lo no cifrado.",tools:["Kaspersky Rescue Disk","Autoruns","RKill","Process Hacker","Malwarebytes portable","Recuva portable"]}
 }
 };
 
