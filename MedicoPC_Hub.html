@@ -25,6 +25,13 @@ html,body{height:100%;overflow:hidden;background:#0b0b12;font-family:'Segoe UI',
 .ext-btn{padding:12px 28px;background:#e8185a;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;letter-spacing:.02em}
 .ext-btn:hover{opacity:.85}
 .ext-note{font-size:12px;color:rgba(255,255,255,.3)}
+.tools-panel{position:absolute;inset:0;display:none;flex-direction:column;background:#0b0b12}
+.tools-panel.active{display:flex}
+.tool-selector{display:flex;gap:6px;padding:10px 16px;background:#0d0d1a;border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0;overflow-x:auto}
+.tool-btn{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:500;color:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.08);background:#1a1a26;transition:all .15s;font-family:inherit;white-space:nowrap}
+.tool-btn:hover{color:#e8e8f0;border-color:rgba(232,24,90,.4)}
+.tool-btn.active{color:#fff;background:rgba(232,24,90,.15);border-color:#e8185a}
+#tool-frame{flex:1;width:100%;border:none;background:#0b0b12}
 </style>
 </head>
 <body>
@@ -35,6 +42,7 @@ html,body{height:100%;overflow:hidden;background:#0b0b12;font-family:'Segoe UI',
     <button class="tab" data-tab="gsuite"><span class="tab-icon">⚡</span>G.SUITE</button>
     <button class="tab" data-tab="facturacion"><span class="tab-icon">💰</span>Facturación</button>
     <button class="tab" data-tab="web"><span class="tab-icon">🌐</span>Web</button>
+    <button class="tab" data-tab="herramientas"><span class="tab-icon">🛠️</span>Herramientas</button>
     <div class="spacer"></div>
     <span class="meta" id="clock"></span>
   </div>
@@ -49,6 +57,15 @@ html,body{height:100%;overflow:hidden;background:#0b0b12;font-family:'Segoe UI',
       <button class="ext-btn" onclick="window.open('https://medicopc.es','_blank')">Abrir medicopc.es →</button>
       <span class="ext-note">Se abre en nueva pestaña</span>
     </div>
+    <div class="tools-panel" id="frame-herramientas">
+      <div class="tool-selector">
+        <button class="tool-btn" data-tool="diagnostico"><span>🩺</span>Diagnóstico</button>
+        <button class="tool-btn" data-tool="checklist"><span>📋</span>Checklist</button>
+        <button class="tool-btn" data-tool="presupuesto"><span>💰</span>Presupuesto</button>
+        <button class="tool-btn" data-tool="clientes"><span>👥</span>Clientes</button>
+      </div>
+      <iframe id="tool-frame" src=""></iframe>
+    </div>
   </div>
 </div>
 
@@ -59,9 +76,16 @@ const URLS={
   facturacion:'/MedicoPC_Facturacion.html',
   web:null
 };
+const TOOL_URLS={
+  diagnostico:'/MedicoPC_Diagnostico.html',
+  checklist:'/MedicoPC_Checklist.html',
+  presupuesto:'/MedicoPC_Presupuesto.html',
+  clientes:'/MedicoPC_Clientes.html'
+};
 
 const tabs=document.querySelectorAll('.tab');
 let active=localStorage.getItem('mpc_hub_tab')||'tablero';
+let activeTool=localStorage.getItem('mpc_hub_tool')||'diagnostico';
 activate(active);
 
 tabs.forEach(t=>t.addEventListener('click',()=>{
@@ -69,16 +93,33 @@ tabs.forEach(t=>t.addEventListener('click',()=>{
   localStorage.setItem('mpc_hub_tab',t.dataset.tab);
 }));
 
+document.querySelectorAll('.tool-btn').forEach(b=>b.addEventListener('click',()=>selectTool(b.dataset.tool)));
+
 function activate(id){
   active=id;
   tabs.forEach(t=>t.classList.toggle('active',t.dataset.tab===id));
-  document.querySelectorAll('.frame,.ext-panel').forEach(f=>f.classList.remove('active'));
+  document.querySelectorAll('.frame,.ext-panel,.tools-panel').forEach(f=>f.classList.remove('active'));
   const el=document.getElementById('frame-'+id);
   if(el){
     el.classList.add('active');
     if(el.tagName==='IFRAME'&&el.getAttribute('src')===''&&URLS[id]){
       el.src=URLS[id];
     }
+    if(id==='herramientas'){
+      selectTool(activeTool);
+    }
+  }
+}
+
+function selectTool(id){
+  if(!TOOL_URLS[id])return;
+  activeTool=id;
+  localStorage.setItem('mpc_hub_tool',id);
+  document.querySelectorAll('.tool-btn').forEach(b=>b.classList.toggle('active',b.dataset.tool===id));
+  const frame=document.getElementById('tool-frame');
+  if(frame.dataset.current!==id){
+    frame.src=TOOL_URLS[id];
+    frame.dataset.current=id;
   }
 }
 
