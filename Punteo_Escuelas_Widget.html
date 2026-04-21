@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Punteo Escuelas</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f0f4f8;min-height:100vh;padding:8px;font-size:13px}
+
+.header{background:#1a1a2e;border-radius:10px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.header-left{display:flex;align-items:center;gap:8px}
+.header-dot{width:8px;height:8px;border-radius:50%;background:#e8185a;flex-shrink:0}
+.header-title{font-size:13px;font-weight:700;color:#fff}
+.header-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px}
+.toggle-btn{width:24px;height:24px;border-radius:6px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.6);font-size:14px;transition:.15s;border:none;cursor:pointer}
+.toggle-btn:hover{background:rgba(255,255,255,.2)}
+
+.body{display:block}
+.body.collapsed{display:none}
+
+.tabs{display:flex;gap:4px;margin-bottom:8px}
+.tab{flex:1;padding:6px 4px;border:1.5px solid #d1d9e6;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#64748b;text-align:center;transition:all .12s}
+.tab.active{background:#1a1a2e;color:#fff;border-color:#1a1a2e}
+
+.section{display:none}.section.visible{display:block}
+
+/* FLOW */
+.bc{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:6px;min-height:18px}
+.bc-home{font-size:10px;color:#94a3b8;cursor:pointer;text-decoration:underline}
+.bc-sep{font-size:10px;color:#cbd5e1}
+.bc-curr{font-size:10px;color:#475569;font-weight:600}
+
+.card{background:#fff;border:1.5px solid #e2e8f0;border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.q-label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#94a3b8;margin-bottom:5px}
+.q-text{font-size:13px;font-weight:600;color:#1e293b;line-height:1.45;margin-bottom:12px}
+.btns{display:flex;flex-direction:column;gap:5px}
+.btn{padding:8px 12px;border:1.5px solid #e2e8f0;border-radius:8px;background:#f8fafc;cursor:pointer;font-size:12px;font-weight:600;color:#475569;text-align:left;transition:all .12s;line-height:1.3}
+.btn:hover{background:#1a1a2e;color:#fff;border-color:#1a1a2e}
+
+.result{background:#fff;border:1.5px solid #e2e8f0;border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.r-hdr{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700}
+.b-blue{background:#dbeafe;color:#1d4ed8}
+.b-red{background:#fee2e2;color:#dc2626}
+.r-title{font-size:13px;font-weight:700;color:#1e293b;line-height:1.3}
+
+.rule{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f1f5f9}
+.rule:last-child{border-bottom:none}
+.dot{width:6px;height:6px;border-radius:50%;margin-top:4px;flex-shrink:0}
+.rt{font-size:12px;color:#334155;line-height:1.4}
+.rn{font-size:11px;color:#94a3b8;font-style:italic;margin-top:1px}
+
+.nav-btns{display:flex;gap:6px;margin-top:6px}
+.nav-btn{padding:6px 12px;border:1.5px solid #e2e8f0;border-radius:7px;background:transparent;cursor:pointer;font-size:11px;color:#64748b}
+.nav-btn:hover{background:#f1f5f9}
+
+.nota-c{background:#fff;border:1.5px solid #f1f5f9;border-radius:8px;padding:10px 12px;margin-top:8px}
+.nota-l{font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.nota-t{font-size:12px;color:#475569;line-height:1.4}
+
+/* REF */
+.ref-list{display:flex;flex-direction:column;gap:5px}
+.rc{background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 12px}
+.rtag{display:inline-block;font-size:10px;font-weight:700;padding:1px 7px;border-radius:8px;margin-bottom:4px}
+.rv{background:#dbeafe;color:#1d4ed8}.ro{background:#fee2e2;color:#dc2626}
+.rtit{font-size:12px;font-weight:700;color:#1e293b;margin-bottom:3px}
+.rbody{font-size:11px;color:#64748b;line-height:1.5}
+
+/* NOTA ESP */
+.nota-esp{background:#fffbeb;border:2px solid #fcd34d;border-radius:10px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start}
+.ni{width:30px;height:30px;background:#f59e0b;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0}
+.ntit{font-size:12px;font-weight:700;color:#92400e;margin-bottom:4px}
+.ntxt{font-size:11px;color:#78350f;line-height:1.5}
+
+/* INSTRUCCIÓN */
+.instruccion{background:#fff;border:1.5px solid #e2e8f0;border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:11px;color:#64748b;line-height:1.5;text-align:center}
+.instruccion strong{color:#1a1a2e}
+</style>
+</head>
+<body>
+
+<div class="header" onclick="toggleBody()">
+  <div class="header-left">
+    <div class="header-dot"></div>
+    <div>
+      <div class="header-title">Punteo de Escuelas</div>
+      <div class="header-sub">Guía rápida interactiva</div>
+    </div>
+  </div>
+  <button class="toggle-btn" id="toggle-icon">▾</button>
+</div>
+
+<div class="body" id="body">
+
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('flow',this)">Paso a paso</div>
+    <div class="tab" onclick="showTab('ref',this)">Referencia</div>
+    <div class="tab" onclick="showTab('nota',this)">! Nota</div>
+  </div>
+
+  <div id="flow" class="section visible">
+    <div id="bc" class="bc"></div>
+    <div id="fc"></div>
+  </div>
+
+  <div id="ref" class="section">
+    <div class="ref-list">
+      <div class="rc"><span class="rtag rv">V1</span><div class="rtit">Voluntaria · Fuera de horario</div><div class="rbody">No FP · Turno trabajo · Con preasig: pluses por preasig · Sin preasig: pluses por servicio anual · No FP en incidencias</div></div>
+      <div class="rc"><span class="rtag rv">V2</span><div class="rtit">Voluntaria · Dentro de horario</div><div class="rbody">Sí FP · Turno escuela · Sin plus · FP en incidencias · Hoja de firmas</div></div>
+      <div class="rc"><span class="rtag rv">V3</span><div class="rtit">Voluntaria · TL/JL prácticas</div><div class="rbody">Turno prácticas · Con corre si corres anuales · Sin corre si fijos</div></div>
+      <div class="rc"><span class="rtag ro">O1</span><div class="rtit">Obligatoria · Fijo</div><div class="rbody">Sí FP · Turno más favorable (no pierde nocturnidad) · Ej: M0550+M0700→deja M0550</div></div>
+      <div class="rc"><span class="rtag ro">O2</span><div class="rtit">Obligatoria · Correturnos sin nocturnidad</div><div class="rbody">Sin turno · Plus correturnos baja automáticamente</div></div>
+      <div class="rc"><span class="rtag ro">O3</span><div class="rtit">Obligatoria · Correturnos con nocturnidad</div><div class="rbody">Excepción O2 · Turno de la escuela</div></div>
+      <div class="rc"><span class="rtag ro">O4</span><div class="rtit">Obligatoria · Fijo P + tarde</div><div class="rbody">Turno del agente · Se puntean correturnos</div></div>
+      <div class="rc"><span class="rtag ro">O5</span><div class="rtit">Obligatoria · Macro mismo turno</div><div class="rbody">Turno escuela · Sin corre</div></div>
+      <div class="rc"><span class="rtag ro">O6</span><div class="rtit">Obligatoria · Macro noche + distinto (M o T)</div><div class="rbody">Con corre · Sin turno</div></div>
+      <div class="rc"><span class="rtag ro">O7</span><div class="rtit">Obligatoria · Macro ≠ turno escuela</div><div class="rbody">Con corre · Con turno de la escuela</div></div>
+    </div>
+  </div>
+
+  <div id="nota" class="section">
+    <div class="nota-esp">
+      <div class="ni">!</div>
+      <div>
+        <div class="ntit">Preasignación coincide con FP</div>
+        <div class="ntxt">La preasignación <strong>no es válida</strong>. Se toma el turno de cuadros y se aplican las mismas normas que para cualquier otra escuela.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var collapsed=false;
+function toggleBody(){
+  collapsed=!collapsed;
+  document.getElementById('body').style.display=collapsed?'none':'block';
+  document.getElementById('toggle-icon').textContent=collapsed?'▸':'▾';
+}
+
+var steps={
+  start:{q:'¿Qué tipo de escuela es?',opts:[{l:'Voluntaria',n:'vol_h'},{l:'Obligatoria',n:'obl_a'}],bc:[]},
+  vol_h:{q:'¿Está dentro del horario de trabajo?',opts:[{l:'No, fuera del horario',n:'vf'},{l:'Sí, dentro del horario',n:'vd'},{l:'TL/JL en periodo de prácticas',n:'vt'}],bc:[{t:'Voluntaria'}]},
+  vf:{res:1,title:'Voluntaria · Fuera de horario',badge:'b-blue',label:'V1',rules:[{c:'#1d4ed8',t:'No puntea la FP'},{c:'#1d4ed8',t:'Turno de trabajo, no de la FP'},{c:'#1d4ed8',t:'Con preasignación → pluses por preasignación'},{c:'#93c5fd',t:'Sin preasignación → pluses por servicio anual'},{c:'#93c5fd',t:'No aparece FP en incidencias'}],bc:[{t:'Voluntaria'},{t:'Fuera'}]},
+  vd:{res:1,title:'Voluntaria · Dentro de horario',badge:'b-blue',label:'V2',rules:[{c:'#1d4ed8',t:'Sí puntea la FP'},{c:'#1d4ed8',t:'Turno de la escuela'},{c:'#1d4ed8',t:'No cobran ningún plus'},{c:'#93c5fd',t:'FP aparece en incidencias'},{c:'#ef4444',t:'Necesita hoja de firmas'}],bc:[{t:'Voluntaria'},{t:'Dentro'}]},
+  vt:{res:1,title:'Voluntaria · TL/JL en prácticas',badge:'b-blue',label:'V3',rules:[{c:'#1d4ed8',t:'Turno de las prácticas'},{c:'#1d4ed8',t:'Con corre si son corres anuales'},{c:'#93c5fd',t:'Sin corre si son fijos sin corre'}],bc:[{t:'Voluntaria'},{t:'TL/JL'}]},
+  obl_a:{q:'¿Qué tipo de agente es?',nota:'Todas las obligatorias son dentro del horario. Siempre puntea FP.',opts:[{l:'Fijo',n:'o1'},{l:'Correturnos',n:'obl_c'},{l:'Fijo del P + escuela de tarde',n:'o4'},{l:'Macroturno',n:'obl_m'}],bc:[{t:'Obligatoria'}]},
+  o1:{res:1,title:'Obligatoria · Fijo',badge:'b-red',label:'O1',rules:[{c:'#dc2626',t:'Sí puntea FP'},{c:'#dc2626',t:'Turno más favorable (no pierde nocturnidad)'},{c:'#fca5a5',t:'Ej: M0550 + esc. M0700 → deja M0550, sin correturnos',n:'Ambos turnos son de mañana'}],bc:[{t:'Obligatoria'},{t:'Fijo'}]},
+  obl_c:{q:'¿La escuela tiene nocturnidad?',opts:[{l:'No tiene nocturnidad',n:'o2'},{l:'Sí tiene nocturnidad',n:'o3'}],bc:[{t:'Obligatoria'},{t:'Correturnos'}]},
+  o2:{res:1,title:'Obligatoria · Correturnos sin nocturnidad',badge:'b-red',label:'O2',rules:[{c:'#dc2626',t:'Sin turno'},{c:'#dc2626',t:'Plus de correturnos baja automáticamente'}],bc:[{t:'Obligatoria'},{t:'Correturnos'},{t:'Sin nocturnidad'}]},
+  o3:{res:1,title:'Obligatoria · Correturnos con nocturnidad',badge:'b-red',label:'O3',rules:[{c:'#dc2626',t:'Excepción al caso O2'},{c:'#dc2626',t:'Turno de la escuela'}],bc:[{t:'Obligatoria'},{t:'Correturnos'},{t:'Con nocturnidad'}]},
+  o4:{res:1,title:'Obligatoria · Fijo P + tarde',badge:'b-red',label:'O4',rules:[{c:'#dc2626',t:'Turno del agente'},{c:'#dc2626',t:'Se puntean los correturnos'}],bc:[{t:'Obligatoria'},{t:'Fijo P + tarde'}]},
+  obl_m:{q:'¿El macroturno coincide con el turno de la escuela?',opts:[{l:'Mismo turno',n:'o5'},{l:'Macro de noche + turno distinto (M o T)',n:'o6'},{l:'Turno distinto al macro (otro caso)',n:'o7'}],bc:[{t:'Obligatoria'},{t:'Macroturno'}]},
+  o5:{res:1,title:'Obligatoria · Macro mismo turno',badge:'b-red',label:'O5',rules:[{c:'#dc2626',t:'Turno de la escuela'},{c:'#dc2626',t:'Sin corre'}],bc:[{t:'Obligatoria'},{t:'Macro'},{t:'Mismo turno'}]},
+  o6:{res:1,title:'Obligatoria · Macro noche + distinto',badge:'b-red',label:'O6',rules:[{c:'#dc2626',t:'Con corre'},{c:'#dc2626',t:'Sin turno'}],bc:[{t:'Obligatoria'},{t:'Macro'},{t:'Noche + distinto'}]},
+  o7:{res:1,title:'Obligatoria · Macro ≠ turno escuela',badge:'b-red',label:'O7',rules:[{c:'#dc2626',t:'Con corre'},{c:'#dc2626',t:'Con turno de la escuela'}],bc:[{t:'Obligatoria'},{t:'Macro'},{t:'Distinto'}]}
+};
+
+var cur='start',hist=[];
+
+function render(){
+  var s=steps[cur];
+  var bc=document.getElementById('bc');
+  var fc=document.getElementById('fc');
+  bc.innerHTML='';
+  if(s.bc&&s.bc.length){
+    var h=document.createElement('span');h.className='bc-home';h.textContent='Inicio';h.onclick=function(){cur='start';hist=[];render();};bc.appendChild(h);
+    s.bc.forEach(function(b){
+      var sep=document.createElement('span');sep.className='bc-sep';sep.textContent=' › ';bc.appendChild(sep);
+      var item=document.createElement('span');item.className='bc-curr';item.textContent=b.t;bc.appendChild(item);
+    });
+  }
+  if(s.res){
+    var html='<div class="result"><div class="r-hdr"><span class="badge '+s.badge+'">'+s.label+'</span><span class="r-title">'+s.title+'</span></div>';
+    s.rules.forEach(function(r){html+='<div class="rule"><div class="dot" style="background:'+r.c+'"></div><div><div class="rt">'+r.t+'</div>'+(r.n?'<div class="rn">'+r.n+'</div>':'')+'</div></div>';});
+    html+='</div>';
+    if(hist.length)html+='<div class="nav-btns"><button class="nav-btn" onclick="back()">← Volver</button><button class="nav-btn" onclick="reset()">Nueva consulta</button></div>';
+    fc.innerHTML=html;return;
+  }
+  var html='<div class="card"><div class="q-label">Pregunta</div><div class="q-text">'+s.q+'</div><div class="btns">';
+  s.opts.forEach(function(o){html+='<button class="btn" onclick="go(\''+o.n+'\')">'+o.l+'</button>';});
+  html+='</div></div>';
+  if(s.nota)html+='<div class="nota-c"><div class="nota-l">Recuerda</div><div class="nota-t">'+s.nota+'</div></div>';
+  if(hist.length)html+='<div class="nav-btns"><button class="nav-btn" onclick="back()">← Volver</button></div>';
+  fc.innerHTML=html;
+}
+
+function go(n){hist.push(cur);cur=n;render();}
+function back(){if(hist.length){cur=hist.pop();render();}}
+function reset(){cur='start';hist=[];render();}
+
+function showTab(id,el){
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('visible');});
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  document.getElementById(id).classList.add('visible');
+  el.classList.add('active');
+}
+
+render();
+</script>
+</body>
+</html>
