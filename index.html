@@ -55,16 +55,18 @@ html,body{height:100%;overflow:hidden;background:#0b0b12;font-family:'Segoe UI',
     <div class="logo"><div class="logo-dot"></div>MedicoPC</div>
     <button class="tab active" data-tab="tablero"><span class="tab-icon">📋</span>Tablero</button>
     <button class="tab" data-tab="facturacion"><span class="tab-icon">💰</span>Facturación</button>
+    <button class="tab" data-tab="finanzas"><span class="tab-icon">💰</span>Finanzas</button>
     <button class="tab" data-tab="web"><span class="tab-icon">🌐</span>Web</button>
-    <button class="tab" data-tab="herramientas"><span class="tab-icon">🛠️</span>Herramientas</button>
     <button class="tab" data-tab="docs"><span class="tab-icon">📋</span>Docs</button>
     <button class="tab" data-external onclick="window.open('mapa_ecosistema.html','_blank','noopener')"><span class="tab-icon">🗺️</span>Mapa</button>
+    <button class="tab" data-tab="herramientas"><span class="tab-icon">🛠️</span>Herramientas</button>
     <div class="spacer"></div>
     <span class="meta" id="clock"></span>
   </div>
   <div id="frame-container">
     <iframe class="frame active" id="frame-tablero" src="MedicoPC_Tablero.html"></iframe>
     <iframe class="frame" id="frame-facturacion" src=""></iframe>
+    <iframe class="frame" id="frame-finanzas" src="" style="border:0;width:100%;height:100vh"></iframe>
     <div class="ext-panel" id="frame-web">
       <div style="font-size:48px">🌐</div>
       <div style="font-size:18px;font-weight:600;color:#fff">MedicoPC Web</div>
@@ -133,6 +135,7 @@ html,body{height:100%;overflow:hidden;background:#0b0b12;font-family:'Segoe UI',
 const URLS={
   tablero:'MedicoPC_Tablero.html',
   facturacion:'MedicoPC_Facturacion.html',
+  finanzas:'finanzas.html',
   web:null
 };
 const TOOL_URLS={
