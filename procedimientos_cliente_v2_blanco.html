@@ -1,0 +1,2001 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Procedimientos Cliente (imprimible) · MedicoPC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ===== PALETA MARCA MEDICOPC · v2 BLANCO IMPRIMIBLE ===== */
+:root {
+  --bg: #ffffff;
+  --bg-elev: #fafafa;
+  --bg-card: #f5f5f7;
+  --border: #d0d0d6;
+  --ink: #1a1a1a;
+  --ink-dim: #333333;
+  --ink-soft: #666666;
+  --pink: #c71c4e;
+  --pink-glow: rgba(199, 28, 78, 0.08);
+  --blue: #1d3fce;
+  --blue-soft: #5082ff;
+  --green: #007850;
+  --amber: #b87d00;
+  --red: #b3122d;
+  --font-display: 'Lora', Georgia, serif;
+  --font-body: 'Poppins', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: 1.65;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== LAYOUT ===== */
+.container { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+
+/* ===== HERO ===== */
+.hero {
+  padding: 100px 0 60px;
+  border-bottom: 1px solid var(--border);
+  background: radial-gradient(ellipse at top, rgba(232, 24, 90, 0.08) 0%, transparent 60%);
+}
+.hero__kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--pink-glow);
+  border: 1px solid var(--pink);
+  color: var(--pink);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.hero__kicker::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--pink);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--pink);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(42px, 6vw, 72px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+}
+.hero h1 em {
+  color: var(--pink);
+  font-style: italic;
+}
+.hero__lead {
+  font-size: 18px;
+  color: var(--ink-dim);
+  max-width: 680px;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+.hero__meta {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.hero__meta strong { color: var(--ink); font-weight: 500; }
+
+/* ===== NAV / INDEX ===== */
+.toc {
+  padding: 40px 0;
+  border-bottom: 1px solid var(--border);
+}
+.toc h2 {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 28px;
+}
+.toc__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 2px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.toc__item {
+  background: var(--bg);
+  padding: 18px 20px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: background 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.toc__item:hover { background: var(--bg-elev); }
+.toc__item-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--pink);
+  letter-spacing: 1px;
+}
+.toc__item-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* ===== BLOQUES / CAPÍTULOS ===== */
+.block {
+  padding: 80px 0 40px;
+  border-bottom: 1px solid var(--border);
+}
+.block__header { margin-bottom: 48px; }
+.block__num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--pink);
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+.block__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(32px, 4.5vw, 48px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin-bottom: 16px;
+}
+.block__subtitle {
+  color: var(--ink-dim);
+  font-size: 17px;
+  max-width: 720px;
+  line-height: 1.6;
+}
+
+/* ===== PROCEDIMIENTOS (P1, P2, ...) ===== */
+.proc {
+  margin-bottom: 56px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--pink);
+  border-radius: 2px;
+}
+.proc__header {
+  padding: 24px 28px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.proc__tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--pink);
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: 3px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.proc__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.2;
+  color: var(--ink);
+  flex: 1;
+}
+.proc__meta {
+  font-size: 11px;
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  letter-spacing: 0.5px;
+}
+.proc__body { padding: 28px; }
+.proc__body p { margin-bottom: 14px; color: var(--ink-dim); line-height: 1.7; }
+.proc__body p:last-child { margin-bottom: 0; }
+.proc__body strong { color: var(--ink); font-weight: 500; }
+
+.proc__body h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  margin: 24px 0 12px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--border);
+}
+.proc__body h4:first-child { padding-top: 0; border-top: 0; margin-top: 0; }
+
+.proc__body ol,
+.proc__body ul {
+  padding-left: 22px;
+  margin: 10px 0 16px;
+  color: var(--ink-dim);
+}
+.proc__body ol li,
+.proc__body ul li { margin-bottom: 8px; line-height: 1.65; }
+
+.proc__body code {
+  font-family: var(--font-mono);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--amber);
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-size: 13px;
+}
+
+.proc__body pre {
+  font-family: var(--font-mono);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--amber);
+  padding: 16px 18px;
+  border-radius: 3px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink);
+  white-space: pre-wrap;
+  margin: 12px 0 18px;
+  overflow-x: auto;
+}
+
+/* ===== ASIDES / CALLOUTS ===== */
+.note {
+  margin: 18px 0;
+  padding: 14px 18px;
+  border-radius: 3px;
+  font-size: 14px;
+  line-height: 1.6;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.note__icon {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 1px;
+  flex-shrink: 0;
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+.note--warn {
+  background: rgba(240, 180, 60, 0.08);
+  border: 1px solid rgba(240, 180, 60, 0.3);
+  border-left: 3px solid var(--amber);
+}
+.note--warn .note__icon { background: var(--amber); color: #fff; }
+.note--warn p { color: #7a5500 !important; }
+
+.note--danger {
+  background: rgba(255, 69, 96, 0.08);
+  border: 1px solid rgba(255, 69, 96, 0.3);
+  border-left: 3px solid var(--red);
+}
+.note--danger .note__icon { background: var(--red); color: #fff; }
+.note--danger p { color: #850d2b !important; }
+
+.note--ok {
+  background: rgba(0, 200, 130, 0.08);
+  border: 1px solid rgba(0, 200, 130, 0.3);
+  border-left: 3px solid var(--green);
+}
+.note--ok .note__icon { background: var(--green); color: #fff; }
+.note--ok p { color: #155c3d !important; }
+
+.note--tip {
+  background: rgba(80, 130, 255, 0.08);
+  border: 1px solid rgba(80, 130, 255, 0.3);
+  border-left: 3px solid var(--blue);
+}
+.note--tip .note__icon { background: var(--blue); color: #fff; }
+.note--tip p { color: #1b2c70 !important; }
+
+/* ===== SCRIPTS (plantillas WhatsApp/email) ===== */
+.script {
+  background: var(--bg-card);
+  border: 1px dashed var(--border);
+  border-radius: 4px;
+  padding: 16px 18px;
+  margin: 14px 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink);
+  white-space: pre-wrap;
+  position: relative;
+}
+.script::before {
+  content: 'GUIÓN';
+  position: absolute;
+  top: -9px;
+  left: 14px;
+  background: var(--bg);
+  color: var(--pink);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  padding: 0 8px;
+  font-weight: 600;
+}
+
+/* ===== CHECKLIST ===== */
+.checklist {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0;
+  display: grid;
+  gap: 8px;
+}
+.checklist li {
+  padding: 10px 14px;
+  background: var(--bg-card);
+  border-left: 2px solid var(--green);
+  border-radius: 2px;
+  font-size: 14px;
+  color: var(--ink-dim);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.checklist li::before {
+  content: '☐';
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 16px;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+
+/* ===== DECISIONES (árbol si/no) ===== */
+.decision {
+  margin: 20px 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 18px 20px;
+}
+.decision__title {
+  font-weight: 500;
+  color: var(--ink);
+  font-size: 14px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.decision__title::before {
+  content: '?';
+  background: var(--pink);
+  color: var(--bg);
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+}
+.decision__branches {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+.decision__branch {
+  padding: 12px 14px;
+  border-radius: 3px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.decision__branch--yes {
+  background: #e5f5ee;
+  border-left: 2px solid var(--green);
+  color: #155c3d;
+}
+.decision__branch--no {
+  background: #ffe8eb;
+  border-left: 2px solid var(--red);
+  color: #850d2b;
+}
+.decision__label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.decision__branch--yes .decision__label { color: var(--green); }
+.decision__branch--no .decision__label { color: var(--red); }
+
+/* ===== TABLAS ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 13px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+th {
+  background: var(--bg-elev);
+  color: var(--ink);
+  font-weight: 500;
+  text-align: left;
+  padding: 11px 14px;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+td {
+  padding: 11px 14px;
+  color: var(--ink-dim);
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: 0; }
+
+/* ===== FOOTER ===== */
+.footer {
+  padding: 60px 0 40px;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 13px;
+  background: var(--bg);
+}
+.footer__hook {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 20px;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.footer__hook em { color: var(--pink); font-weight: 600; }
+.footer__meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: 1px; color: var(--ink-soft); }
+
+/* ===== ANEXOS ===== */
+.anexo {
+  margin-top: 40px;
+  padding: 28px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+}
+.anexo h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+
+/* ===== PRINT / PDF ===== */
+@media print {
+  @page {
+    size: A4;
+    margin: 18mm 15mm;
+  }
+  body {
+    background: #fff !important;
+    color: #111 !important;
+    font-size: 10.5pt;
+    line-height: 1.45;
+  }
+  .container { max-width: 100%; padding: 0; }
+  .hero, .toc, .block { page-break-inside: avoid; }
+  .hero { padding: 20px 0 30px; border-bottom: 2px solid #111; background: #fff !important; }
+  .hero h1 { color: #111 !important; font-size: 28pt; }
+  .hero h1 em { color: #c71c4e !important; }
+  .hero__kicker { background: #fff !important; color: #c71c4e !important; border-color: #c71c4e !important; }
+  .hero__kicker::before { display: none; }
+  .hero__lead, .hero__meta { color: #333 !important; }
+  .hero__meta { border-color: #111 !important; }
+
+  .toc { padding: 24px 0; page-break-after: always; }
+  .toc h2 { color: #111 !important; }
+  .toc__grid { background: #fff; border: 1px solid #111; }
+  .toc__item { background: #fff !important; color: #111 !important; padding: 10px; }
+  .toc__item-num { color: #c71c4e !important; }
+  .toc__item-title { color: #111 !important; }
+
+  .block { padding: 24px 0; page-break-before: always; }
+  .block__num { color: #c71c4e !important; }
+  .block__title { color: #111 !important; }
+  .block__subtitle { color: #333 !important; }
+
+  .proc { background: #fff !important; border: 1px solid #888; border-left: 3px solid #c71c4e !important; page-break-inside: avoid; margin-bottom: 22px; }
+  .proc__header { border-color: #ccc !important; padding: 14px 16px; }
+  .proc__tag { background: #c71c4e !important; color: #fff !important; }
+  .proc__title { color: #111 !important; font-size: 16pt; }
+  .proc__meta { color: #666 !important; }
+  .proc__body { padding: 14px 16px; }
+  .proc__body p { color: #222 !important; }
+  .proc__body strong { color: #000 !important; }
+  .proc__body h4 { color: #111 !important; }
+  .proc__body code { background: #f2f2f2 !important; color: #8a5200 !important; border-color: #ccc !important; }
+  .proc__body pre { background: #f5f5f5 !important; color: #111 !important; border-color: #ccc !important; border-left-color: #d49010 !important; }
+
+  .note { page-break-inside: avoid; }
+  .note--warn { background: #fff7e0 !important; border-color: #d49010 !important; }
+  .note--warn p { color: #7a5500 !important; }
+  .note--danger { background: #ffe8eb !important; border-color: #c71c4e !important; }
+  .note--danger p { color: #850d2b !important; }
+  .note--ok { background: #e5f5ee !important; border-color: #007850 !important; }
+  .note--ok p { color: #155c3d !important; }
+  .note--tip { background: #e6ecff !important; border-color: #1d3fce !important; }
+  .note--tip p { color: #1b2c70 !important; }
+
+  .script { background: #fafafa !important; color: #111 !important; border-color: #888 !important; }
+  .script::before { background: #fff !important; color: #c71c4e !important; }
+
+  .checklist li { background: #f5f5f5 !important; color: #222 !important; border-color: #007850 !important; page-break-inside: avoid; }
+  .checklist li::before { color: #007850 !important; }
+
+  .decision { background: #f8f8fb !important; border-color: #888 !important; page-break-inside: avoid; }
+  .decision__title { color: #111 !important; }
+  .decision__branch--yes { background: #e5f5ee !important; color: #155c3d !important; border-color: #007850 !important; }
+  .decision__branch--no { background: #ffe8eb !important; color: #850d2b !important; border-color: #c71c4e !important; }
+  .decision__label { font-weight: 700; }
+
+  table { background: #fff !important; border-color: #888 !important; page-break-inside: avoid; }
+  th { background: #f0f0f4 !important; color: #111 !important; border-color: #888 !important; }
+  td { color: #222 !important; border-color: #ccc !important; }
+
+  .footer { background: #fff !important; padding: 20px 0 10px; border-top: 1px solid #111; page-break-before: auto; }
+  .footer__hook { color: #111 !important; }
+  .footer__hook em { color: #c71c4e !important; }
+  .footer__meta { color: #666 !important; }
+
+  .anexo { background: #fafafa !important; border-color: #888 !important; page-break-inside: avoid; }
+  .anexo h3 { color: #111 !important; }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .hero { padding: 60px 0 40px; }
+  .block { padding: 48px 0 24px; }
+  .proc__header { padding: 18px 20px; }
+  .proc__body { padding: 20px; }
+  .decision__branches { grid-template-columns: 1fr; }
+  .hero__meta { gap: 16px; font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="container">
+    <span class="hero__kicker">Manual interno · MedicoPC</span>
+    <h1>Procedimientos<br><em>cliente</em>.</h1>
+    <p class="hero__lead">Guía operativa paso a paso: cómo recibir, visitar, diagnosticar, reparar, entregar y dar seguimiento a un cliente. Qué decir en cada momento, qué hacer cuando algo se tuerce, qué NO hacer nunca.</p>
+    <div class="hero__meta">
+      <span><strong>Versión</strong> · 1.0</span>
+      <span><strong>Fecha</strong> · 24/04/2026</span>
+      <span><strong>Vigor</strong> · 01/05/2026</span>
+      <span><strong>Tarifa referencia</strong> · v2 (2026)</span>
+      <span><strong>Alta autónomo</strong> · julio 2026</span>
+    </div>
+  </div>
+</section>
+
+<!-- ========== TOC ========== -->
+<section class="toc">
+  <div class="container">
+    <h2>Índice de procedimientos</h2>
+    <div class="toc__grid">
+      <a class="toc__item" href="#p1"><span class="toc__item-num">BLOQUE 1 · P1</span><span class="toc__item-title">Primer contacto</span></a>
+      <a class="toc__item" href="#p2"><span class="toc__item-num">P2</span><span class="toc__item-title">Calificar sin comprometer precio</span></a>
+      <a class="toc__item" href="#p3"><span class="toc__item-num">P3</span><span class="toc__item-title">Cerrar la cita</span></a>
+
+      <a class="toc__item" href="#p4"><span class="toc__item-num">BLOQUE 2 · P4</span><span class="toc__item-title">Checklist material</span></a>
+      <a class="toc__item" href="#p5"><span class="toc__item-num">P5</span><span class="toc__item-title">Llegada a casa cliente</span></a>
+      <a class="toc__item" href="#p6"><span class="toc__item-num">P6</span><span class="toc__item-title">Diagnóstico en casa</span></a>
+      <a class="toc__item" href="#p7"><span class="toc__item-num">P7</span><span class="toc__item-title">Reparar aquí · taller · derivar</span></a>
+      <a class="toc__item" href="#p8"><span class="toc__item-num">P8</span><span class="toc__item-title">Backup obligatorio</span></a>
+      <a class="toc__item" href="#p9"><span class="toc__item-num">P9</span><span class="toc__item-title">Presupuesto firmado</span></a>
+
+      <a class="toc__item" href="#p10"><span class="toc__item-num">BLOQUE 3 · P10</span><span class="toc__item-title">Top 10 reparaciones</span></a>
+      <a class="toc__item" href="#p11"><span class="toc__item-num">P11</span><span class="toc__item-title">Parar y consultar</span></a>
+      <a class="toc__item" href="#p12"><span class="toc__item-num">P12</span><span class="toc__item-title">Rendirse bien</span></a>
+
+      <a class="toc__item" href="#p13"><span class="toc__item-num">BLOQUE 4 · P13</span><span class="toc__item-title">7_ENTREGA + demo</span></a>
+      <a class="toc__item" href="#p14"><span class="toc__item-num">P14</span><span class="toc__item-title">Informe cliente</span></a>
+      <a class="toc__item" href="#p15"><span class="toc__item-num">P15</span><span class="toc__item-title">Cobro + recibo</span></a>
+      <a class="toc__item" href="#p16"><span class="toc__item-num">P16</span><span class="toc__item-title">Foto final + firma</span></a>
+
+      <a class="toc__item" href="#p17"><span class="toc__item-num">BLOQUE 5 · P17</span><span class="toc__item-title">Seguimiento 48h</span></a>
+      <a class="toc__item" href="#p18"><span class="toc__item-num">P18</span><span class="toc__item-title">Garantía 30 días</span></a>
+      <a class="toc__item" href="#p19"><span class="toc__item-num">P19</span><span class="toc__item-title">Reseña Google</span></a>
+      <a class="toc__item" href="#p20"><span class="toc__item-num">P20</span><span class="toc__item-title">Archivar caso</span></a>
+
+      <a class="toc__item" href="#p21"><span class="toc__item-num">BLOQUE 6 · P21</span><span class="toc__item-title">Cliente difícil</span></a>
+      <a class="toc__item" href="#p22"><span class="toc__item-num">P22</span><span class="toc__item-title">PC irrecuperable</span></a>
+      <a class="toc__item" href="#p23"><span class="toc__item-num">P23</span><span class="toc__item-title">Datos perdidos sin backup</span></a>
+      <a class="toc__item" href="#p24"><span class="toc__item-num">P24</span><span class="toc__item-title">No paga / no firma</span></a>
+      <a class="toc__item" href="#p25"><span class="toc__item-num">P25</span><span class="toc__item-title">Reclamación garantía</span></a>
+      <a class="toc__item" href="#p26"><span class="toc__item-num">P26</span><span class="toc__item-title">"Si no lo arreglamos..."</span></a>
+
+      <a class="toc__item" href="#anexos"><span class="toc__item-num">BLOQUE 7</span><span class="toc__item-title">Anexos · plantillas · datos</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== BLOQUE 1 ========== -->
+<section class="block" id="bloque1">
+  <div class="container">
+    <div class="block__header">
+      <div class="block__num">BLOQUE 1 / 7</div>
+      <h2 class="block__title">Captación.</h2>
+      <p class="block__subtitle">Antes de poner un pie en casa del cliente. El 70 % de los casos se ganan o se pierden en este bloque.</p>
+    </div>
+
+    <!-- P1 -->
+    <article class="proc" id="p1">
+      <header class="proc__header">
+        <span class="proc__tag">P1</span>
+        <h3 class="proc__title">Primer contacto · WhatsApp o llamada</h3>
+        <span class="proc__meta">3-5 min · WhatsApp / móvil</span>
+      </header>
+      <div class="proc__body">
+        <h4>Objetivo</h4>
+        <p>Calificar la avería sin comprometer precio, transmitir profesionalidad y dejar la puerta abierta a cerrar cita sin forzar.</p>
+
+        <h4>Paso a paso</h4>
+        <ol>
+          <li><strong>Responder en menos de 15 minutos</strong> en horario laboral. Si llega fuera de horario, respuesta automática + respuesta real al abrir el día siguiente.</li>
+          <li><strong>Saludar y presentarse</strong> con frase corta. Nunca vendes en el primer mensaje.</li>
+          <li><strong>Preguntar síntomas concretos</strong>, no diagnósticos. El cliente dice "va lento" → tú averiguas si arranca, si oye ventiladores, si se apaga solo.</li>
+          <li><strong>Si hay foto o vídeo</strong>, pedirlo sin presión. "Si puedes mandarme foto de la pantalla del error, afino mejor el diagnóstico."</li>
+          <li><strong>Dar rango aproximado sin comprometer</strong>. "Por lo que me cuentas, suele estar entre X y Y. Confirmo en visita con diagnóstico de 25 €, descontable si reparo."</li>
+          <li><strong>Cerrar con opción, no con empujón</strong>. "¿Te viene bien que nos veamos mañana por la tarde o prefieres esta semana?"</li>
+        </ol>
+
+        <h4>Preguntas OBLIGATORIAS del primer contacto</h4>
+        <ul>
+          <li>¿Qué hace y qué debería hacer? (síntoma concreto)</li>
+          <li>¿Desde cuándo? ¿Empezó de golpe o progresivo?</li>
+          <li>¿Algo cambió justo antes? (actualización, golpe, caída agua, instalación rara)</li>
+          <li>¿PC de sobremesa o portátil? ¿Marca y modelo aproximado?</li>
+          <li>¿Tiene datos importantes sin backup? (CRÍTICO para priorizar)</li>
+          <li>¿Dónde vives? (barrio Madrid) — para calcular si entra en M30/M40/fuera</li>
+        </ul>
+
+        <h4>Preguntas que NO haces nunca en primer contacto</h4>
+        <ul>
+          <li>"¿Cuánto estás dispuesto a pagar?" → te coloca en posición mendicante.</li>
+          <li>"¿Has ido a otro técnico antes?" → suena desconfiado.</li>
+          <li>"¿Es un ordenador viejo?" → el cliente se ofende.</li>
+          <li>"¿Sabes algo de informática?" → condescendiente.</li>
+        </ul>
+
+        <div class="script">Hola [nombre], soy Guillermo de MedicoPC. Cuéntame qué síntomas hace el PC:
+
+• ¿Qué pasa exactamente?
+• ¿Desde cuándo?
+• ¿Sobremesa o portátil? ¿Marca/modelo si lo sabes?
+• ¿Tienes datos importantes sin copia?
+
+Con eso te doy idea aproximada. Diagnóstico certero lo hago en visita (25 € · se descuenta si reparo).</div>
+
+        <div class="note note--tip"><span class="note__icon">TIP</span><p>Responde siempre con texto, no audios. Los clientes senior agradecen poder releer. Los gaming agradecen no tener que escuchar audios de 3 minutos.</p></div>
+      </div>
+    </article>
+
+    <!-- P2 -->
+    <article class="proc" id="p2">
+      <header class="proc__header">
+        <span class="proc__tag">P2</span>
+        <h3 class="proc__title">Calificar la reparación sin comprometer precio</h3>
+        <span class="proc__meta">mental · 1-2 min tras leer síntomas</span>
+      </header>
+      <div class="proc__body">
+        <h4>Por qué importa</h4>
+        <p>Si das precio cerrado por WhatsApp y luego en visita descubres que era otra cosa, quedas como un mentiroso. Si no das ninguna referencia, el cliente no sabe si son 50 € o 500 € y se va a otro que sí le oriente.</p>
+
+        <h4>Marco de referencia mental (tarifa v2)</h4>
+        <table>
+          <thead><tr><th>Síntoma dominante</th><th>Rango típico</th><th>Servicio principal</th></tr></thead>
+          <tbody>
+            <tr><td>"Va lento" sin más</td><td>59 – 89 €</td><td>Limpieza + posible SSD</td></tr>
+            <tr><td>Temperaturas altas, apagones</td><td>89 – 119 €</td><td>Limpieza completa + pasta + pads</td></tr>
+            <tr><td>No arranca nada</td><td>25 – 200 €</td><td>Diagnóstico → fuente · placa · disco</td></tr>
+            <tr><td>Pantalla azul aleatoria</td><td>89 – 200 €</td><td>Diagnóstico + RAM/disco/driver</td></tr>
+            <tr><td>Pantalla rota portátil</td><td>55 € m.o. + pieza (50-120 €)</td><td>Cambio pantalla</td></tr>
+            <tr><td>Batería no carga</td><td>30-55 € m.o. + pieza (30-70 €)</td><td>Cambio batería</td></tr>
+            <tr><td>Datos perdidos (disco OK)</td><td>110 €</td><td>Recuperación N1</td></tr>
+            <tr><td>Datos perdidos (disco muerto)</td><td>350-800 €</td><td>Derivación N2 laboratorio</td></tr>
+            <tr><td>Virus / ransomware</td><td>89 – 199 €</td><td>Formateo+backup o Pack Rescate</td></tr>
+            <tr><td>PC nuevo sin configurar</td><td>79 – 139 €</td><td>Instalación Windows / Pack Gaming</td></tr>
+          </tbody>
+        </table>
+
+        <h4>Cómo trasladarlo al cliente</h4>
+        <p>Nunca "son 89 €" en primer contacto. Siempre:</p>
+        <div class="script">Por los síntomas que me describes, suena a [limpieza completa / cambio de pantalla / recuperación datos]. El rango habitual es entre X y Y €. Lo confirmo con diagnóstico en visita, son 25 € y se descuentan del total si acabo reparando.</div>
+
+        <div class="note note--warn"><span class="note__icon">OJO</span><p>Nunca prometas "es seguro tal precio" sin haber visto el PC. Si luego sale más, pierdes el cliente. Si sale menos, quedas bien sin haberte comprometido.</p></div>
+      </div>
+    </article>
+
+    <!-- P3 -->
+    <article class="proc" id="p3">
+      <header class="proc__header">
+        <span class="proc__tag">P3</span>
+        <h3 class="proc__title">Cerrar la cita</h3>
+        <span class="proc__meta">WhatsApp · 1-2 mensajes</span>
+      </header>
+      <div class="proc__body">
+        <h4>Qué tiene que quedar por escrito antes de salir de casa</h4>
+        <ul>
+          <li>Dirección completa con piso, puerta y código portal si procede.</li>
+          <li>Nombre del cliente (el que abre la puerta).</li>
+          <li>Teléfono alternativo si hay (por si no te abren).</li>
+          <li>Hora pactada con margen (+/- 15 min).</li>
+          <li>Precio diagnóstico (25 €) y forma de pago (Bizum o efectivo).</li>
+          <li>Rango estimado de la reparación si ya lo diste.</li>
+          <li>Si tiene mascotas grandes, avisarlo (para protegerse/adaptarse).</li>
+        </ul>
+
+        <div class="script">Confirmado [nombre]:
+• Dirección: [calle, nº, piso, puerta]
+• Día y hora: [viernes 2/5 a las 17:30]
+• Diagnóstico: 25 € (se descuenta si reparo)
+• Reparación estimada: entre [X] y [Y] €
+• Pago: Bizum o efectivo
+
+Te aviso 30 min antes de salir. Si surge algo, al 640 126 543.</div>
+
+        <div class="note note--ok"><span class="note__icon">OK</span><p>Guardar la dirección completa en Google Maps como "favorito" con etiqueta "[Apellido cliente]". Te ahorra 5 min el día de la visita y evita equivocarte de número.</p></div>
+
+        <h4>Si el cliente retrasa / duda</h4>
+        <p>No presiones. "Sin problema, cuando lo tengas claro me escribes. Te dejo el número por si te surge otra duda." Los clientes que compran bajo presión luego se arrepienten y reclaman.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ========== BLOQUE 2 ========== -->
+<section class="block" id="bloque2">
+  <div class="container">
+    <div class="block__header">
+      <div class="block__num">BLOQUE 2 / 7</div>
+      <h2 class="block__title">Visita.</h2>
+      <p class="block__subtitle">Desde que cierras la puerta de casa con el maletín hasta que te sientas delante del PC del cliente.</p>
+    </div>
+
+    <!-- P4 -->
+    <article class="proc" id="p4">
+      <header class="proc__header">
+        <span class="proc__tag">P4</span>
+        <h3 class="proc__title">Preparación material (checklist antes de salir)</h3>
+        <span class="proc__meta">5 min · en casa</span>
+      </header>
+      <div class="proc__body">
+        <h4>Maletín obligatorio</h4>
+        <ul class="checklist">
+          <li><strong>USB MASTER verde 32GB</strong> (USB_Arsenal_Master con MEDICOPC.exe + 9 scripts + Tools)</li>
+          <li><strong>USB ARSENAL rojo 32GB</strong> (Ventoy con ISOs Win11, Hirens PE, etc.) para PC que no arranca</li>
+          <li><strong>Portátil personal</strong> cargado + cargador + cable red corto</li>
+          <li>Disco externo Seagate 4TB para backups urgentes</li>
+          <li>Destornilladores precisión (PH0, PH1, Torx T5-T10)</li>
+          <li>Pasta térmica (KTC1 o Arctic MX-6)</li>
+          <li>Pads térmicos 1 mm y 1.5 mm</li>
+          <li>Bote aire comprimido</li>
+          <li>Pulsera antiestática</li>
+          <li>Linterna frontal (placas base oscuras)</li>
+          <li>Guantes nitrilo (PC muy sucios)</li>
+          <li>Calzas o cubrezapatos (casas con suelo claro)</li>
+          <li>Bolígrafo + libreta A6 (anotar serial, incidencias)</li>
+          <li>Móvil cargado + cargador rápido + banco de energía 10.000 mAh</li>
+          <li>Tarjetas MedicoPC (5-10 unidades)</li>
+        </ul>
+
+        <h4>Según tipo de visita, añadir</h4>
+        <ul>
+          <li><strong>Cambio pantalla portátil:</strong> pantalla correcta (modelo + resolución confirmados), ventosa, púas plásticas.</li>
+          <li><strong>Cambio batería:</strong> batería pedida, palancas plásticas para no hacer palanca sobre PCB.</li>
+          <li><strong>Recuperación datos N1:</strong> disco externo con espacio suficiente (mínimo doble del disco origen), cable SATA-USB.</li>
+          <li><strong>Instalación SSD/RAM:</strong> pieza correcta confirmada por serial o modelo, no por "creo que es".</li>
+          <li><strong>Pack Gaming:</strong> cable HDMI largo, drivers descargados offline por si la red del cliente es mala.</li>
+        </ul>
+
+        <div class="note note--danger"><span class="note__icon">NUNCA</span><p>No salgas de casa sin <strong>confirmar el día anterior</strong> que la pieza comprada (pantalla, batería, SSD concreto) es la correcta. Llegar a casa del cliente con la pieza equivocada es un desastre comercial: pierdes el viaje y la confianza.</p></div>
+
+        <h4>Antes de arrancar el coche / metro</h4>
+        <ul class="checklist">
+          <li>Confirmar dirección en Google Maps</li>
+          <li>WhatsApp cliente: "Salgo ya, llego en X min"</li>
+          <li>Revisar que el maletín está cerrado bien</li>
+          <li>Móvil con 50% mínimo batería</li>
+          <li>Llevar unos euros en efectivo por si el Bizum falla en zona con mala cobertura</li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- P5 -->
+    <article class="proc" id="p5">
+      <header class="proc__header">
+        <span class="proc__tag">P5</span>
+        <h3 class="proc__title">Llegada a casa del cliente</h3>
+        <span class="proc__meta">primeros 5 minutos · críticos</span>
+      </header>
+      <div class="proc__body">
+        <h4>Los primeros 5 minutos definen el resto</h4>
+        <p>El cliente te está evaluando desde que abre la puerta. Ropa limpia sin ser traje. Sonrisa breve, mano firme si te la ofrece, si no, no fuerces. Presentación de una frase.</p>
+
+        <div class="script">Hola [nombre], soy Guillermo de MedicoPC. ¿Dónde tenemos al paciente?</div>
+
+        <h4>Protocolo entrada</h4>
+        <ol>
+          <li><strong>Calzado:</strong> si ves que la casa tiene suelo claro o la familia va descalza, ofrecer calzas automáticamente. No esperar a que te lo pidan.</li>
+          <li><strong>Dónde poner el maletín:</strong> preguntar, nunca imponer. "¿Dónde te viene mejor que me coloque, en el salón o donde está el PC?"</li>
+          <li><strong>Foto del estado inicial:</strong> antes de tocar nada, una foto al PC tal cual está. Con fecha y hora. Va a Drive / carpeta del cliente.</li>
+          <li><strong>Preguntas rápidas en voz alta</strong> mientras miras:
+            <ul>
+              <li>"¿Cuándo fue la última vez que funcionó bien del todo?"</li>
+              <li>"¿Ha habido apagones o subidas de tensión?"</li>
+              <li>"¿Lo has movido o has abierto la caja recientemente?"</li>
+              <li>"¿Tienes copia de seguridad de algo?"</li>
+            </ul>
+          </li>
+          <li><strong>Contrato depósito si te lo vas a llevar:</strong> explicar, firmar, copia para cliente, copia para ti. Nunca te lleves un PC sin contrato firmado, ni siquiera si es de un familiar directo.</li>
+        </ol>
+
+        <div class="note note--tip"><span class="note__icon">TIP</span><p>Si el cliente te ofrece café/agua: acepta siempre el agua. El café solo si ya tienes confianza. Tarda 3 minutos que puedes aprovechar para observar el PC sin que nadie te mire por encima del hombro.</p></div>
+
+        <h4>Señales de alerta en la casa</h4>
+        <ul>
+          <li><strong>Cables trenzados por todas partes:</strong> suele venir con problemas eléctricos. Preguntar si el PC está con regleta con protección.</li>
+          <li><strong>Mascotas sueltas cerca del PC:</strong> advertir con tacto "para el trabajo fino igual mejor que no esté encima, por si hay piezas pequeñas".</li>
+          <li><strong>Habitación muy polvorienta / con humo tabaco:</strong> el PC seguramente está igual por dentro. Presupuesta limpieza aunque no la pida.</li>
+          <li><strong>Niños pequeños corriendo:</strong> ¡piezas pequeñas en sitios altos!</li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- P6 -->
+    <article class="proc" id="p6">
+      <header class="proc__header">
+        <span class="proc__tag">P6</span>
+        <h3 class="proc__title">Diagnóstico en casa · MEDICOPC.exe</h3>
+        <span class="proc__meta">15-30 min · portátil + USB MASTER</span>
+      </header>
+      <div class="proc__body">
+        <h4>Orden de diagnóstico (estándar)</h4>
+        <ol>
+          <li><strong>Observación visual</strong> (2 min): cables bien conectados, polvo, humedad, LEDs placa, pitidos POST, temperatura carcasa al tacto.</li>
+          <li><strong>Arranque normal</strong> (3 min): tiempo desde botón hasta escritorio, ruidos raros, mensajes BIOS, pantallas azules.</li>
+          <li><strong>USB MASTER + MEDICOPC.exe</strong>: lanzar <code>1_DIAGNOSTICO</code> → modo automático o guiado según síntoma dominante.</li>
+          <li><strong>Revisar logs</strong> en <code>MedicoPC_Logs</code>: SMART del disco, temperaturas CPU/GPU, BSODs últimos 30d (9_HISTORIAL).</li>
+          <li><strong>Prueba de red</strong> si aplica: 8_RED con fallback Hetzner.</li>
+          <li><strong>Tools externas</strong> solo si hace falta:
+            <ul>
+              <li>CrystalDiskInfo → si hay dudas del disco</li>
+              <li>BlueScreenView → si ha habido pantallas azules</li>
+              <li>ProduKey → si quieres guardar licencias Windows/Office antes de formatear</li>
+            </ul>
+          </li>
+        </ol>
+
+        <div class="note note--warn"><span class="note__icon">OJO</span><p>Si en casa del cliente salta el Defender con las Tools de Nirsoft (ProduKey, BlueScreenView), añadir exclusión temporal de la carpeta del USB <strong>sin pánico y sin explicar tecnicismos</strong>. Al cliente le dices simplemente: "Es una herramienta de administración que Windows marca por defecto. Está verificada, la añado a excepciones y al terminar la quitamos."</p></div>
+
+        <h4>Regla de oro del diagnóstico</h4>
+        <p>No tocar configuración, no instalar nada, no formatear y no cambiar ninguna pieza <strong>hasta haber completado el diagnóstico entero</strong>. Diagnóstico = observar y medir, no reparar. Esto evita el error clásico de "lo he tocado y ahora está peor".</p>
+
+        <h4>Qué anotar sí o sí</h4>
+        <ul>
+          <li>Modelo y serial del equipo (etiqueta o <code>wmic bios get serialnumber</code>).</li>
+          <li>Estado SMART del disco (OK / advertencia / pre-fallo / fallo).</li>
+          <li>Temperaturas idle y bajo carga.</li>
+          <li>Memoria RAM total y slots ocupados.</li>
+          <li>Versión Windows + última actualización.</li>
+          <li>Licencias localizadas (Windows, Office si aplica).</li>
+          <li>Síntoma reproducido sí/no (muy importante: si no se reproduce, no se puede garantizar nada).</li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- P7 -->
+    <article class="proc" id="p7">
+      <header class="proc__header">
+        <span class="proc__tag">P7</span>
+        <h3 class="proc__title">Decisión · reparo aquí, llevo al taller o derivo</h3>
+        <span class="proc__meta">5 min mental · crítico</span>
+      </header>
+      <div class="proc__body">
+        <p>Tras el diagnóstico, antes de dar precio, decidir <strong>dónde</strong> se hace el trabajo.</p>
+
+        <div class="decision">
+          <div class="decision__title">¿Reparar en casa del cliente?</div>
+          <div class="decision__branches">
+            <div class="decision__branch decision__branch--yes">
+              <span class="decision__label">SÍ si</span>
+              Limpieza sobremesa, cambio SSD/RAM, formateo, instalación Windows OEM, virus, config Gaming, migración datos, pantalla portátil sencilla con pieza llevada.
+            </div>
+            <div class="decision__branch decision__branch--no">
+              <span class="decision__label">NO si</span>
+              Electrónica fina, soldadura, reballing, requiere piezas no llevadas, >3 horas, cliente con niños/mascotas que no te dejan trabajar, recuperación datos sospecha física.
+            </div>
+          </div>
+        </div>
+
+        <div class="decision">
+          <div class="decision__title">¿Llevarme el PC al taller (casa de Guillermo)?</div>
+          <div class="decision__branches">
+            <div class="decision__branch decision__branch--yes">
+              <span class="decision__label">SÍ si</span>
+              Soldadura, tiempo largo, necesitas microscopio/estación aire, piezas que pedir, pruebas de estabilidad largas.
+            </div>
+            <div class="decision__branch decision__branch--no">
+              <span class="decision__label">NO si</span>
+              Cliente senior sin otro equipo (privarle del PC le afecta), datos muy sensibles sin copia, sin contrato depósito firmado.
+            </div>
+          </div>
+        </div>
+
+        <div class="decision">
+          <div class="decision__title">¿Derivar a laboratorio partner N2?</div>
+          <div class="decision__branches">
+            <div class="decision__branch decision__branch--yes">
+              <span class="decision__label">SÍ si</span>
+              Disco con click-click-click, disco no detectado, agua en placa nivel severo, chip BGA quemado, RAID roto, encriptación corporativa.
+            </div>
+            <div class="decision__branch decision__branch--no">
+              <span class="decision__label">NO si</span>
+              Disco lógico accesible (N1 propio), placa con fallos electrónicos nivel 1 (condensadores, puertos, DC jack).
+            </div>
+          </div>
+        </div>
+
+        <div class="note note--danger"><span class="note__icon">REGLA</span><p>Si hay <strong>cualquier duda</strong> de que el disco tiene fallo físico (ruidos, no lo ve BIOS, sectores masivos), NO intentar recuperación N1 tú mismo. Cada intento empeora el disco. Derivar a N2 directamente. Honestidad > ego.</p></div>
+      </div>
+    </article>
+
+    <!-- P8 -->
+    <article class="proc" id="p8">
+      <header class="proc__header">
+        <span class="proc__tag">P8</span>
+        <h3 class="proc__title">Backup obligatorio ANTES DE TOCAR NADA</h3>
+        <span class="proc__meta">20-90 min · según volumen datos</span>
+      </header>
+      <div class="proc__body">
+        <div class="note note--danger"><span class="note__icon">LEY</span><p>Si vas a formatear, cambiar disco, reinstalar Windows, migrar o <strong>cualquier operación con riesgo</strong> sobre datos: primero backup. Sin excepción. Ni "confía en mí", ni "ya tengo copia", ni "no hace falta". Backup siempre, documentado, con manifest de archivos y firma del cliente confirmando que se ha hecho.</p></div>
+
+        <h4>Protocolo backup estándar (script 2_BACKUP del maletín)</h4>
+        <ol>
+          <li><strong>Identificar qué es importante</strong>: preguntar al cliente. Documentos, fotos, vídeos, escritorio, descargas, email local (.pst), marcadores navegador, claves guardadas, Documents de juegos si es gaming.</li>
+          <li><strong>Decidir destino del backup</strong>:
+            <ul>
+              <li>Si es <strong>PC cliente + disco nuevo</strong>: backup directo al disco nuevo montado como secundario.</li>
+              <li>Si es <strong>formateo sin disco nuevo</strong>: backup al Seagate 4TB del técnico (carpeta <code>MedicoPC_Backups_Clientes\2026-XX-XX_[Apellido]\</code>).</li>
+              <li>Si el cliente tiene <strong>disco externo propio</strong> con espacio, mejor al suyo. Documentar marca y serial.</li>
+            </ul>
+          </li>
+          <li><strong>Ejecutar 2_BACKUP.bat</strong>: el script hace robocopy con <code>/E /DCOPY:DAT /R:2 /W:3 /NFL /NDL</code>, genera <code>manifest.txt</code> con listado completo + tamaños + hash opcional.</li>
+          <li><strong>Verificar integridad</strong>: abrir al menos 3 archivos al azar en el destino (documento, foto, vídeo) para confirmar que no se han corrompido.</li>
+          <li><strong>Firmar backup</strong>: documento simple 1 página. Fecha, hora, tamaño total, ruta destino, firma del cliente conforme "he visto el backup y lo acepto".</li>
+        </ol>
+
+        <h4>Qué NO hacer nunca</h4>
+        <ul>
+          <li>Formatear sin backup "porque el cliente dice que no tiene nada importante" (mentira, siempre tiene algo).</li>
+          <li>Backup "en marcha" al mismo disco que vas a formatear — evidente pero ha pasado.</li>
+          <li>Confiar en OneDrive/Drive del cliente como backup si no has comprobado con tus propios ojos que los archivos realmente están sincronizados.</li>
+          <li>Backup a un USB del propio técnico sin decirle al cliente dónde están sus datos y sin firmarlo. Riesgo RGPD.</li>
+        </ul>
+
+        <div class="note note--warn"><span class="note__icon">RGPD</span><p>Los datos del cliente son SUYOS. Si los tienes tú temporalmente (backup en tu Seagate), se borran en cuanto el trabajo termine y la garantía 30d haya vencido. Nunca reutilizar, compartir ni curiosear. Cuando llegue alta autónomo (julio 2026) esto se formaliza en el contrato de prestación.</p></div>
+      </div>
+    </article>
+
+    <!-- P9 -->
+    <article class="proc" id="p9">
+      <header class="proc__header">
+        <span class="proc__tag">P9</span>
+        <h3 class="proc__title">Presupuesto firmado por cliente</h3>
+        <span class="proc__meta">10 min · antes de tocar nada · MCP presupuesto_pdf</span>
+      </header>
+      <div class="proc__body">
+        <h4>Por qué se firma</h4>
+        <p>Porque después de reparar, el cliente no puede decir "pero si yo pensaba que iban a ser 50 €". El presupuesto cerrado y firmado es protección jurídica básica.</p>
+
+        <h4>Pasos</h4>
+        <ol>
+          <li><strong>Claude + MCP</strong> → tool <code>presupuesto_pdf</code>. Inputs: client_id, servicio (de tarifa v2), piezas necesarias (bloque G), observaciones.</li>
+          <li><strong>Revisar el PDF</strong> antes de mostrarlo: nombre correcto, conceptos claros, total correcto, garantía mencionada.</li>
+          <li><strong>Leer en voz alta con el cliente</strong>: conceptos, total, forma de pago, garantía. Si hay rango (ej. 30-55 € batería), explicar por qué.</li>
+          <li><strong>Firma</strong>: dedo en móvil / tablet (Adobe Fill & Sign, DocuSign gratis 3/mes o simplemente firma manuscrita en papel y foto).</li>
+          <li><strong>Envío inmediato por WhatsApp</strong> del PDF firmado al cliente. Guardar copia en Drive <code>/MedicoPC/Clientes/2026/[mes]/[nombre]/presupuesto.pdf</code>.</li>
+        </ol>
+
+        <h4>Qué debe incluir el presupuesto</h4>
+        <ul>
+          <li>Número de presupuesto (PRS-YYYYMM-NNN)</li>
+          <li>Fecha y nombre cliente</li>
+          <li>Equipo: marca + modelo + serial</li>
+          <li>Síntomas reportados</li>
+          <li>Diagnóstico realizado</li>
+          <li>Servicio(s) a aplicar con código de tarifa v2</li>
+          <li>Piezas a instalar con precio</li>
+          <li>Total desglosado (mano de obra + piezas)</li>
+          <li>Gancho: "Si no lo arreglamos, no cobramos" (cuando aplique)</li>
+          <li>Garantía 30 días sobre el trabajo realizado</li>
+          <li>Forma de pago: Bizum 640 126 543 · efectivo</li>
+        </ul>
+
+        <div class="note note--tip"><span class="note__icon">TIP</span><p>Si el cliente duda al ver el total, <strong>no rebajes ni hagas descuentos inventados</strong>. Explica el valor: "Te incluye diagnóstico, reparación, prueba 30 min, informe de entrega, y garantía de 30 días. Si en 30 días vuelve a fallar por lo mismo, vuelvo sin cobrarte." El precio se defiende, no se negocia.</p></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ========== BLOQUE 3 ========== -->
+<section class="block" id="bloque3">
+  <div class="container">
+    <div class="block__header">
+      <div class="block__num">BLOQUE 3 / 7</div>
+      <h2 class="block__title">Reparación.</h2>
+      <p class="block__subtitle">La parte técnica. Orden mental, checkpoints, cuándo parar y consultar, cuándo reconocer que no puedes seguir.</p>
+    </div>
+
+    <!-- P10 -->
+    <article class="proc" id="p10">
+      <header class="proc__header">
+        <span class="proc__tag">P10</span>
+        <h3 class="proc__title">Orden de operaciones por tipo de avería (top 10)</h3>
+        <span class="proc__meta">referencia rápida · ampliar en skill Opus</span>
+      </header>
+      <div class="proc__body">
+        <p>Esta lista es resumen operativo. La versión profunda (árbol de decisión completo, materiales, tiempos precisos) va en el skill <code>medicopc-reparaciones.skill.md</code>, que se crea tras el primer cliente real.</p>
+
+        <h4>1. PC no arranca · no da señal</h4>
+        <ol>
+          <li>Probar fuente sola (puente verde-negro o tester de fuente).</li>
+          <li>Si fuente OK → placa base (LEDs debug, beep codes, probar con 1 sola RAM en slot primario).</li>
+          <li>Si RAM → probar una a una.</li>
+          <li>Pila CMOS → reemplazar, reset BIOS por jumper.</li>
+          <li>Si nada → derivar o presupuestar cambio placa (120-180 € m.o. + pieza).</li>
+        </ol>
+
+        <h4>2. PC va lento general</h4>
+        <ol>
+          <li>SMART del disco → si mal, proponer SSD nuevo.</li>
+          <li>Temperaturas → si alta, limpieza completa + pasta.</li>
+          <li>Malware → escaneo Defender + Malwarebytes.</li>
+          <li>Autoarranque cargado → msconfig + Autoruns.</li>
+          <li>RAM insuficiente (4GB) → upgrade 8/16GB.</li>
+        </ol>
+
+        <h4>3. Pantalla azul aleatoria</h4>
+        <ol>
+          <li>BlueScreenView → identificar driver o módulo culpable.</li>
+          <li>Memtest86 RAM (una pasada completa mínimo).</li>
+          <li>SMART disco.</li>
+          <li>Drivers vídeo (limpiar con DDU y reinstalar).</li>
+          <li>Temperaturas bajo carga.</li>
+        </ol>
+
+        <h4>4. Cambio de pantalla portátil</h4>
+        <ol>
+          <li>Confirmar modelo pantalla (código detrás del panel si ya se cambió antes).</li>
+          <li>Desconectar batería interna primero.</li>
+          <li>Retirar marco con púas plásticas (nunca metal).</li>
+          <li>Cable LVDS con cuidado — se rompe al tirar.</li>
+          <li>Montar nueva, ajustar cinta adhesiva nueva si el marco es adhesivo.</li>
+          <li>Prueba 10 min a full brillo.</li>
+        </ol>
+
+        <h4>5. Cambio de batería portátil</h4>
+        <ol>
+          <li>Comprobar ciclos actuales (<code>powercfg /batteryreport</code>).</li>
+          <li>Batería original o compatible de marca reconocida (Green Cell, original OEM).</li>
+          <li>Nunca baterías sin certificar de AliExpress genérico.</li>
+          <li>Calibrar tras instalación: carga al 100 → descarga hasta apagado → carga al 100.</li>
+        </ol>
+
+        <h4>6. Recuperación datos N1 (disco lógico)</h4>
+        <ol>
+          <li>NO arrancar el sistema operativo del disco afectado. Conectar el disco como secundario desde arranque externo.</li>
+          <li>Primero copia imagen completa (ddrescue o similar).</li>
+          <li>Recuperar desde la imagen, no del disco original.</li>
+          <li>Herramientas: TestDisk (particiones), PhotoRec (archivos), Recuva, R-Studio Demo.</li>
+          <li>Si disco da errores físicos → parar y derivar N2.</li>
+        </ol>
+
+        <h4>7. Formateo + backup + restauración</h4>
+        <ol>
+          <li>Backup (P8).</li>
+          <li>Guardar licencias con ProduKey.</li>
+          <li>Instalar Windows limpio (USB Arsenal rojo Ventoy).</li>
+          <li>Drivers: Windows Update primero, luego fabricante si falta algo.</li>
+          <li>Restaurar datos del backup.</li>
+          <li>Instalar software base (Chrome, Office si tiene licencia, 7zip, VLC).</li>
+          <li>Configuración seguridad básica (Defender activo, UAC normal, BitLocker si procede).</li>
+        </ol>
+
+        <h4>8. Limpieza física + pasta térmica</h4>
+        <ol>
+          <li>Foto del interior ANTES de tocar.</li>
+          <li>Desmontar CPU cooler. GPU si procede.</li>
+          <li>Retirar pasta vieja con alcohol isopropílico 99%.</li>
+          <li>Pasta nueva: grano de arroz en sobremesa, raya fina en portátil.</li>
+          <li>Pads térmicos si estaban en mal estado.</li>
+          <li>Limpiar ventiladores, carcasa, filtros.</li>
+          <li>Prueba de temperaturas 15 min bajo carga (Prime95 + FurMark).</li>
+        </ol>
+
+        <h4>9. Infección virus / ransomware</h4>
+        <ol>
+          <li>Aislar: desconectar red inmediatamente.</li>
+          <li>Si es ransomware activo con datos cifrados → <strong>no intentar descifrar, no pagar</strong>, evaluar si hay decryptor conocido (nomoreransom.org).</li>
+          <li>Si no hay decryptor → formateo + restauración desde backup previo del cliente (si lo tiene).</li>
+          <li>Si es malware sin cifrado → escaneo offline (Defender Offline + Malwarebytes), si no se limpia → formateo.</li>
+          <li>Cambiar contraseñas críticas del cliente al terminar (desde otro dispositivo).</li>
+        </ol>
+
+        <h4>10. Configuración PC Gaming nuevo</h4>
+        <ol>
+          <li>Windows limpio + drivers GPU oficiales (NVIDIA / AMD).</li>
+          <li>Steam + Epic + GOG + Battle.net según preferencia cliente.</li>
+          <li>Discord, MSI Afterburner.</li>
+          <li>Undervolt CPU/GPU si procede (solo con consentimiento).</li>
+          <li>Benchmark 3DMark o Cinebench para referencia.</li>
+          <li>Tuning curvas ventiladores (silencio + rendimiento).</li>
+          <li>Entregar capturas benchmarks al cliente.</li>
+        </ol>
+      </div>
+    </article>
+
+    <!-- P11 -->
+    <article class="proc" id="p11">
+      <header class="proc__header">
+        <span class="proc__tag">P11</span>
+        <h3 class="proc__title">Parar y consultar al cliente</h3>
+        <span class="proc__meta">comunicación · cualquier momento</span>
+      </header>
+      <div class="proc__body">
+        <h4>Cuándo parar obligatoriamente</h4>
+        <ul>
+          <li>Descubres que el coste real va a superar el presupuesto firmado en más de un 15 %.</li>
+          <li>Aparece un problema nuevo que no estaba en el presupuesto.</li>
+          <li>El cliente tenía datos sensibles que no estaban en el backup y vas a formatear.</li>
+          <li>Encuentras material sospechoso (contenido ilegal, indicios de fraude) — parar y salir, no tocar nada más.</li>
+          <li>Necesitas una pieza que no llevas y significa cambiar el presupuesto.</li>
+          <li>Estás cansado, llevas 4h seguidas y empiezas a cometer errores pequeños — mejor dejar y volver.</li>
+        </ul>
+
+        <h4>Cómo comunicarlo al cliente</h4>
+        <div class="script">[Nombre], antes de seguir quiero comentarte una cosa:
+
+He visto que [explicación breve y técnica, sin jerga].
+
+Esto significa [consecuencia concreta en dinero/tiempo].
+
+Tienes dos/tres opciones: [opción A, opción B, opción C].
+
+¿Cómo prefieres seguir?</div>
+
+        <div class="note note--tip"><span class="note__icon">TIP</span><p>Parar a consultar NUNCA es signo de debilidad, es signo de profesionalidad. El cliente que sabe que lo mantienes informado es el cliente que te recomienda. El que se sorprende al final con una factura más alta es el que deja una reseña de 1 estrella.</p></div>
+      </div>
+    </article>
+
+    <!-- P12 -->
+    <article class="proc" id="p12">
+      <header class="proc__header">
+        <span class="proc__tag">P12</span>
+        <h3 class="proc__title">Reconocer que no puedes seguir (rendirse bien)</h3>
+        <span class="proc__meta">momento duro pero necesario</span>
+      </header>
+      <div class="proc__body">
+        <p>Pasa a todos los técnicos. Un equipo concreto, un fallo raro, piezas no disponibles, complejidad superior a tu nivel actual. Rendirse a tiempo es más profesional que insistir tres horas y empeorar la situación.</p>
+
+        <h4>Señales de que hay que rendirse</h4>
+        <ul>
+          <li>Llevas 3-4 horas, has probado 3-4 caminos y ninguno avanza.</li>
+          <li>Cada cosa que pruebas empeora algo (más BSOD, más errores).</li>
+          <li>El equipo necesita soldadura BGA y aún no has hecho 15 placas desguace practicando (regla personal).</li>
+          <li>Es una placa server / RAID / equipo corporativo fuera de tu alcance actual.</li>
+          <li>Hardware muy antiguo sin piezas de repuesto disponibles razonablemente.</li>
+        </ul>
+
+        <h4>Cómo comunicarlo</h4>
+        <div class="script">[Nombre], he hecho todo lo que puedo hacer a este nivel. Este caso concreto necesita [microscopio + reballing / laboratorio con sala limpia / piezas que ya no se fabrican].
+
+Te recomiendo dos opciones:
+1. Derivar a un laboratorio partner especializado (rango 350-800 € según complejidad).
+2. Valorar si compensa reparar o sustituir el equipo (según edad y coste).
+
+Por el diagnóstico hecho hoy te cobro los 25 €. El resto del presupuesto queda sin efecto al no haber ejecutado la reparación. No cobro lo que no termino.</div>
+
+        <h4>Qué haces después</h4>
+        <ol>
+          <li>Documentar el caso en tu libreta / MCP (qué probaste, qué no funcionó).</li>
+          <li>Pasarlo al plan de formación: "esto es lo que tengo que aprender próximo".</li>
+          <li>Si derivas, pasar contacto del partner y cobrar solo diagnóstico.</li>
+          <li>Hacer seguimiento al cliente a los 7 días por WhatsApp para saber cómo acabó.</li>
+        </ol>
+
+        <div class="note note--ok"><span class="note__icon">OK</span><p>Rendirse bien genera confianza. Un cliente al que derivas con transparencia y honestidad vuelve con el próximo PC y te recomienda a 3 personas. El cliente al que le juras que puedes y luego le devuelves un PC peor que el que trajo... ese no vuelve jamás.</p></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ========== BLOQUE 4 ========== -->
+<section class="block" id="bloque4">
+  <div class="container">
+    <div class="block__header">
+      <div class="block__num">BLOQUE 4 / 7</div>
+      <h2 class="block__title">Entrega.</h2>
+      <p class="block__subtitle">El momento en que el cliente ve que ha merecido la pena. Si este bloque sale bien, la reseña sale sola.</p>
+    </div>
+
+    <!-- P13 -->
+    <article class="proc" id="p13">
+      <header class="proc__header">
+        <span class="proc__tag">P13</span>
+        <h3 class="proc__title">Script 7_ENTREGA + demostración ante cliente</h3>
+        <span class="proc__meta">15-20 min · MEDICOPC.exe</span>
+      </header>
+      <div class="proc__body">
+        <h4>Qué hace 7_ENTREGA</h4>
+        <p>Ejecuta 16 comprobaciones automáticas y saca un informe con semáforo (verde / amarillo / rojo):</p>
+        <ol>
+          <li>Estado Windows (activado, actualizado).</li>
+          <li>Estado disco principal (SMART).</li>
+          <li>Temperaturas CPU / GPU bajo carga leve.</li>
+          <li>RAM funcional.</li>
+          <li>Red (ethernet + WiFi).</li>
+          <li>Audio (salida).</li>
+          <li>Cámara (si es portátil).</li>
+          <li>USB frontales + traseros.</li>
+          <li>Batería (si portátil): ciclos + capacidad.</li>
+          <li>Defender activo + al día.</li>
+          <li>Firewall activo.</li>
+          <li>Actualizaciones Windows pendientes.</li>
+          <li>Espacio libre disco ≥ 15 %.</li>
+          <li>Punto de restauración creado.</li>
+          <li>Servicios críticos funcionando.</li>
+          <li>Arranque limpio < 60 s.</li>
+        </ol>
+
+        <h4>Demostración frente al cliente</h4>
+        <p>Sentar al cliente a tu lado. Ejecutar 7_ENTREGA en pantalla. Explicar cada check en lenguaje claro:</p>
+        <ul>
+          <li>"Esto comprueba que tu disco duro no tiene errores de salud → está verde, perfecto."</li>
+          <li>"Esto confirma que la temperatura bajo carga está en X grados, dentro del rango seguro."</li>
+          <li>"Esto es tu batería: tiene X ciclos y mantiene Y % de capacidad — es normal para su edad."</li>
+        </ul>
+        <p>Luego demostración en vivo del problema original <strong>ya resuelto</strong>: abres el programa que iba lento y ahora va rápido. Reproduces el caso de uso que traía el cliente.</p>
+
+        <div class="note note--tip"><span class="note__icon">TIP</span><p>El cliente senior no entiende métricas técnicas. Para él traduce: "tu ordenador ahora está como cuando lo compraste, todas las piezas sanas, limpio por dentro, listo para otros 3-4 años". Frase concreta + tranquilidad.</p></div>
+      </div>
+    </article>
+
+    <!-- P14 -->
+    <article class="proc" id="p14">
+      <header class="proc__header">
+        <span class="proc__tag">P14</span>
+        <h3 class="proc__title">Informe cliente · PDF con garantía</h3>
+        <span class="proc__meta">MCP register_session · automático</span>
+      </header>
+      <div class="proc__body">
+        <h4>Qué debe incluir el informe</h4>
+        <ul>
+          <li>Nombre cliente + fecha + nº presupuesto asociado.</li>
+          <li>Equipo: marca + modelo + serial.</li>
+          <li>Síntomas iniciales reportados.</li>
+          <li>Diagnóstico encontrado.</li>
+          <li>Trabajos realizados (lista clara, no jerga).</li>
+          <li>Piezas instaladas (con marca, modelo, nº serie si aplica).</li>
+          <li>Resultado 7_ENTREGA (el semáforo de los 16 checks).</li>
+          <li>Temperaturas, tiempos arranque, estado disco (medidas concretas).</li>
+          <li>Backup realizado: sí/no, dónde está guardado (cliente se lo lleva o el técnico lo borra).</li>
+          <li><strong>Garantía 30 días</strong>: qué cubre, qué no, cómo reclamar.</li>
+          <li>Recomendaciones futuras (ej. "en 12 meses convendría revisar temperaturas", "el disco antiguo tiene 4 años, valorar cambio preventivo").</li>
+          <li>Fecha + firma técnico.</li>
+        </ul>
+
+        <h4>Cómo se genera</h4>
+        <p>Desde Claude Desktop: <code>register_session</code> con los datos del trabajo. Genera PDF en <code>C:\Users\gpico\Documents\doctorpc\reports\sesion_[Apellido]_[nº].pdf</code>.</p>
+        <p>Se envía al cliente por WhatsApp al terminar la visita. Copia en Drive carpeta del cliente.</p>
+
+        <div class="note note--ok"><span class="note__icon">PRO</span><p>Un buen informe es tu mejor herramienta de fidelización. El cliente lo guarda, lo enseña cuando un amigo le pregunta "¿dónde llevas el PC?" y ahí tienes tu publicidad gratis en formato PDF profesional.</p></div>
+      </div>
+    </article>
+
+    <!-- P15 -->
+    <article class="proc" id="p15">
+      <header class="proc__header">
+        <span class="proc__tag">P15</span>
+        <h3 class="proc__title">Cobro + recibo</h3>
+        <span class="proc__meta">5 min · Bizum o efectivo</span>
+      </header>
+      <div class="proc__body">
+        <h4>Antes del alta autónomo (pre-julio 2026)</h4>
+        <ul>
+          <li>Cobro Bizum preferido (640 126 543) o efectivo.</li>
+          <li>Recibo simple manuscrito o PDF generado por MCP. No es factura oficial porque no hay alta aún.</li>
+          <li>Guardar captura del Bizum recibido + recibo en Drive cliente.</li>
+        </ul>
+
+        <h4>Tras alta autónomo (julio 2026+)</h4>
+        <ul>
+          <li>Factura oficial con NIF, dirección, desglose, IVA 21 % (particulares pagan IVA también).</li>
+          <li>Numeración correlativa obligatoria.</li>
+          <li>Software contable (QuickBooks / Holded / Quipu) emitiendo factura.</li>
+          <li>Copia al cliente por email + copia interna + contable.</li>
+        </ul>
+
+        <h4>Protocolo cobro</h4>
+        <ol>
+          <li>Cerrar el informe y mostrarlo al cliente.</li>
+          <li>Confirmar total ("total son X €, como acordamos en el presupuesto").</li>
+          <li>Ofrecer Bizum primero ("¿Bizum al 640 126 543?"). Si acepta, esperar confirmación en tu móvil antes de marcharte.</li>
+          <li>Si prefiere efectivo, contar el dinero delante del cliente, dos veces.</li>
+          <li>Entregar recibo / factura al momento.</li>
+          <li>Cerrar con agradecimiento breve: "Muchas gracias, cualquier cosa en los 30 próximos días llamas y vengo."</li>
+        </ol>
+
+        <div class="note note--warn"><span class="note__icon">OJO</span><p>Nunca aceptes Bizum "que te llega en un rato", "es que mi marido tiene que enviármelo". Esperar confirmación. Han existido casos reales de pagos "perdidos" que nunca llegan.</p></div>
+      </div>
+    </article>
+
+    <!-- P16 -->
+    <article class="proc" id="p16">
+      <header class="proc__header">
+        <span class="proc__tag">P16</span>
+        <h3 class="proc__title">Foto estado final + firma conforme</h3>
+        <span class="proc__meta">2 min · prueba inatacable</span>
+      </header>
+      <div class="proc__body">
+        <h4>Por qué</h4>
+        <p>Protección ante reclamaciones infundadas ("me has rayado la carcasa" / "me has roto el puerto USB"). Si tienes foto antes y foto después con fecha, blindado.</p>
+
+        <h4>Qué fotografiar al terminar</h4>
+        <ul>
+          <li>PC completo exterior (mismo ángulo que la foto inicial).</li>
+          <li>Pantalla funcionando con el escritorio normal.</li>
+          <li>Detalle de la zona intervenida si aplica (pantalla cambiada, disco nuevo montado, etc.).</li>
+          <li>Captura del informe 7_ENTREGA en pantalla.</li>
+        </ul>
+
+        <h4>Firma conforme del cliente</h4>
+        <p>En el informe PDF o en papel: "Recibo el equipo funcionando correctamente. Acepto el trabajo realizado. Firma + fecha + DNI opcional."</p>
+        <p>Opciones de firma:</p>
+        <ul>
+          <li><strong>Adobe Fill & Sign</strong> (gratis): firma con dedo en móvil cliente, PDF firmado.</li>
+          <li><strong>DocuSign</strong> (gratis hasta 3/mes): más formal, email al cliente con copia firmada.</li>
+          <li><strong>Papel + foto</strong>: firma manuscrita en el informe impreso, foto al móvil.</li>
+        </ul>
+
+        <div class="note note--tip"><span class="note__icon">TIP</span><p>Las fotos antes/después van automáticamente a <code>/MedicoPC/Clientes/2026/[mes]/[nombre]/</code>. Con las Ray-Ban Meta (cuando las tengas) esto será automático, manos libres.</p></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ========== BLOQUE 5 ========== -->
+<section class="block" id="bloque5">
+  <div class="container">
+    <div class="block__header">
+      <div class="block__num">BLOQUE 5 / 7</div>
+      <h2 class="block__title">Post-servicio.</h2>
+      <p class="block__subtitle">La visita no acaba cuando sales por la puerta. Los 7 días siguientes son los que construyen el boca-oreja.</p>
+    </div>
+
+    <!-- P17 -->
+    <article class="proc" id="p17">
+      <header class="proc__header">
+        <span class="proc__tag">P17</span>
+        <h3 class="proc__title">Seguimiento 48h</h3>
+        <span class="proc__meta">WhatsApp · automático con MCP get_followups_today</span>
+      </header>
+      <div class="proc__body">
+        <h4>Por qué a las 48h</h4>
+        <p>Tiempo suficiente para que el cliente haya usado el PC en su flujo normal y detectado cualquier detalle. Demasiado pronto (24h) y no ha tenido tiempo de usarlo. Demasiado tarde (1 semana) y ya has perdido momentum comercial.</p>
+
+        <div class="script">Hola [nombre], soy Guillermo de MedicoPC.
+
+¿Qué tal va el PC desde la reparación? ¿Notas algo raro o está todo bien?
+
+Si hay cualquier detalle a ajustar lo vemos sin coste (entra en la garantía 30 días).
+
+Y si está todo perfecto, me harías un favor enorme con una reseña corta en Google. Link: [enlace Google Business]
+
+Gracias!</div>
+
+        <h4>Tres escenarios posibles</h4>
+
+        <ol>
+          <li><strong>Cliente responde "todo perfecto"</strong> → agradecer + recordar reseña si no ha puesto + cerrar con "cualquier cosa me dices".</li>
+          <li><strong>Cliente no responde</strong> → esperar 5 días. Si sigue sin responder, un mensaje más suave: "¿Te he podido ayudar con el PC o quedó algo pendiente?". Si sigue sin responder → asumir que va bien y no insistir.</li>
+          <li><strong>Cliente reporta problema</strong> → P25 (reclamación garantía). Responder en menos de 2h, concertar visita en &lt; 48h.</li>
+        </ol>
+
+        <h4>Marcar como hecho en MCP</h4>
+        <p>Tras el seguimiento: <code>mark_followup_done</code> con resultado (OK / pendiente / reclamación). Queda registrado para estadísticas mensuales.</p>
+      </div>
+    </article>
+
+    <!-- P18 -->
+    <article class="proc" id="p18">
+      <header class="proc__header">
+        <span class="proc__tag">P18</span>
+        <h3 class="proc__title">Gestión garantía 30 días</h3>
+        <span class="proc__meta">variable · política MedicoPC</span>
+      </header>
+      <div class="proc__body">
+        <h4>Qué cubre la garantía</h4>
+        <ul>
+          <li>El mismo fallo exacto por el que contrató el servicio y que aparentemente se resolvió.</li>
+          <li>Errores derivados directos del trabajo realizado (ej. "me cambiaste la pantalla y ahora parpadea" — sí cubre).</li>
+          <li>Piezas instaladas por el técnico con su propio defecto (SSD nuevo que falla a los 10 días — sí).</li>
+        </ul>
+
+        <h4>Qué NO cubre la garantía</h4>
+        <ul>
+          <li>Fallos nuevos no relacionados con el trabajo hecho (ej. se le rompe el cargador 2 semanas después).</li>
+          <li>Daños por uso incorrecto del cliente (derrame líquido, caída, virus nuevo por descargar cosas raras).</li>
+          <li>Piezas del propio cliente que fallan (ej. su disco original que no cambió).</li>
+          <li>Software del cliente o configuraciones que el cliente haya modificado después.</li>
+        </ul>
+
+        <h4>Cómo resolverla</h4>
+        <ol>
+          <li>Responder al cliente &lt; 2h.</li>
+          <li>Visita en &lt; 48h si es algo del trabajo.</li>
+          <li>Si fue error del trabajo: reparar sin cobrar nada.</li>
+          <li>Si es cosa nueva no cubierta: explicar con claridad por qué y dar presupuesto de la nueva reparación como haces con un cliente normal (es cliente recurrente, no hay diagnóstico adicional).</li>
+        </ol>
+
+        <div class="note note--warn"><span class="note__icon">DIFÍCIL</span><p>A veces el cliente insiste en que "es lo mismo" cuando claramente no lo es. Aquí se aplica P21 (cliente difícil): escuchar, explicar con paciencia, y si hay duda razonable, asumir el coste como "courtesía de casa" y ganar un cliente fiel. La factura de un mantenimiento gratis &lt; el coste de una reseña de 1 estrella.</p></div>
+      </div>
+    </article>
+
+    <!-- P19 -->
+    <article class="proc" id="p19">
+      <header class="proc__header">
+        <span class="proc__tag">P19</span>
+        <h3 class="proc__title">Pedir reseña Google Business</h3>
+        <span class="proc__meta">1 min · con P17 combinado</span>
+      </header>
+      <div class="proc__body">
+        <h4>Cuándo pedirla</h4>
+        <p>En el mensaje de seguimiento 48h si el cliente responde que todo va bien. No antes (riesgo de que diga "dame unos días a ver").</p>
+
+        <h4>Cómo pedirla sin forzar</h4>
+        <div class="script">Si el PC va perfecto y tuvieras 30 segundos, me ayudaría mucho una reseña en Google. Aquí el enlace directo: [https://g.page/r/MedicoPC-Madrid]
+
+Para un negocio que empieza es oro. Gracias de corazón.</div>
+
+        <h4>Qué NO hacer</h4>
+        <ul>
+          <li>Ofrecer descuento a cambio de reseña (prohibido Google, te baja el ranking).</li>
+          <li>Insistir si el cliente no contesta.</li>
+          <li>Escribir tú mismo reseñas falsas — Google lo detecta y te penaliza.</li>
+        </ul>
+
+        <h4>Si el cliente da 4 estrellas o menos</h4>
+        <p>Contactar directamente, preguntar qué ha fallado, ofrecer solución. Si se resuelve, pedir que actualice la reseña. Mejor una reseña de 5 estrellas genuina que una de 4 defensiva.</p>
+
+        <div class="note note--ok"><span class="note__icon">META</span><p>Objetivo realista: 20 reseñas reales 5★ en 6 meses. Con eso sales primero en "servicio técnico informático Madrid" para búsqueda local de clientes a 3 km a la redonda.</p></div>
+      </div>
+    </article>
+
+    <!-- P20 -->
+    <article class="proc" id="p20">
+      <header class="proc__header">
+        <span class="proc__tag">P20</span>
+        <h3 class="proc__title">Archivar el caso</h3>
+        <span class="proc__meta">5 min al final del día · Drive + MCP</span>
+      </header>
+      <div class="proc__body">
+        <h4>Estructura Drive por cliente</h4>
+        <pre>/MedicoPC/Clientes/2026/[mes]/[Apellido_Nombre]/
+  ├── 01_primer_contacto.txt
+  ├── 02_presupuesto_PRS-XXXX.pdf
+  ├── 03_backup_manifest.txt
+  ├── 04_foto_inicial.jpg
+  ├── 05_foto_final.jpg
+  ├── 06_informe_cliente_SES-XXXX.pdf
+  ├── 07_firma_conforme.pdf
+  └── 08_seguimiento_48h.txt</pre>
+
+        <h4>Registro MCP</h4>
+        <p><code>register_session</code> ya crea el PDF automáticamente y actualiza <code>stats_negocio</code>. No hay que hacer nada manual si se usó el MCP correctamente en su momento.</p>
+
+        <h4>Privacidad (RGPD)</h4>
+        <ul>
+          <li>Los datos del cliente caducan a los 30 días de garantía + 5 años de obligación fiscal (tras alta autónomo).</li>
+          <li>Los backups físicos (en Seagate) se borran tras la garantía si el cliente no ha vuelto a por ellos.</li>
+          <li>Nunca reutilizar, compartir ni cruzar datos entre clientes.</li>
+        </ul>
+
+        <div class="note note--tip"><span class="note__icon">PRO</span><p>Un cliente archivado bien es un cliente fácil de retomar 12 meses después. Cuando te escriba "el PC me va otra vez raro", ya tienes histórico completo, sabes qué se hizo, y le das mejor servicio que la competencia.</p></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ========== BLOQUE 6 ========== -->
+<section class="block" id="bloque6">
+  <div class="container">
+    <div class="block__header">
+      <div class="block__num">BLOQUE 6 / 7</div>
+      <h2 class="block__title">Casos difíciles.</h2>
+      <p class="block__subtitle">Cuando las cosas no van como el guion. Protocolos concretos para los momentos duros — los que diferencian al técnico profesional del improvisador.</p>
+    </div>
+
+    <!-- P21 -->
+    <article class="proc" id="p21">
+      <header class="proc__header">
+        <span class="proc__tag">P21</span>
+        <h3 class="proc__title">Cliente difícil · discusión de precio</h3>
+        <span class="proc__meta">desescalado · técnicas</span>
+      </header>
+      <div class="proc__body">
+        <h4>Tipos de cliente difícil</h4>
+        <ul>
+          <li><strong>El regateador:</strong> "¿me lo puedes dejar en 50?" cuando son 89.</li>
+          <li><strong>El ofendido:</strong> "por 25 € de diagnóstico me podías haber mirado más".</li>
+          <li><strong>El comparador:</strong> "mi cuñado me lo hace por la mitad".</li>
+          <li><strong>El profesional de la queja:</strong> va buscando excusa para no pagar o pagar menos.</li>
+        </ul>
+
+        <h4>Reglas generales</h4>
+        <ul>
+          <li>No bajar precio sobre la marcha. Crea dependencia: el siguiente cliente te regateará todavía más.</li>
+          <li>No competir por precio, competir por valor. Explicar qué incluye el servicio.</li>
+          <li>Si el cliente pide descuento recurrente, plantear pack: "servicio hoy 89 + próximo mantenimiento en 6 meses por 40 = 129". Así ganas recurrencia.</li>
+          <li>No enfadarse nunca. El cliente puede ser pesado pero si tú pierdes la calma, pierdes el cliente y te juegas reseña negativa.</li>
+        </ul>
+
+        <h4>Scripts de desescalado</h4>
+        <div class="script">CLIENTE: "¿me lo puedes dejar en 50?"
+
+TÉCNICO: "Te entiendo perfectamente. El precio de 89 € cubre la limpieza completa + pasta térmica nueva + pads + prueba 30 min + informe + garantía 30 días. Si en 30 días vuelve a pasar lo mismo, vuelvo sin cobrarte.
+
+Si prefieres algo más económico, te hago limpieza básica por 59 € que cubre la parte software y el polvo exterior. Eso sí, sin pasta térmica ni garantía extensa.
+
+¿Qué prefieres?"</div>
+
+        <div class="script">CLIENTE: "mi cuñado me lo hace por la mitad"
+
+TÉCNICO: "Perfecto si te funciona esa opción. Lo que te ofrezco yo es garantía por escrito, informe profesional, y responsabilidad si algo falla. Tú decides lo que encaja mejor con lo que buscas.
+
+Si luego cambias de opinión, aquí estoy."</div>
+
+        <div class="note note--warn"><span class="note__icon">NUNCA</span><p>Nunca denigrar a la competencia, ni al cuñado, ni a "los de la tienda del barrio". Tú estás a otro nivel, no hace falta atacar a nadie. El cliente que valora precio se va, el que valora profesionalidad se queda.</p></div>
+      </div>
+    </article>
+
+    <!-- P22 -->
+    <article class="proc" id="p22">
+      <header class="proc__header">
+        <span class="proc__tag">P22</span>
+        <h3 class="proc__title">PC irrecuperable · dar malas noticias</h3>
+        <span class="proc__meta">delicado · claridad</span>
+      </header>
+      <div class="proc__body">
+        <h4>Cuándo dar malas noticias</h4>
+        <ul>
+          <li>Placa base con fallo electrónico grave y coste reparación &gt; coste PC nuevo similar.</li>
+          <li>Disco con fallo físico, datos perdidos, sin backup, coste N2 superior al valor emocional / económico.</li>
+          <li>Equipo tan antiguo que no merece la pena reparar (Windows no soportado + piezas caras).</li>
+          <li>Daño por líquido extenso en portátil.</li>
+        </ul>
+
+        <h4>Cómo comunicarlo</h4>
+        <ol>
+          <li><strong>Directo pero compasivo</strong>, sin rodear el tema.</li>
+          <li><strong>Datos concretos</strong>: por qué es irrecuperable, qué probaste, qué costaría si fuera posible.</li>
+          <li><strong>Alternativas reales</strong>: qué opciones tiene (PC nuevo rango X, asesoría gratis para elegir, migración de lo que se pueda rescatar).</li>
+          <li><strong>Cobrar solo el diagnóstico</strong>, ser claro en que no hay trabajo extra facturado.</li>
+          <li><strong>No abandonar al cliente</strong>: ofrecer acompañamiento para la siguiente decisión aunque no facture.</li>
+        </ol>
+
+        <div class="script">[Nombre], tengo que ser claro contigo.
+
+Lo que ha pasado es [explicación concreta]. Lo que sucede es que [reparar esto / recuperar esto] costaría [cifra concreta], y la realidad es que [PC nuevo similar / alternativa] está en [cifra menor].
+
+Mi consejo profesional, no comercial, es [valorar nuevo PC / llevar a laboratorio N2 para datos / asumir pérdida].
+
+Te cobro los 25 € del diagnóstico, ninguna cosa más. Si quieres, te acompaño a buscar un equipo nuevo adecuado sin compromiso, solo asesoría. Tú decides.</div>
+
+        <div class="note note--tip"><span class="note__icon">PRO</span><p>El cliente al que das malas noticias bien es cliente para siempre. Cuando se compre el PC nuevo, volverá a ti a configurarlo. Y te recomienda como "el que no me cobró de más y fue sincero".</p></div>
+      </div>
+    </article>
+
+    <!-- P23 -->
+    <article class="proc" id="p23">
+      <header class="proc__header">
+        <span class="proc__tag">P23</span>
+        <h3 class="proc__title">Datos perdidos sin backup previo</h3>
+        <span class="proc__meta">protocolo emergencia</span>
+      </header>
+      <div class="proc__body">
+        <h4>Cuándo aplica</h4>
+        <p>Cliente llega con disco dañado, datos que para él tienen valor emocional o profesional alto, y no tiene backup de nada.</p>
+
+        <h4>Protocolo</h4>
+        <ol>
+          <li><strong>NO arrancar el disco</strong>. Cada encendido empeora el estado si hay fallo físico.</li>
+          <li><strong>Diagnóstico rápido</strong>: ¿el disco lo detecta la BIOS? ¿Hace ruidos (click-click-click)? ¿Responde al CrystalDiskInfo?
+            <ul>
+              <li>Sí lo detecta y SMART regular → posible N1 propio (110 €). Se intenta con ddrescue, imagen primero, recuperación desde imagen.</li>
+              <li>No lo detecta / ruidos / SMART muy mal → derivación N2 (350-800 €).</li>
+            </ul>
+          </li>
+          <li><strong>Explicar al cliente honestamente</strong> el escenario:
+            <ul>
+              <li>Probabilidad de éxito (nunca al 100 % ni al 0 %).</li>
+              <li>Coste según escenario.</li>
+              <li>Tiempos reales (N1: 4-24h, N2: 1-3 semanas).</li>
+              <li>Qué pasa si falla el intento (N1 de 110 €) y hay que derivar igual (N2 350-800 € adicionales).</li>
+            </ul>
+          </li>
+          <li><strong>Consentimiento informado por escrito</strong> antes de tocar. Especialmente crítico si hay riesgo de empeoramiento.</li>
+          <li><strong>Pack Rescate (199 €)</strong> si combina diagnóstico + N1 + formateo + backup → ofrecerlo como opción más económica total.</li>
+        </ol>
+
+        <div class="note note--danger"><span class="note__icon">HONESTIDAD</span><p>Nunca prometas "te recupero todo seguro". En recuperación de datos nadie garantiza nada al 100 %. Cliente al que le prometes y fallas = reseña 1★. Cliente al que le das 70 % de probabilidades y recuperas el 100 % = cliente fiel de por vida.</p></div>
+
+        <h4>Lección educativa al cliente al terminar</h4>
+        <p>Al entregar (sea éxito total, parcial o fracaso), regla de los 3-2-1 de backup:</p>
+        <ul>
+          <li>3 copias de los datos importantes</li>
+          <li>2 soportes distintos (ej. PC + disco externo)</li>
+          <li>1 copia offsite (Drive / iCloud / disco en otra casa)</li>
+        </ul>
+        <p>Ofrecer Servicio Senior (129 €) como solución de mantenimiento preventivo que incluye config backup automático.</p>
+      </div>
+    </article>
+
+    <!-- P24 -->
+    <article class="proc" id="p24">
+      <header class="proc__header">
+        <span class="proc__tag">P24</span>
+        <h3 class="proc__title">Cliente no paga / no firma</h3>
+        <span class="proc__meta">protocolo impago</span>
+      </header>
+      <div class="proc__body">
+        <h4>Escenario 1 · no quiere firmar el presupuesto previo</h4>
+        <ul>
+          <li><strong>NO empezar trabajo</strong>. Sin presupuesto firmado no hay contrato.</li>
+          <li>Explicar: "Es protección para los dos. Sin la firma no puedo empezar. Si no te convence el presupuesto, lo ajustamos o lo dejamos sin compromiso."</li>
+          <li>Si insiste en que empieces sin firmar: rechazar con claridad y marcharse. Cobrar los 25 € del desplazamiento-diagnóstico.</li>
+        </ul>
+
+        <h4>Escenario 2 · trabajo terminado y se niega a pagar</h4>
+        <ol>
+          <li>Mantener la calma. Repetir la cifra firmada en presupuesto.</li>
+          <li>Preguntar el motivo concreto: ¿no ha funcionado? ¿cree que es demasiado? ¿problema económico puntual?</li>
+          <li>Según motivo:
+            <ul>
+              <li><strong>No ha funcionado:</strong> aplicar "si no lo arreglamos, no cobramos" si el servicio entra en ese gancho (ver P26). Si no entra, demostrar que sí funciona (con 7_ENTREGA y el problema reproducido).</li>
+              <li><strong>Le parece caro:</strong> enseñar el presupuesto firmado. "Lo acordamos antes de empezar y firmaste. Ahora no puedo cambiar el precio."</li>
+              <li><strong>Problema económico:</strong> pacto de pago fraccionado por escrito, 50 % al terminar, 50 % a los 15 días, con compromiso escrito.</li>
+            </ul>
+          </li>
+          <li>Si sigue sin pagar: no montar escena, no gritar, no amenazar. Marcharse llevándose copia del presupuesto firmado.</li>
+          <li>Tras el alta autónomo: vía burofax + reclamación monitorio judicial (procedimiento sencillo hasta 2.000 €).</li>
+        </ol>
+
+        <h4>Escenario 3 · PC está en taller y se niega a recogerlo o pagar</h4>
+        <ul>
+          <li>Contrato de depósito firmado al principio protege esto.</li>
+          <li>Ley 39/1981 de depósito: tras 6 meses sin reclamar, el PC puede considerarse abandonado.</li>
+          <li>Antes de eso: 3 burofax (a 30d, 60d, 90d) avisando.</li>
+          <li>A partir de julio 2026 con alta autónomo y RC, este protocolo queda blindado legalmente.</li>
+        </ul>
+
+        <div class="note note--warn"><span class="note__icon">PRE-AUTÓNOMO</span><p>Mientras no tengas alta, tu capacidad legal de reclamar es limitada. Por eso el presupuesto firmado y el cobro al contado son obligatorios en esta fase. No dejes PCs en casa del cliente sin cobrar y no aceptes "te pago en unos días" bajo ningún concepto.</p></div>
+      </div>
+    </article>
+
+    <!-- P25 -->
+    <article class="proc" id="p25">
+      <header class="proc__header">
+        <span class="proc__tag">P25</span>
+        <h3 class="proc__title">Reclamación en garantía · flujo de resolución</h3>
+        <span class="proc__meta">&lt; 48h respuesta</span>
+      </header>
+      <div class="proc__body">
+        <h4>Cuando llega reclamación</h4>
+        <ol>
+          <li><strong>Responder &lt; 2h</strong> por WhatsApp, con calma y sin defenderse aún.</li>
+          <li><strong>Preguntar síntomas concretos</strong>: qué hace, desde cuándo, tras qué.</li>
+          <li><strong>Descartar causas nuevas</strong>: ¿ha instalado algo? ¿ha movido el PC? ¿ha habido apagones?</li>
+          <li><strong>Concertar visita en &lt; 48h</strong>. Llevar el maletín completo.</li>
+        </ol>
+
+        <h4>En la visita de garantía</h4>
+        <ol>
+          <li><strong>Reproducir el problema</strong> → si se reproduce, diagnóstico.</li>
+          <li><strong>Determinar causa</strong>:
+            <ul>
+              <li>¿Es el mismo fallo que se reparó? → garantía cubre, reparar sin cobrar.</li>
+              <li>¿Es un fallo diferente? → explicar con claridad y cordialidad, dar presupuesto nuevo.</li>
+              <li>¿Es un fallo que derivó del trabajo pero no es el original? → valorar: si es claramente consecuencia del trabajo (ej. "te cambié la RAM y ahora no arranca"), asumirlo. Si es un fallo no relacionado que coincidió en tiempo, explicar.</li>
+            </ul>
+          </li>
+          <li><strong>Documentar todo</strong>: foto, informe 7_ENTREGA si procede, PDF actualizado del caso.</li>
+        </ol>
+
+        <h4>Filosofía con reclamaciones</h4>
+        <p>Una reclamación bien gestionada genera un cliente fiel. Una mal gestionada genera una reseña de 1★ que te cuesta 10 clientes futuros. Si hay duda razonable, inclinarse hacia el cliente. Asumir coste pequeño para preservar reputación y boca-oreja.</p>
+
+        <div class="note note--ok"><span class="note__icon">REGLA</span><p>"Si hay duda, el cliente tiene razón" no es debilidad, es inversión comercial. Un trabajo gratis de 30 min hoy te ahorra una reseña catastrófica mañana.</p></div>
+      </div>
+    </article>
+
+    <!-- P26 -->
+    <article class="proc" id="p26">
+      <header class="proc__header">
+        <span class="proc__tag">P26</span>
+        <h3 class="proc__title">"Si no lo arreglamos, no cobramos" — aplicación</h3>
+        <span class="proc__meta">compromiso comercial · interpretación correcta</span>
+      </header>
+      <div class="proc__body">
+        <h4>Dónde aplica el gancho</h4>
+        <ul>
+          <li><strong>Bloque B (Software)</strong>: limpiezas, formateos, contraseñas Windows, instalación Windows, migración → sí aplica.</li>
+          <li><strong>Bloque C (Hardware · instalación)</strong>: mano de obra de SSD, RAM, clonado, cambio pantalla/teclado/batería → sí aplica (la pieza no, pero la mano de obra sí).</li>
+          <li><strong>Bloque D (Datos N1)</strong>: recuperación lógica → sí aplica. Si no recuperas nada, no cobras nada.</li>
+          <li><strong>Bloque E (Extras)</strong>: remoto, formación → sí aplica por tiempo efectivo trabajado.</li>
+          <li><strong>Bloque F (Packs)</strong>: sí aplica al conjunto.</li>
+        </ul>
+
+        <h4>Dónde NO aplica el gancho</h4>
+        <ul>
+          <li><strong>Bloque A · Diagnóstico (25 €)</strong>: se cobra siempre. El cliente paga el tiempo de evaluar, no el resultado.</li>
+          <li><strong>Bloque D · N2 derivación</strong>: es laboratorio externo, el gancho no aplica porque no lo ejecutas tú.</li>
+          <li><strong>Piezas compradas</strong>: si compraste una pantalla y el cliente cancela, la pieza es suya (o te la quedas en stock). La mano de obra no se cobra, pero la pieza sí o queda para ti.</li>
+          <li><strong>Urgencias +30 %</strong>: el recargo se cobra si se hizo el trabajo en urgencia, aunque luego no se arregle al 100 % (cobras el trabajo hecho).</li>
+        </ul>
+
+        <h4>Qué dice el cliente en la duda</h4>
+        <div class="script">"Mi compromiso es claro: si no te arreglo el problema que me has traído, no te cobro la mano de obra. El diagnóstico sí se cobra, y las piezas si se han comprado ya, pero el tiempo mío y la mano de obra, no.
+
+Si al terminar el PC sigue igual, te devuelvo el equipo y pagas solo el diagnóstico."</div>
+
+        <div class="note note--warn"><span class="note__icon">LÍMITE</span><p>"No arreglar" no es lo mismo que "cliente decide que no quiere seguir". Si has reparado correctamente y el cliente cambia de opinión (ej. "prefiero comprar nuevo"), el trabajo se cobra porque sí se ha hecho. El gancho protege contra fallos técnicos, no contra cambios de criterio del cliente.</p></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ========== BLOQUE 7 · ANEXOS ========== -->
+<section class="block" id="anexos">
+  <div class="container">
+    <div class="block__header">
+      <div class="block__num">BLOQUE 7 / 7</div>
+      <h2 class="block__title">Anexos.</h2>
+      <p class="block__subtitle">Plantillas, datos de referencia y checklist imprimible.</p>
+    </div>
+
+    <!-- A1 -->
+    <div class="anexo" id="a1">
+      <h3>A1 · Plantillas WhatsApp</h3>
+
+      <h4 style="font-family: var(--font-display); margin: 20px 0 10px; color: var(--ink);">Primer contacto (responder en &lt; 15 min)</h4>
+      <div class="script">Hola [nombre], soy Guillermo de MedicoPC. Cuéntame qué síntomas hace el PC:
+
+• ¿Qué pasa exactamente?
+• ¿Desde cuándo?
+• ¿Sobremesa o portátil? ¿Marca/modelo si lo sabes?
+• ¿Tienes datos importantes sin copia?
+
+Con eso te doy idea aproximada. Diagnóstico certero lo hago en visita (25 € · se descuenta si reparo).</div>
+
+      <h4 style="font-family: var(--font-display); margin: 20px 0 10px; color: var(--ink);">Confirmación de cita</h4>
+      <div class="script">Confirmado [nombre]:
+• Dirección: [calle, nº, piso, puerta]
+• Día y hora: [viernes 2/5 a las 17:30]
+• Diagnóstico: 25 € (se descuenta si reparo)
+• Reparación estimada: entre [X] y [Y] €
+• Pago: Bizum 640 126 543 o efectivo
+
+Te aviso 30 min antes de salir.</div>
+
+      <h4 style="font-family: var(--font-display); margin: 20px 0 10px; color: var(--ink);">Aviso salida (30 min antes)</h4>
+      <div class="script">[nombre], salgo ya, llego en unos [30] minutos. ¡Hasta ahora!</div>
+
+      <h4 style="font-family: var(--font-display); margin: 20px 0 10px; color: var(--ink);">Seguimiento 48h</h4>
+      <div class="script">Hola [nombre], soy Guillermo de MedicoPC.
+
+¿Qué tal va el PC desde la reparación? ¿Notas algo raro o está todo bien?
+
+Si hay cualquier detalle a ajustar lo vemos sin coste (entra en la garantía 30 días).
+
+Y si está todo perfecto, me harías un favor enorme con una reseña corta en Google: [enlace Google Business]
+
+Gracias!</div>
+
+      <h4 style="font-family: var(--font-display); margin: 20px 0 10px; color: var(--ink);">Solicitud reseña (tras respuesta positiva)</h4>
+      <div class="script">Gracias [nombre], me alegro mucho.
+
+Si tuvieras 30 segundos, una reseña en Google me ayudaría un montón:
+[https://g.page/r/MedicoPC-Madrid]
+
+¡Cualquier cosa en los 30 próximos días me dices!</div>
+    </div>
+
+    <!-- A2 -->
+    <div class="anexo" id="a2">
+      <h3>A2 · Precios de referencia rápida (tarifa v2)</h3>
+      <table>
+        <thead><tr><th>Código</th><th>Servicio</th><th>Precio</th></tr></thead>
+        <tbody>
+          <tr><td>A1</td><td>Diagnóstico + presupuesto</td><td>25 €</td></tr>
+          <tr><td>A2</td><td>Asesoría técnica</td><td>25 €</td></tr>
+          <tr><td>B1</td><td>Limpieza Básica</td><td>59 €</td></tr>
+          <tr><td>B2</td><td>Limpieza Completa</td><td>89 €</td></tr>
+          <tr><td>B3</td><td>Limpieza Completa + GPU</td><td>119 €</td></tr>
+          <tr><td>B4</td><td>Recuperación contraseña</td><td>45 €</td></tr>
+          <tr><td>B5</td><td>Formateo seco</td><td>59 €</td></tr>
+          <tr><td>B6</td><td>Formateo + Backup</td><td>89 €</td></tr>
+          <tr><td>B7</td><td>Instalación Windows OEM</td><td>79 €</td></tr>
+          <tr><td>B8</td><td>Migración PC viejo → nuevo</td><td>89 €</td></tr>
+          <tr><td>C1</td><td>Instalación SSD/RAM/disco</td><td>30 €</td></tr>
+          <tr><td>C2</td><td>Clonado OS → SSD</td><td>49 €</td></tr>
+          <tr><td>C3</td><td>Cambio batería portátil (m.o.)</td><td>30-55 €</td></tr>
+          <tr><td>C4</td><td>Cambio pantalla portátil (m.o.)</td><td>55 €</td></tr>
+          <tr><td>C5</td><td>Cambio teclado portátil (m.o.)</td><td>35 €</td></tr>
+          <tr><td>D1</td><td>Recuperación datos N1</td><td>110 €</td></tr>
+          <tr><td>D2</td><td>Recuperación datos N2 (derivación)</td><td>350-800 €</td></tr>
+          <tr><td>E1</td><td>Asistencia remota (mín 30 min)</td><td>25 € · 45 €/h</td></tr>
+          <tr><td>E2</td><td>Recogida + entrega Madrid</td><td>20 €</td></tr>
+          <tr><td>E3</td><td>Urgencia 24-48h</td><td>+30 % · mín 25 €</td></tr>
+          <tr><td>E4</td><td>Formación 1h</td><td>45 €/h</td></tr>
+          <tr><td>E5</td><td>Recargo fuera M30 / M40 / lejanas</td><td>+15 / +25 / +35 €</td></tr>
+          <tr><td>F1</td><td>Servicio Senior</td><td>129 €</td></tr>
+          <tr><td>F2</td><td>Pack Gaming Tune-Up</td><td>159 €</td></tr>
+          <tr><td>F3</td><td>Pack Gaming New Rig</td><td>139 €</td></tr>
+          <tr><td>F4</td><td>Config PC Gaming (suelto)</td><td>79 €</td></tr>
+          <tr><td>F5</td><td>Pack Rescate</td><td>199 €</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- A3 -->
+    <div class="anexo" id="a3">
+      <h3>A3 · Números y contactos clave</h3>
+      <table>
+        <thead><tr><th>Concepto</th><th>Contacto / dato</th></tr></thead>
+        <tbody>
+          <tr><td>Teléfono negocio</td><td>+34 640 126 543</td></tr>
+          <tr><td>Email</td><td>hola@medicopc.es</td></tr>
+          <tr><td>Web</td><td>medicopc.es</td></tr>
+          <tr><td>Bizum</td><td>640 126 543</td></tr>
+          <tr><td>Partner N2 recuperación</td><td>[Ondata / Recovery Labs · pendiente acuerdo pre-julio]</td></tr>
+          <tr><td>Proveedor piezas base</td><td>[Amazon / PCComponentes / Ldlc.es]</td></tr>
+          <tr><td>Proveedor pantallas móviles</td><td>Satkit.com (pre-curso Ceipro)</td></tr>
+          <tr><td>Seguro RC (post-julio)</td><td>[pendiente contratar]</td></tr>
+          <tr><td>Emergencia 112</td><td>112</td></tr>
+          <tr><td>Reclamaciones oficiales (post-julio)</td><td>Agencia Tributaria + Seguridad Social</td></tr>
+        </tbody>
+      </table>
+      <div class="note note--warn" style="margin-top: 18px;"><span class="note__icon">ACTUALIZAR</span><p>Los datos marcados como "pendiente" se rellenan tras cerrar los hitos correspondientes (acuerdo partner N2, alta autónomo julio 2026, contratación seguro RC).</p></div>
+    </div>
+
+    <!-- A4 -->
+    <div class="anexo" id="a4">
+      <h3>A4 · Checklist imprimible (1 cara A4)</h3>
+      <p style="margin-bottom: 14px; color: var(--ink-dim);">Imprimir este anexo en A4 para llevar en el maletín como referencia rápida en campo.</p>
+
+      <h4 style="font-family: var(--font-display); margin: 20px 0 10px; color: var(--ink);">Antes de salir</h4>
+      <ul class="checklist">
+        <li>Dirección confirmada en Google Maps</li>
+        <li>Maletín completo: USBs + portátil + herramientas + pasta</li>
+        <li>Pieza(s) específica(s) del caso, modelo correcto</li>
+        <li>WhatsApp cliente: "Salgo ya"</li>
+        <li>Móvil ≥ 50 % batería + banco energía</li>
+        <li>Efectivo en bolsillo (por si Bizum falla)</li>
+      </ul>
+
+      <h4 style="font-family: var(--font-display); margin: 20px 0 10px; color: var(--ink);">Al llegar</h4>
+      <ul class="checklist">
+        <li>Calzas si hay suelo claro</li>
+        <li>Preguntar dónde colocarse</li>
+        <li>Foto estado inicial del PC</li>
+        <li>Preguntas rápidas: última vez OK, apagones, cambios</li>
+        <li>Contrato depósito firmado si te lo vas a llevar</li>
+      </ul>
+
+      <h4 style="font-family: var(--font-display); margin: 20px 0 10px; color: var(--ink);">Diagnóstico</h4>
+      <ul class="checklist">
+        <li>Observación visual (polvo, LEDs, cables)</li>
+        <li>Arranque normal · tiempo · ruidos</li>
+        <li>MEDICOPC.exe → 1_DIAGNOSTICO</li>
+        <li>Revisar logs MedicoPC_Logs</li>
+        <li>Decisión: reparar aquí / taller / derivar</li>
+      </ul>
+
+      <h4 style="font-family: var(--font-display); margin: 20px 0 10px; color: var(--ink);">Antes de reparar</h4>
+      <ul class="checklist">
+        <li>Backup obligatorio + manifest + firma cliente</li>
+        <li>Licencias guardadas (ProduKey)</li>
+        <li>Presupuesto firmado antes de tocar</li>
+      </ul>
+
+      <h4 style="font-family: var(--font-display); margin: 20px 0 10px; color: var(--ink);">Entrega</h4>
+      <ul class="checklist">
+        <li>MEDICOPC.exe → 7_ENTREGA (16 checks)</li>
+        <li>Demo cliente del problema resuelto</li>
+        <li>Informe PDF generado (register_session)</li>
+        <li>Foto estado final</li>
+        <li>Firma conforme cliente</li>
+        <li>Cobro Bizum (esperar confirmación) o efectivo</li>
+        <li>Recibo entregado</li>
+        <li>Tarjeta MedicoPC</li>
+      </ul>
+
+      <h4 style="font-family: var(--font-display); margin: 20px 0 10px; color: var(--ink);">Al día siguiente + 48h</h4>
+      <ul class="checklist">
+        <li>Archivar caso en Drive</li>
+        <li>mark_followup_done al hacer seguimiento</li>
+        <li>WhatsApp seguimiento 48h + solicitud reseña</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="container">
+    <p class="footer__hook">Si no lo arreglamos, <em>no cobramos</em>.</p>
+    <p class="footer__meta">MEDICOPC · PROCEDIMIENTOS CLIENTE V1.0 · 24.04.2026 · MADRID</p>
+  </div>
+</footer>
+
+<script>
+// Smooth scroll en anchor links sin JS externo
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', e => {
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>

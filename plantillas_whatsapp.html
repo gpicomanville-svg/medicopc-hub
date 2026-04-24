@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0b0b12">
+<title>Plantillas WhatsApp · MedicoPC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0b12;
+  --bg-soft: #141422;
+  --bg-card: #1a1a2a;
+  --bg-hover: #22223a;
+  --border: #2a2a40;
+  --border-soft: #1f1f30;
+  --ink: #f3f3fa;
+  --ink-dim: #a0a0b8;
+  --ink-soft: #707088;
+  --pink: #e8185a;
+  --pink-dim: rgba(232, 24, 90, 0.15);
+  --blue: #5082ff;
+  --blue-dim: rgba(80, 130, 255, 0.12);
+  --green: #00c882;
+  --green-dim: rgba(0, 200, 130, 0.12);
+  --amber: #f0b43c;
+  --amber-dim: rgba(240, 180, 60, 0.12);
+  --red: #ff4560;
+  --font-display: 'Lora', Georgia, serif;
+  --font-body: 'Poppins', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: 1.6;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: 60px;
+}
+
+/* ===== HEADER STICKY ===== */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(11, 11, 18, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 18px;
+}
+.topbar__inner {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.topbar__logo {
+  width: 34px;
+  height: 34px;
+  background: var(--pink);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+  box-shadow: 0 4px 12px rgba(232, 24, 90, 0.4);
+}
+.topbar__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+}
+.topbar__sub {
+  color: var(--ink-dim);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ===== INTRO ===== */
+.intro {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px 18px 8px;
+}
+.intro h1 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.intro h1 span { color: var(--pink); }
+.intro p {
+  color: var(--ink-dim);
+  font-size: 14px;
+}
+
+.legend {
+  margin: 18px 0;
+  background: var(--bg-soft);
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--ink-dim);
+}
+.legend b { color: var(--pink); font-weight: 600; }
+.legend code {
+  background: var(--pink-dim);
+  color: var(--pink);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* ===== FILTROS STICKY ===== */
+.filters {
+  position: sticky;
+  top: 63px;
+  z-index: 40;
+  background: rgba(11, 11, 18, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 0;
+  margin: 8px 0 20px;
+}
+.filters__inner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 18px;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.filters__inner::-webkit-scrollbar { display: none; }
+.filter {
+  flex-shrink: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--ink-dim);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 7px 13px;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.filter.active {
+  background: var(--pink);
+  border-color: var(--pink);
+  color: #fff;
+}
+.filter__count {
+  opacity: 0.7;
+  margin-left: 4px;
+  font-size: 11px;
+}
+
+/* ===== CARDS ===== */
+.cards {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+.card.hidden { display: none; }
+.card__head {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.card__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card__num {
+  width: 30px;
+  height: 30px;
+  background: var(--pink-dim);
+  color: var(--pink);
+  font-weight: 700;
+  font-size: 13px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+}
+.card__title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+}
+.card__cat {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+.card__cat--captacion { background: var(--blue-dim); color: var(--blue); }
+.card__cat--visita { background: var(--amber-dim); color: var(--amber); }
+.card__cat--post { background: var(--green-dim); color: var(--green); }
+.card__cat--dificiles { background: var(--pink-dim); color: var(--pink); }
+.card__cat--resenas { background: rgba(200, 100, 255, 0.15); color: #c864ff; }
+
+.card__body {
+  padding: 14px 16px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--ink);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+.card__body var {
+  background: var(--pink-dim);
+  color: var(--pink);
+  font-family: var(--font-mono);
+  font-style: normal;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+.card__foot {
+  padding: 10px 12px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  background: var(--bg-soft);
+}
+.btn-copy {
+  background: var(--pink);
+  border: none;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-copy:active { transform: scale(0.96); }
+.btn-copy.copied {
+  background: var(--green);
+}
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--green);
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 8px 24px rgba(0, 200, 130, 0.4);
+  opacity: 0;
+  transition: all 0.3s ease-out;
+  z-index: 100;
+  pointer-events: none;
+}
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* ===== FOOTER ===== */
+.foot {
+  max-width: 760px;
+  margin: 40px auto 0;
+  padding: 24px 18px;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 12px;
+  border-top: 1px solid var(--border-soft);
+}
+.foot b { color: var(--pink); font-weight: 600; }
+
+@media (max-width: 480px) {
+  .intro h1 { font-size: 22px; }
+  .card__title { font-size: 14px; }
+  .card__body { font-size: 12.5px; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar__inner">
+    <div class="topbar__brand">
+      <div class="topbar__logo">+</div>
+      <div>
+        <div class="topbar__title">MedicoPC</div>
+        <div class="topbar__sub">Plantillas WhatsApp</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="intro">
+  <h1>16 plantillas <span>listas para copiar</span></h1>
+  <p>Toca "Copiar", pégalo en WhatsApp, personaliza las variables en rosa y envía.</p>
+  <div class="legend">
+    <b>Leyenda:</b> las variables <code>[nombre]</code>, <code>[hora]</code>, <code>[X]€</code> se sustituyen por datos reales antes de enviar. Todo lo demás ya está pulido.
+  </div>
+</section>
+
+<nav class="filters">
+  <div class="filters__inner">
+    <button class="filter active" data-filter="all">Todas <span class="filter__count">16</span></button>
+    <button class="filter" data-filter="captacion">Captación <span class="filter__count">4</span></button>
+    <button class="filter" data-filter="visita">Visita <span class="filter__count">3</span></button>
+    <button class="filter" data-filter="post">Post-servicio <span class="filter__count">3</span></button>
+    <button class="filter" data-filter="dificiles">Difíciles <span class="filter__count">4</span></button>
+    <button class="filter" data-filter="resenas">Reseñas <span class="filter__count">2</span></button>
+  </div>
+</nav>
+
+<section class="cards">
+
+<!-- 01 -->
+<article class="card" data-cat="captacion">
+  <div class="card__head">
+    <div class="card__meta">
+      <div class="card__num">01</div>
+      <div class="card__title">Respuesta primer contacto</div>
+    </div>
+    <div class="card__cat card__cat--captacion">Captación</div>
+  </div>
+  <div class="card__body">Hola <var>[nombre]</var>, soy Guillermo de MedicoPC 👋
+
+He visto tu mensaje. Cuéntame:
+· ¿Qué le pasa exactamente al PC?
+· ¿Portátil o sobremesa? ¿Marca/modelo?
+· ¿Desde cuándo viene así?
+
+Con eso te doy un rango orientativo. Te aviso: presupuesto cerrado solo tras ver el equipo en persona (diagnóstico 25€, descontable si reparo).</div>
+  <div class="card__foot">
+    <button class="btn-copy" data-id="01">📋 Copiar</button>
+  </div>
+</article>
+
+<!-- 02 -->
+<article class="card" data-cat="captacion">
+  <div class="card__head">
+    <div class="card__meta">
+      <div class="card__num">02</div>
+      <div class="card__title">Dar rango orientativo sin cerrar</div>
+    </div>
+    <div class="card__cat card__cat--captacion">Captación</div>
+  </div>
+  <div class="card__body">Por lo que me cuentas suena a <var>[tipo problema]</var>.
+
+Rango orientativo: <var>[X]</var> a <var>[Y]</var>€ (según lo que encuentre al abrir). Incluye desplazamiento Madrid capital y garantía escrita 30 días.
+
+Si te cuadra, te paso a verlo. ¿Qué tal <var>[día]</var> por la <var>[mañana/tarde]</var>?</div>
+  <div class="card__foot">
+    <button class="btn-copy" data-id="02">📋 Copiar</button>
+  </div>
+</article>
+
+<!-- 03 -->
+<article class="card" data-cat="captacion">
+  <div class="card__head">
+    <div class="card__meta">
+      <div class="card__num">03</div>
+      <div class="card__title">Confirmación de cita completa</div>
+    </div>
+    <div class="card__cat card__cat--captacion">Captación</div>
+  </div>
+  <div class="card__body">Perfecto <var>[nombre]</var> ✅
+
+📅 <var>[día]</var> a las <var>[hora]</var>
+📍 <var>[dirección]</var>
+⏱️ Estaré entre <var>[X]</var>-<var>[Y]</var>h allí
+
+Lo que necesito:
+· PC enchufado a la corriente
+· Que me indiques la contraseña de Windows (o dejarla sin contraseña temporalmente)
+· 10 min tu atención para contarme bien el problema
+
+Cobro: efectivo o Bizum al terminar.
+
+Cualquier imprevisto, aviso con antelación. Igual tú.</div>
+  <div class="card__foot">
+    <button class="btn-copy" data-id="03">📋 Copiar</button>
+  </div>
+</article>
+
+<!-- 04 -->
+<article class="card" data-cat="captacion">
+  <div class="card__head">
+    <div class="card__meta">
+      <div class="card__num">04</div>
+      <div class="card__title">Descarte educado (PC que no compensa)</div>
+    </div>
+    <div class="card__cat card__cat--captacion">Captación</div>
+  </div>
+  <div class="card__body">Hola <var>[nombre]</var>, gracias por contactar.
+
+He mirado lo que me cuentas y siendo sincero: en ese equipo concreto la reparación saldría por encima de lo que vale un PC nuevo de gama equivalente. No me parece honesto cobrarte por algo que no te va a compensar.
+
+Mi consejo: <var>[recomendación concreta]</var>.
+
+Si te animas a renovar equipo, te echo una mano sin coste eligiendo modelo según tu uso. Y con el nuevo, si quieres servicio de migración de archivos y config, ahí sí puedo ayudarte (89€).
+
+Gracias por haber contado conmigo.</div>
+  <div class="card__foot">
+    <button class="btn-copy" data-id="04">📋 Copiar</button>
+  </div>
+</article>
+
+<!-- 05 -->
+<article class="card" data-cat="visita">
+  <div class="card__head">
+    <div class="card__meta">
+      <div class="card__num">05</div>
+      <div class="card__title">Aviso 30 min antes</div>
+    </div>
+    <div class="card__cat card__cat--visita">Visita</div>
+  </div>
+  <div class="card__body">Hola <var>[nombre]</var>, salgo ya hacia tu casa. Llegando en unos <var>[30]</var> min 👍
+
+Si puedes ir dejando el PC encendido y con la contraseña a mano, ganamos tiempo. Gracias.</div>
+  <div class="card__foot">
+    <button class="btn-copy" data-id="05">📋 Copiar</button>
+  </div>
+</article>
+
+<!-- 06 -->
+<article class="card" data-cat="visita">
+  <div class="card__head">
+    <div class="card__meta">
+      <div class="card__num">06</div>
+      <div class="card__title">Retraso imprevisto</div>
+    </div>
+    <div class="card__cat card__cat--visita">Visita</div>
+  </div>
+  <div class="card__body">Hola <var>[nombre]</var>, disculpa. Me ha surgido un imprevisto con el cliente anterior y voy a llegar <var>[15-20]</var> min tarde.
+
+¿Te viene bien o prefieres reagendar a otro momento? Como mejor te encaje. Perdona las molestias.</div>
+  <div class="card__foot">
+    <button class="btn-copy" data-id="06">📋 Copiar</button>
+  </div>
+</article>
+
+<!-- 07 -->
+<article class="card" data-cat="visita">
+  <div class="card__head">
+    <div class="card__meta">
+      <div class="card__num">07</div>
+      <div class="card__title">Presupuesto enviado (PDF)</div>
+    </div>
+    <div class="card__cat card__cat--visita">Visita</div>
+  </div>
+  <div class="card__body">Te mando el presupuesto en PDF 📎
+
+Resumen rápido:
+· <var>[servicio 1]</var> — <var>[X]</var>€
+· <var>[servicio 2]</var> — <var>[Y]</var>€
+· <var>[pieza si aplica]</var> — <var>[Z]</var>€
+━━━━━━━━━━━━━━━
+TOTAL: <var>[TOTAL]</var>€
+
+Incluye garantía escrita 30 días y el diagnóstico de hoy va descontado.
+
+Dime algo cuando lo mires. Sin prisa.</div>
+  <div class="card__foot">
+    <button class="btn-copy" data-id="07">📋 Copiar</button>
+  </div>
+</article>
+
+<!-- 08 -->
+<article class="card" data-cat="post">
+  <div class="card__head">
+    <div class="card__meta">
+      <div class="card__num">08</div>
+      <div class="card__title">Entrega + informe PDF</div>
+    </div>
+    <div class="card__cat card__cat--post">Post</div>
+  </div>
+  <div class="card__body">Hola <var>[nombre]</var>, aquí tienes el informe del servicio de hoy 📄
+
+Resumen de lo que se ha hecho:
+· <var>[acción 1]</var>
+· <var>[acción 2]</var>
+· <var>[acción 3]</var>
+
+Importe cobrado: <var>[X]</var>€ (<var>[Bizum/efectivo]</var>) ✅
+Garantía escrita: 30 días desde hoy.
+
+Si en los próximos días notas algo raro relacionado con lo que tocamos, me avisas y lo reviso sin coste.
+
+Gracias por confiar en MedicoPC 🙏</div>
+  <div class="card__foot">
+    <button class="btn-copy" data-id="08">📋 Copiar</button>
+  </div>
+</article>
+
+<!-- 09 -->
+<article class="card" data-cat="post">
+  <div class="card__head">
+    <div class="card__meta">
+      <div class="card__num">09</div>
+      <div class="card__title">Seguimiento 48h + reseña</div>
+    </div>
+    <div class="card__cat card__cat--post">Post</div>
+  </div>
+  <div class="card__body">Hola <var>[nombre]</var> 👋
+
+Paso a ver qué tal el PC tras la reparación del otro día. ¿Todo funcionando como esperabas?
+
+Si hay algo raro, me dices y lo miro. Si va todo fino y te apetece echarme un cable: una reseña en Google ayuda mucho a que me encuentren más clientes como tú.
+
+Te paso el enlace si quieres: <var>[link Google Business]</var>
+
+Sin presión. Gracias igual.</div>
+  <div class="card__foot">
+    <button class="btn-copy" data-id="09">📋 Copiar</button>
+  </div>
+</article>
+
+<!-- 10 -->
+<article class="card" data-cat="post">
+  <div class="card__head">
+    <div class="card__meta">
+      <div class="card__num">10</div>
+      <div class="card__title">Reactivación 3-6 meses</div>
+    </div>
+    <div class="card__cat card__cat--post">Post</div>
+  </div>
+  <div class="card__body">Hola <var>[nombre]</var>, qué tal ☺️
+
+Te escribo porque hace ya unos meses que estuve con el PC. ¿Todo sigue bien?
+
+Si notas que está yendo más lento, se sobrecalienta o se reinicia solo, te recomiendo una Limpieza Completa (60€) — pasta térmica nueva, limpieza software y rendimiento como el primer día.
+
+Si quieres que pase, dime día. Si no toca, también perfecto. Saludos.</div>
+  <div class="card__foot">
+    <button class="btn-copy" data-id="10">📋 Copiar</button>
+  </div>
+</article>
+
+<!-- 11 -->
+<article class="card" data-cat="dificiles">
+  <div class="card__head">
+    <div class="card__meta">
+      <div class="card__num">11</div>
+      <div class="card__title">Sobrevisita (algo nuevo a mitad)</div>
+    </div>
+    <div class="card__cat card__cat--dificiles">Difíciles</div>
+  </div>
+  <div class="card__body"><var>[nombre]</var>, al abrir he visto algo que no se veía por fuera: <var>[hallazgo técnico, ej: SSD con sectores defectuosos]</var>.
+
+Esto cambia el presupuesto inicial. Opciones:
+
+A) Seguir solo con lo pactado y dejar esto para otro día (riesgo: <var>[explicar]</var>).
+B) Añadirlo ahora aprovechando que está abierto: +<var>[X]</var>€ sobre lo hablado.
+
+Tú decides. No te meto nada sin confirmarlo tú primero.</div>
+  <div class="card__foot">
+    <button class="btn-copy" data-id="11">📋 Copiar</button>
+  </div>
+</article>
+
+<!-- 12 -->
+<article class="card" data-cat="dificiles">
+  <div class="card__head">
+    <div class="card__meta">
+      <div class="card__num">12</div>
+      <div class="card__title">Malas noticias (PC irrecuperable)</div>
+    </div>
+    <div class="card__cat card__cat--dificiles">Difíciles</div>
+  </div>
+  <div class="card__body"><var>[nombre]</var>, te llamo lo antes posible pero te adelanto por aquí:
+
+El equipo tiene <var>[diagnóstico: placa muerta / disco fallo físico / etc.]</var>. Reparación no compensa (saldría <var>[X]</var>€, un PC nuevo equivalente cuesta <var>[Y]</var>€).
+
+Si había datos importantes dentro:
+· Recuperación lógica (N1): 130€ — si el disco aún responde.
+· Recuperación física (N2) vía laboratorio partner: 350-800€ + mi gestión 60€.
+
+Si los datos no son críticos, mi recomendación: comprar PC nuevo y que te ayude con la migración (100€).
+
+Del diagnóstico de hoy cobro los 25€ acordados. El resto, lo que tú decidas.</div>
+  <div class="card__foot">
+    <button class="btn-copy" data-id="12">📋 Copiar</button>
+  </div>
+</article>
+
+<!-- 13 -->
+<article class="card" data-cat="dificiles">
+  <div class="card__head">
+    <div class="card__meta">
+      <div class="card__num">13</div>
+      <div class="card__title">Reclamación en garantía</div>
+    </div>
+    <div class="card__cat card__cat--dificiles">Difíciles</div>
+  </div>
+  <div class="card__body">Hola <var>[nombre]</var>, recibido. La garantía cubre lo que toqué el día <var>[fecha]</var>.
+
+Voy a pasar a revisarlo sin coste. ¿Te viene bien <var>[día]</var> a las <var>[hora]</var>?
+
+Si el problema está relacionado con lo que reparé, lo arreglo gratis. Si es algo nuevo no relacionado, te aviso antes de tocar nada y decides.
+
+Nos vemos.</div>
+  <div class="card__foot">
+    <button class="btn-copy" data-id="13">📋 Copiar</button>
+  </div>
+</article>
+
+<!-- 14 -->
+<article class="card" data-cat="dificiles">
+  <div class="card__head">
+    <div class="card__meta">
+      <div class="card__num">14</div>
+      <div class="card__title">Regateo (defender precio)</div>
+    </div>
+    <div class="card__cat card__cat--dificiles">Difíciles</div>
+  </div>
+  <div class="card__body">Te entiendo <var>[nombre]</var>, y gracias por ser directo.
+
+El precio incluye:
+· Desplazamiento Madrid capital
+· Trabajo hecho en tu casa (no tienes que moverte)
+· Piezas con calidad garantizada (no de las baratas que duran 6 meses)
+· Garantía escrita 30 días: si algo falla relacionado, vuelvo gratis
+· "Si no lo arreglo, no cobro"
+
+Más barato hay, pero entonces cambia una de esas. Yo no bajo de ahí porque a ese precio ya no cubro bien el servicio.
+
+Si prefieres pensarlo, sin problema. Si tiras, también. Lo decides tú.</div>
+  <div class="card__foot">
+    <button class="btn-copy" data-id="14">📋 Copiar</button>
+  </div>
+</article>
+
+<!-- 15 -->
+<article class="card" data-cat="resenas">
+  <div class="card__head">
+    <div class="card__meta">
+      <div class="card__num">15</div>
+      <div class="card__title">Petición Google</div>
+    </div>
+    <div class="card__cat card__cat--resenas">Reseñas</div>
+  </div>
+  <div class="card__body">Hola <var>[nombre]</var>, espero que el PC siga yendo bien ☺️
+
+Favor enorme si tienes 30 segundos: ¿me dejas una reseña en Google? A un técnico de barrio como yo le ayuda muchísimo.
+
+Enlace directo 👉 <var>[link Google Business]</var>
+
+Gracias de verdad. Y ya sabes, cualquier cosa, aquí estoy.</div>
+  <div class="card__foot">
+    <button class="btn-copy" data-id="15">📋 Copiar</button>
+  </div>
+</article>
+
+<!-- 16 -->
+<article class="card" data-cat="resenas">
+  <div class="card__head">
+    <div class="card__meta">
+      <div class="card__num">16</div>
+      <div class="card__title">Agradecimiento post-reseña</div>
+    </div>
+    <div class="card__cat card__cat--resenas">Reseñas</div>
+  </div>
+  <div class="card__body"><var>[nombre]</var>, acabo de ver tu reseña 🙏
+
+Gracias de verdad, esto me ayuda mucho más de lo que parece. Cualquier cosa que necesites tú o alguien que conozcas, aquí me tienes.
+
+Un abrazo.</div>
+  <div class="card__foot">
+    <button class="btn-copy" data-id="16">📋 Copiar</button>
+  </div>
+</article>
+
+</section>
+
+<footer class="foot">
+  <p><b>MedicoPC</b> · Plantillas WhatsApp · v1.0</p>
+  <p style="margin-top:6px;">Si no lo arreglamos, no cobramos.</p>
+</footer>
+
+<div class="toast" id="toast">✓ Copiado al portapapeles</div>
+
+<script>
+// ===== COPIAR =====
+const toast = document.getElementById('toast');
+let toastTimer;
+
+document.querySelectorAll('.btn-copy').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const card = btn.closest('.card');
+    const body = card.querySelector('.card__body');
+    const text = body.innerText;
+    try {
+      await navigator.clipboard.writeText(text);
+      btn.classList.add('copied');
+      btn.innerHTML = '✓ Copiado';
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+        btn.classList.remove('copied');
+        btn.innerHTML = '📋 Copiar';
+      }, 1800);
+    } catch (e) {
+      // Fallback para navegadores viejos
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      btn.innerHTML = '✓ Copiado';
+      setTimeout(() => { btn.innerHTML = '📋 Copiar'; }, 1800);
+    }
+  });
+});
+
+// ===== FILTROS =====
+const filters = document.querySelectorAll('.filter');
+const cards = document.querySelectorAll('.card');
+
+filters.forEach(f => {
+  f.addEventListener('click', () => {
+    filters.forEach(x => x.classList.remove('active'));
+    f.classList.add('active');
+    const cat = f.dataset.filter;
+    cards.forEach(c => {
+      if (cat === 'all' || c.dataset.cat === cat) {
+        c.classList.remove('hidden');
+      } else {
+        c.classList.add('hidden');
+      }
+    });
+  });
+});
+</script>
+
+</body>
+</html>

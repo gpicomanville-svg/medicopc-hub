@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MedicoPC — Centro de Mando</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Poppins:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden;background:#0b0b12;font-family:'Segoe UI',system-ui,sans-serif}
@@ -32,6 +35,18 @@ html,body{height:100%;overflow:hidden;background:#0b0b12;font-family:'Segoe UI',
 .tool-btn:hover{color:#e8e8f0;border-color:rgba(232,24,90,.4)}
 .tool-btn.active{color:#fff;background:rgba(232,24,90,.15);border-color:#e8185a}
 #tool-frame{flex:1;width:100%;border:none;background:#0b0b12}
+.docs-panel{position:absolute;inset:0;display:none;flex-direction:column;background:#0b0b12;overflow-y:auto}
+.docs-panel.active{display:flex}
+.docs-head{padding:32px 28px 20px;border-bottom:1px solid rgba(255,255,255,.05)}
+.docs-head h2{font-family:'Lora',Georgia,serif;font-weight:600;font-size:26px;color:#fff;letter-spacing:-.01em;margin-bottom:6px}
+.docs-head p{font-size:13px;color:rgba(255,255,255,.4);font-family:'Poppins',system-ui,sans-serif}
+.docs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;padding:24px 28px 40px}
+.doc-card{display:flex;flex-direction:column;gap:10px;padding:20px 20px 22px;background:#141422;border:1px solid rgba(255,255,255,.06);border-left:3px solid #e8185a;border-radius:4px;text-decoration:none;color:inherit;transition:transform .15s,border-color .15s,background .15s;cursor:pointer;font-family:'Poppins',system-ui,sans-serif}
+.doc-card:hover{background:#1a1a2a;border-color:rgba(232,24,90,.35);transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.35)}
+.doc-card__icon{font-size:26px;line-height:1}
+.doc-card__title{font-family:'Lora',Georgia,serif;font-weight:600;font-size:16px;color:#fff;letter-spacing:-.01em}
+.doc-card__desc{font-size:12.5px;color:rgba(255,255,255,.55);line-height:1.55}
+.doc-card__meta{margin-top:auto;font-family:'JetBrains Mono',Consolas,monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#5082ff;padding-top:8px}
 </style>
 </head>
 <body>
@@ -43,6 +58,7 @@ html,body{height:100%;overflow:hidden;background:#0b0b12;font-family:'Segoe UI',
     <button class="tab" data-tab="facturacion"><span class="tab-icon">💰</span>Facturación</button>
     <button class="tab" data-tab="web"><span class="tab-icon">🌐</span>Web</button>
     <button class="tab" data-tab="herramientas"><span class="tab-icon">🛠️</span>Herramientas</button>
+    <button class="tab" data-tab="docs"><span class="tab-icon">📋</span>Docs</button>
     <div class="spacer"></div>
     <span class="meta" id="clock"></span>
   </div>
@@ -66,6 +82,50 @@ html,body{height:100%;overflow:hidden;background:#0b0b12;font-family:'Segoe UI',
         <button class="tool-btn" data-tool="inventario"><span>🏢</span>Inventario Pyme</button>
       </div>
       <iframe id="tool-frame" src=""></iframe>
+    </div>
+    <div class="docs-panel" id="frame-docs">
+      <div class="docs-head">
+        <h2>📋 Documentos operativos</h2>
+        <p>Procedimientos, manuales y chuletas de campo. Abren en pestaña nueva.</p>
+      </div>
+      <div class="docs-grid">
+        <a class="doc-card" href="/manual_maletin.html" target="_blank" rel="noopener">
+          <div class="doc-card__icon">🧰</div>
+          <div class="doc-card__title">Manual del maletín</div>
+          <div class="doc-card__desc">Contenido, protocolos y uso del maletín técnico MedicoPC en visita.</div>
+          <div class="doc-card__meta">manual_maletin</div>
+        </a>
+        <a class="doc-card" href="/procedimientos_cliente.html" target="_blank" rel="noopener">
+          <div class="doc-card__icon">📘</div>
+          <div class="doc-card__title">Procedimientos cliente (oscuro)</div>
+          <div class="doc-card__desc">26 procedimientos P1–P26. Captación, visita, reparación, entrega, post-servicio, casos difíciles. Consulta en móvil.</div>
+          <div class="doc-card__meta">procedimientos · dark</div>
+        </a>
+        <a class="doc-card" href="/procedimientos_cliente_v2_blanco.html" target="_blank" rel="noopener">
+          <div class="doc-card__icon">🖨️</div>
+          <div class="doc-card__title">Procedimientos cliente (imprimible)</div>
+          <div class="doc-card__desc">Misma batería, optimizado para impresión A4 en blanco.</div>
+          <div class="doc-card__meta">procedimientos · print</div>
+        </a>
+        <a class="doc-card" href="/manual_usbs.html" target="_blank" rel="noopener">
+          <div class="doc-card__icon">💾</div>
+          <div class="doc-card__title">Manual de USBs</div>
+          <div class="doc-card__desc">9 scripts del maletín, 3 tools externas, USB Arsenal Ventoy, 6 flujos operativos, troubleshooting.</div>
+          <div class="doc-card__meta">manual_usbs</div>
+        </a>
+        <a class="doc-card" href="/plantillas_whatsapp.html" target="_blank" rel="noopener">
+          <div class="doc-card__icon">💬</div>
+          <div class="doc-card__title">Plantillas WhatsApp</div>
+          <div class="doc-card__desc">16 plantillas con botón copiar. Captación, visita, post-servicio, casos difíciles, reseñas.</div>
+          <div class="doc-card__meta">plantillas · wa</div>
+        </a>
+        <a class="doc-card" href="/chuleta_campo.html" target="_blank" rel="noopener">
+          <div class="doc-card__icon">📇</div>
+          <div class="doc-card__title">Chuleta de campo</div>
+          <div class="doc-card__desc">2 hojas A4 bolsillo. Orden visita 12 pasos, árboles de decisión, 10 NUNCAS, frases tipo.</div>
+          <div class="doc-card__meta">chuleta · a4</div>
+        </a>
+      </div>
     </div>
   </div>
 </div>
@@ -100,7 +160,7 @@ document.querySelectorAll('.tool-btn').forEach(b=>b.addEventListener('click',()=
 function activate(id){
   active=id;
   tabs.forEach(t=>t.classList.toggle('active',t.dataset.tab===id));
-  document.querySelectorAll('.frame,.ext-panel,.tools-panel').forEach(f=>f.classList.remove('active'));
+  document.querySelectorAll('.frame,.ext-panel,.tools-panel,.docs-panel').forEach(f=>f.classList.remove('active'));
   const el=document.getElementById('frame-'+id);
   if(el){
     el.classList.add('active');

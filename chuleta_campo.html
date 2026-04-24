@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chuleta de campo · MedicoPC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Poppins:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f6f6f9;
+  --bg-card: #eceef3;
+  --border: #c0c0d0;
+  --border-soft: #dcdce4;
+  --ink: #0a0a15;
+  --ink-mid: #2a2a3a;
+  --ink-dim: #555565;
+  --ink-soft: #888898;
+  --pink: #c71c4e;
+  --pink-soft: #fce4ec;
+  --blue: #1d3fce;
+  --blue-soft: #e8edff;
+  --green: #006e48;
+  --green-soft: #dff2e8;
+  --amber: #955800;
+  --amber-soft: #fff2d6;
+  --red: #a81029;
+  --red-soft: #fce0e4;
+  --font-display: 'Lora', Georgia, serif;
+  --font-body: 'Poppins', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg-soft);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.45;
+  font-size: 12.5px;
+  -webkit-font-smoothing: antialiased;
+}
+.page {
+  max-width: 210mm;
+  margin: 0 auto;
+  padding: 18mm 14mm;
+  background: var(--bg);
+}
+
+/* ===== HEADER ===== */
+.hdr {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--ink);
+  margin-bottom: 14px;
+}
+.hdr__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.hdr__title em { color: var(--pink); font-style: italic; }
+.hdr__sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+}
+
+/* ===== GRID 2 COLUMNAS ===== */
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.grid3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* ===== CAJA GENÉRICA ===== */
+.box {
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 3px;
+  padding: 9px 12px;
+  break-inside: avoid;
+}
+.box--pink { border-left: 4px solid var(--pink); }
+.box--blue { border-left: 4px solid var(--blue); }
+.box--green { border-left: 4px solid var(--green); }
+.box--amber { border-left: 4px solid var(--amber); }
+.box--red { border-left: 4px solid var(--red); }
+
+.box__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink);
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border-soft);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.box__tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 2px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #fff;
+}
+.box--pink .box__tag { background: var(--pink); }
+.box--blue .box__tag { background: var(--blue); }
+.box--green .box__tag { background: var(--green); }
+.box--amber .box__tag { background: var(--amber); }
+.box--red .box__tag { background: var(--red); }
+
+.box ul,
+.box ol {
+  padding-left: 15px;
+  margin: 4px 0;
+  color: var(--ink-mid);
+}
+.box li { margin-bottom: 3px; line-height: 1.4; }
+
+.box strong { color: var(--ink); font-weight: 600; }
+.box em { font-style: normal; color: var(--pink); font-weight: 600; }
+
+.box code {
+  font-family: var(--font-mono);
+  background: var(--bg-card);
+  padding: 1px 4px;
+  border-radius: 2px;
+  font-size: 11px;
+  color: var(--amber);
+  font-weight: 600;
+}
+
+/* ===== SECUENCIA NUMERADA COMPACTA ===== */
+.seq {
+  list-style: none;
+  counter-reset: s;
+  padding: 0;
+  margin: 4px 0;
+}
+.seq li {
+  counter-increment: s;
+  padding: 3px 0 3px 22px;
+  position: relative;
+  line-height: 1.4;
+  font-size: 11.5px;
+  color: var(--ink-mid);
+}
+.seq li::before {
+  content: counter(s);
+  position: absolute;
+  left: 0;
+  top: 3px;
+  width: 16px;
+  height: 16px;
+  background: var(--blue);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+/* ===== TABLA COMPACTA ===== */
+.tbl {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4px 0;
+  font-size: 11px;
+}
+.tbl th {
+  background: var(--bg-card);
+  color: var(--ink);
+  text-align: left;
+  padding: 4px 7px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+.tbl td {
+  padding: 4px 7px;
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--ink-mid);
+  vertical-align: top;
+  font-size: 11px;
+}
+.tbl tr:last-child td { border-bottom: 0; }
+
+/* ===== BLOQUE GRANDE ANCHO COMPLETO ===== */
+.full {
+  grid-column: 1 / -1;
+}
+
+/* ===== DECISIÓN SI/NO ===== */
+.dec {
+  display: flex;
+  gap: 6px;
+  margin: 5px 0;
+}
+.dec__side {
+  flex: 1;
+  padding: 5px 8px;
+  border-radius: 2px;
+  font-size: 10.5px;
+  line-height: 1.35;
+}
+.dec__side--y {
+  background: var(--green-soft);
+  border-left: 3px solid var(--green);
+  color: #003e2b;
+}
+.dec__side--n {
+  background: var(--red-soft);
+  border-left: 3px solid var(--red);
+  color: #600a1b;
+}
+.dec__label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  display: block;
+  margin-bottom: 2px;
+}
+.dec__side--y .dec__label { color: var(--green); }
+.dec__side--n .dec__label { color: var(--red); }
+
+/* ===== FLAG (pill) ===== */
+.flag {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 2px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  margin-right: 3px;
+  letter-spacing: 0.3px;
+}
+.flag--ok { background: var(--green-soft); color: var(--green); }
+.flag--warn { background: var(--amber-soft); color: var(--amber); }
+.flag--stop { background: var(--red-soft); color: var(--red); }
+
+/* ===== FOOTER ===== */
+.footer {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1.5px solid var(--ink);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  color: var(--ink-soft);
+}
+.footer__hook {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--ink);
+}
+.footer__hook em { color: var(--pink); font-weight: 700; }
+
+/* ===== PRINT ===== */
+@media print {
+  @page { size: A4; margin: 0; }
+  body { background: #fff; font-size: 10pt; }
+  .page { padding: 10mm 8mm; max-width: 210mm; }
+  .hdr__title { font-size: 24px; }
+  .box { break-inside: avoid; }
+}
+
+/* ===== 2ª HOJA separator ===== */
+.sheet-break {
+  page-break-before: always;
+  border-top: 3px dashed var(--pink);
+  margin: 30px 0 20px;
+  padding-top: 20px;
+}
+
+@media print {
+  .sheet-break { border: 0; margin: 0; padding: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+<!-- ============ HOJA 1 ============ -->
+
+<header class="hdr">
+  <div>
+    <h1 class="hdr__title">Chuleta <em>de campo</em></h1>
+    <div style="font-size: 11px; color: var(--ink-dim); margin-top: 2px;">Lo imprescindible cuando estás delante del PC del cliente</div>
+  </div>
+  <div class="hdr__sub">HOJA 1/2 · V1.0 · 24/04/26</div>
+</header>
+
+<!-- ORDEN VISITA ESTÁNDAR -->
+<div class="box box--pink full" style="margin-bottom: 10px;">
+  <div class="box__title"><span class="box__tag">ORDEN</span>Visita estándar · paso por paso</div>
+  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; font-size: 11px;">
+    <div><strong>1.</strong> Foto PC estado inicial</div>
+    <div><strong>2.</strong> Preguntas rápidas al cliente</div>
+    <div><strong>3.</strong> Enchufar USB MASTER verde</div>
+    <div><strong>4.</strong> Ejecutar <code>1_DIAGNOSTICO</code></div>
+    <div><strong>5.</strong> Decidir in-situ/taller/derivar</div>
+    <div><strong>6.</strong> <em>BACKUP obligatorio</em> <code>2_BACKUP</code></div>
+    <div><strong>7.</strong> Firma backup cliente</div>
+    <div><strong>8.</strong> Presupuesto firmado</div>
+    <div><strong>9.</strong> Reparar</div>
+    <div><strong>10.</strong> <code>7_ENTREGA</code> · 16 checks</div>
+    <div><strong>11.</strong> Demo al cliente · problema ya OK</div>
+    <div><strong>12.</strong> Cobro Bizum · firma · foto final</div>
+  </div>
+</div>
+
+<!-- FILA A: CUÁNDO SALTARSE PASOS + BACKUP QUE COPIAR -->
+<div class="grid2">
+
+  <div class="box box--amber">
+    <div class="box__title"><span class="box__tag">SALTAR</span>¿Puedo saltarme algún paso?</div>
+    <ul>
+      <li><strong>Paso 6 (BACKUP):</strong> NUNCA si vas a formatear, cambiar disco o tocar sistema. <em>Obligatorio siempre.</em></li>
+      <li><strong>Paso 6:</strong> SÍ puedes saltarlo solo en: limpieza física pura · cambio pantalla · cambio teclado · config PC nuevo vacío</li>
+      <li><strong>Paso 8 (presupuesto firmado):</strong> NUNCA. Siempre firma antes de tocar.</li>
+      <li><strong>Paso 10 (7_ENTREGA):</strong> NUNCA. Siempre antes de irte.</li>
+      <li><strong>Paso 11 (demo):</strong> NUNCA. La demo es lo que vende la próxima reseña.</li>
+      <li><strong>Paso 4 (diagnóstico):</strong> Puedes abreviar si el síntoma es obvio (pantalla rota = no hace falta 15 min de test).</li>
+    </ul>
+  </div>
+
+  <div class="box box--blue">
+    <div class="box__title"><span class="box__tag">BACKUP</span>Qué copiar siempre</div>
+    <ul>
+      <li>Escritorio</li>
+      <li>Documentos</li>
+      <li>Imágenes · Vídeos · Música</li>
+      <li>Descargas</li>
+      <li>Favoritos navegador (bookmarks)</li>
+      <li>Perfiles Thunderbird/Outlook si usa email local</li>
+      <li>AppData crítico si es usuario avanzado</li>
+      <li>Partidas guardadas de juegos (<code>C:\Users\X\Documents\My Games</code>)</li>
+    </ul>
+    <div style="margin-top: 4px; font-size: 10px; color: var(--amber); font-weight: 600;">⚠ Preguntar SIEMPRE si tiene algo en ruta rara (D:\, E:\ o carpetas custom)</div>
+  </div>
+
+</div>
+
+<!-- FILA B: NIVELES REPARACIÓN + CUÁNDO FORMATEAR -->
+<div class="grid2">
+
+  <div class="box box--blue">
+    <div class="box__title"><span class="box__tag">S5</span>Niveles Reparación · cuándo y qué esperar</div>
+    <table class="tbl">
+      <thead><tr><th>Nivel</th><th>Cuándo</th><th>Tiempo</th><th>Éxito</th></tr></thead>
+      <tbody>
+        <tr><td><strong>N1</strong> seguro</td><td>Windows regular pero arranca</td><td>10-20m</td><td>70%</td></tr>
+        <tr><td><strong>N2</strong> intermedio</td><td>N1 no bastó · WU bloqueado</td><td>30-45m</td><td>85%</td></tr>
+        <tr><td><strong>N3</strong> agresivo</td><td>Último recurso antes formateo</td><td>45-60m</td><td>50/50</td></tr>
+      </tbody>
+    </table>
+    <div style="font-size: 10.5px; color: var(--ink-dim); margin-top: 4px;"><strong>Cliente no quiere formatear:</strong> N1→N2→N3. Si N3 falla, explicar que no queda otra.</div>
+  </div>
+
+  <div class="box box--amber">
+    <div class="box__title"><span class="box__tag">QUÉ</span>Formatear · qué problemas pueden surgir</div>
+    <ul>
+      <li><span class="flag flag--stop">NO WIFI</span>Driver red faltante → usa móvil como tethering USB, baja drivers con <code>4_DRIVERS</code>, o tarjeta WiFi USB portátil propia</li>
+      <li><span class="flag flag--warn">DRIVER RARO</span>Huella, cámara IR, touchpad multi → web fabricante oficial del modelo</li>
+      <li><span class="flag flag--warn">LICENCIA</span>W10/11 moderno = reactiva sola. W7/8 retail = pegar clave de <code>3_LICENCIAS</code></li>
+      <li><span class="flag flag--warn">OFFICE</span>365 = login cuenta Microsoft del cliente. Retail = clave. Pirata = no reinstalar, ofrecer legit</li>
+      <li><span class="flag flag--warn">DATOS</span>Restaurar del backup paso 6. Verificar 3 archivos al azar</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- FILA C: FLUJO HDD→SSD EXPANDIDO -->
+<div class="box box--green full" style="margin-bottom: 10px;">
+  <div class="box__title"><span class="box__tag">HDD→SSD</span>Clonar disco · qué hago después del clonado</div>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+    <div>
+      <strong style="font-size: 11px; color: var(--green);">DURANTE EL CLONADO</strong>
+      <ol class="seq">
+        <li>Verificar HDD origen SMART OK con <code>CrystalDiskInfo</code> antes de clonar</li>
+        <li>Si SMART rojo → NO clonar, hacer imagen <code>ddrescue</code> primero</li>
+        <li>Conectar SSD nuevo (SATA+alimentación · bahía M.2 · caja USB)</li>
+        <li>Lanzar Macrium Reflect Free (o software del fabricante SSD)</li>
+        <li>Origen: HDD viejo · Destino: SSD nuevo · Tipo: Disco completo</li>
+        <li>30-90 min. NO cortar ni usar PC</li>
+      </ol>
+    </div>
+    <div>
+      <strong style="font-size: 11px; color: var(--green);">DESPUÉS DEL CLONADO</strong>
+      <ol class="seq">
+        <li>Apagar PC · desconectar HDD viejo · dejar solo SSD</li>
+        <li>Encender. Si no arranca: BIOS → Boot order → SSD primero</li>
+        <li>Si arranca: comprobar C: es el SSD (Admin Discos)</li>
+        <li>Expandir partición C: si el SSD es más grande (Admin Discos → Extender volumen)</li>
+        <li>Activar TRIM: <code>fsutil behavior set DisableDeleteNotify 0</code></li>
+        <li><code>7_ENTREGA</code> para demo tiempo arranque · esperar 15-25 seg</li>
+        <li>HDD viejo: ofrecer al cliente o guardarlo para borrado seguro</li>
+      </ol>
+    </div>
+  </div>
+  <div style="margin-top: 6px; font-size: 10.5px; color: var(--red); font-weight: 600;">⚠ Si después del clonado da pantalla azul "Inaccessible Boot Device" → rebuild BCD desde USB Arsenal: <code>bootrec /rebuildbcd</code></div>
+</div>
+
+<!-- FILA D: DECISIONES CLAVE IN-SITU -->
+<div class="grid2">
+
+  <div class="box box--red">
+    <div class="box__title"><span class="box__tag">DATOS</span>Disco con datos → N1 o derivar N2</div>
+    <div class="dec">
+      <div class="dec__side dec__side--y">
+        <span class="dec__label">N1 PROPIO 110€</span>
+        Disco se detecta · SMART amarillo · datos borrados por accidente · formateo por error
+      </div>
+      <div class="dec__side dec__side--n">
+        <span class="dec__label">DERIVAR N2 350-800€</span>
+        No detecta en BIOS · click-click · SMART rojo · agua en placa · chip quemado
+      </div>
+    </div>
+    <div style="font-size: 10px; color: var(--red); font-weight: 600; margin-top: 3px;">REGLA: ante duda física, SIEMPRE derivar. Cada intento propio empeora el disco.</div>
+  </div>
+
+  <div class="box box--amber">
+    <div class="box__title"><span class="box__tag">TOOLS</span>Cuándo usar cada Tool externa</div>
+    <table class="tbl">
+      <thead><tr><th>Tool</th><th>Cuándo</th></tr></thead>
+      <tbody>
+        <tr><td><strong>ProduKey</strong></td><td>Antes de formatear · extraer claves Windows/Office</td></tr>
+        <tr><td><strong>CrystalDiskInfo</strong></td><td>Sospecha disco · justificar cambio SSD</td></tr>
+        <tr><td><strong>BlueScreenView</strong></td><td>Pantallazos azules · saber qué driver culpable</td></tr>
+      </tbody>
+    </table>
+    <div style="font-size: 10px; color: var(--amber); margin-top: 3px;"><strong>Nirsoft (ProduKey+BSV):</strong> Defender las marca falso positivo. Excluir carpeta <code>Tools</code> del USB temporalmente.</div>
+  </div>
+
+</div>
+
+<!-- FOOTER HOJA 1 -->
+<div class="footer">
+  <div class="footer__hook">Si no lo arreglamos, <em>no cobramos</em>.</div>
+  <div style="font-family: var(--font-mono);">MEDICOPC · CHULETA CAMPO · 1/2</div>
+</div>
+
+<!-- ============ HOJA 2 ============ -->
+<div class="sheet-break"></div>
+
+<header class="hdr">
+  <div>
+    <h1 class="hdr__title">Chuleta <em>rescate</em></h1>
+    <div style="font-size: 11px; color: var(--ink-dim); margin-top: 2px;">Qué hacer cuando algo va mal</div>
+  </div>
+  <div class="hdr__sub">HOJA 2/2 · V1.0 · 24/04/26</div>
+</header>
+
+<!-- FILA 1: PC NO ARRANCA + PC VA LENTO -->
+<div class="grid2">
+
+  <div class="box box--red">
+    <div class="box__title"><span class="box__tag">F6</span>PC no arranca · árbol decisión</div>
+    <table class="tbl">
+      <thead><tr><th>Síntoma</th><th>Causa más probable</th><th>Acción</th></tr></thead>
+      <tbody>
+        <tr><td>Nada · no LED</td><td>Fuente muerta</td><td>Probar fuente sola · cambiar</td></tr>
+        <tr><td>LED pero sin pantalla</td><td>RAM o GPU</td><td>1 RAM sola en slot primario</td></tr>
+        <tr><td>Pitidos POST</td><td>Código BIOS → buscar</td><td>Según fabricante</td></tr>
+        <tr><td>Entra BIOS no Windows</td><td>Disco o SO corrupto</td><td>USB Arsenal · Hirens</td></tr>
+        <tr><td>Pantalla azul loop</td><td>Driver roto</td><td>Modo seguro · DDU GPU</td></tr>
+        <tr><td>Reinicia solo</td><td>Calor · fuente · RAM</td><td><code>9_HISTORIAL</code> Kernel-Power</td></tr>
+      </tbody>
+    </table>
+    <div style="font-size: 10.5px; color: var(--ink-dim); margin-top: 3px;"><strong>Truco de oro:</strong> Pila CMOS CR2032 vieja = causa del 5-10% de "no arranca". Cambiar vale 2€ y 30 seg.</div>
+  </div>
+
+  <div class="box box--blue">
+    <div class="box__title"><span class="box__tag">F5</span>PC va lento · cuello de botella</div>
+    <table class="tbl">
+      <thead><tr><th>Indicador</th><th>Valor</th><th>Upsell</th></tr></thead>
+      <tbody>
+        <tr><td>Disco SMART</td><td>Amarillo/rojo</td><td>+SSD 55€ · 30€ mano · 49€ clonado</td></tr>
+        <tr><td>CPU temp</td><td>&gt;85°C</td><td>+Limpieza Completa 89€</td></tr>
+        <tr><td>RAM uso idle</td><td>&gt;80%</td><td>+RAM 39-99€ · 30€ mano</td></tr>
+        <tr><td>Autoarranque</td><td>&gt;20 items</td><td><code>6_PURGA</code> incluido</td></tr>
+        <tr><td>Malware</td><td>Detectado</td><td>Formateo 89€ / Rescate 199€</td></tr>
+        <tr><td>Windows sin actualizar</td><td>&gt;6 meses</td><td>Reparación N2 · 30 min</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- FILA 2: PROBLEMAS CLONADO + RESCATE USB ARSENAL -->
+<div class="grid2">
+
+  <div class="box box--amber">
+    <div class="box__title"><span class="box__tag">SSD</span>Clonado falló · qué hacer</div>
+    <table class="tbl">
+      <thead><tr><th>Error</th><th>Solución</th></tr></thead>
+      <tbody>
+        <tr><td>Disco destino más pequeño</td><td>Reducir partición origen primero · Admin Discos → Reducir</td></tr>
+        <tr><td>Bad sectors en HDD</td><td>ddrescue desde Ubuntu Live · imagen → luego clonar</td></tr>
+        <tr><td>SSD no detectado</td><td>Verificar SATA+alim · probar otro puerto · BIOS Admin SATA modo AHCI</td></tr>
+        <tr><td>Clonado OK pero no arranca</td><td>BIOS Boot order · rebuild BCD desde USB</td></tr>
+        <tr><td>"Inaccessible Boot Device"</td><td>USB Arsenal → Reparar inicio automático</td></tr>
+        <tr><td>Cliente con RAID</td><td>NO clonar. Derivar N2 o formateo limpio</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="box box--green">
+    <div class="box__title"><span class="box__tag">ARSENAL</span>USB rojo · qué ISO elegir</div>
+    <table class="tbl">
+      <thead><tr><th>Situación</th><th>Arrancar con</th></tr></thead>
+      <tbody>
+        <tr><td>Instalar Windows limpio</td><td>Windows 11 24H2</td></tr>
+        <tr><td>PC no arranca · rescate</td><td>Hirens BootCD PE</td></tr>
+        <tr><td>Reset contraseña Windows</td><td>Hirens · Offline NT</td></tr>
+        <tr><td>Rescate datos sin Windows</td><td>Ubuntu Live</td></tr>
+        <tr><td>Test RAM profundo</td><td>Memtest86 · 1h mín</td></tr>
+        <tr><td>Hardware exótico no detectado</td><td>Ubuntu Live (detecta más)</td></tr>
+      </tbody>
+    </table>
+    <div style="font-size: 10px; color: var(--ink-dim); margin-top: 3px;"><strong>Teclas Boot:</strong> Lenovo F12 · HP F9 · Dell F12 · Asus F8 · MSI F11 · Acer F12 · Samsung F12</div>
+  </div>
+
+</div>
+
+<!-- FILA 3: QUÉ DECIR AL CLIENTE EN MOMENTOS DIFÍCILES -->
+<div class="box box--pink full" style="margin-bottom: 10px;">
+  <div class="box__title"><span class="box__tag">DECIR</span>Qué decir al cliente en momentos difíciles · frases tipo</div>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 11px;">
+    <div>
+      <strong style="color: var(--pink);">Encuentras algo nuevo a mitad:</strong>
+      <p style="color: var(--ink-mid); margin: 3px 0 8px; font-style: italic;">"Antes de seguir quiero comentarte algo que he encontrado. Implica X€ más / Y min más. Opciones: 1) seguir, 2) dejarlo, 3) presupuesto nuevo. ¿Qué prefieres?"</p>
+
+      <strong style="color: var(--pink);">PC irrecuperable:</strong>
+      <p style="color: var(--ink-mid); margin: 3px 0 8px; font-style: italic;">"Tengo que ser sincero. Reparar cuesta X€, PC nuevo similar está en Y€. Mi consejo profesional: valorar nuevo. Te cobro solo los 25€ del diagnóstico."</p>
+
+      <strong style="color: var(--pink);">Datos perdidos sin backup:</strong>
+      <p style="color: var(--ink-mid); margin: 3px 0 0; font-style: italic;">"Voy a intentar recuperar lo máximo posible. Puede ser todo, parcial, o nada según estado del disco. No prometo al 100%."</p>
+    </div>
+    <div>
+      <strong style="color: var(--pink);">Cliente regatea:</strong>
+      <p style="color: var(--ink-mid); margin: 3px 0 8px; font-style: italic;">"El precio de 89€ cubre limpieza completa + pasta + pads + garantía 30 días. Si prefieres algo más económico, Limpieza Básica 59€."</p>
+
+      <strong style="color: var(--pink);">Se niega a firmar presupuesto:</strong>
+      <p style="color: var(--ink-mid); margin: 3px 0 8px; font-style: italic;">"Es protección para los dos. Sin firma no puedo empezar. Te cobro solo los 25€ del diagnóstico si lo dejamos aquí."</p>
+
+      <strong style="color: var(--pink);">"Pero si no lo arreglamos no cobramos":</strong>
+      <p style="color: var(--ink-mid); margin: 3px 0 0; font-style: italic;">"Así es: mano de obra no. Pero el diagnóstico (25€) y las piezas compradas sí se cobran. Lo aclaro para que no haya sorpresa."</p>
+    </div>
+  </div>
+</div>
+
+<!-- FILA 4: NUNCAS ABSOLUTOS + RED BÁSICO -->
+<div class="grid2">
+
+  <div class="box box--red">
+    <div class="box__title"><span class="box__tag">NUNCA</span>Nuncas absolutos</div>
+    <ul>
+      <li><strong>Nunca</strong> formatees sin backup verificado abriendo 3 archivos al azar</li>
+      <li><strong>Nunca</strong> empiezas sin presupuesto firmado</li>
+      <li><strong>Nunca</strong> te lleves un PC sin contrato depósito firmado</li>
+      <li><strong>Nunca</strong> aceptes Bizum "que te llega en un rato"</li>
+      <li><strong>Nunca</strong> des precio cerrado en WhatsApp sin ver el PC</li>
+      <li><strong>Nunca</strong> arrancas el disco dañado si hay datos críticos sin backup</li>
+      <li><strong>Nunca</strong> prometes recuperar al 100%</li>
+      <li><strong>Nunca</strong> bajas precio sobre la marcha · defiende valor</li>
+      <li><strong>Nunca</strong> reinstalas Office / Windows pirata</li>
+      <li><strong>Nunca</strong> denigras competencia · tú estás a otro nivel</li>
+    </ul>
+  </div>
+
+  <div class="box box--blue">
+    <div class="box__title"><span class="box__tag">RED</span>Config router básica · SÍ entra (25-35€ extra)</div>
+    <ul>
+      <li><strong>Cambiar contraseña WiFi</strong> por una fuerte (apuntada en sitio seguro)</li>
+      <li><strong>Cambiar SSID</strong> por algo neutro (no "Movistar_ABC" que delata operador)</li>
+      <li><strong>Red invitados</strong> activada (útil para senior)</li>
+      <li><strong>DNS 1.1.1.1</strong> o <strong>8.8.8.8</strong> para mejorar velocidad</li>
+      <li><strong>WPA3</strong> si el router lo soporta · si no WPA2 AES</li>
+      <li><strong>Abrir puerto</strong> solo si cliente necesita (cámara IP · server · raro)</li>
+    </ul>
+    <div style="font-size: 10.5px; color: var(--red); font-weight: 600; margin-top: 4px;">NO entra: portabilidad · factura · fibra caída · cambio router → llamar operadora</div>
+  </div>
+
+</div>
+
+<!-- FOOTER HOJA 2 -->
+<div class="footer">
+  <div class="footer__hook">La <em>duda</em> se consulta · no se improvisa.</div>
+  <div style="font-family: var(--font-mono);">MEDICOPC · CHULETA CAMPO · 2/2</div>
+</div>
+
+</div>
+
+</body>
+</html>

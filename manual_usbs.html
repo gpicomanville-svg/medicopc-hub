@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual USBs · MedicoPC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===== FONDO BLANCO · ahorro tinta · PROFESIONAL ===== */
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f8f8fb;
+  --bg-card: #f0f0f4;
+  --border: #d0d0dc;
+  --border-soft: #e4e4ec;
+  --ink: #111118;
+  --ink-mid: #3a3a48;
+  --ink-dim: #5a5a70;
+  --ink-soft: #8a8aa0;
+  --pink: #c71c4e;
+  --pink-soft: #fce4ec;
+  --blue: #1d3fce;
+  --blue-soft: #e8edff;
+  --green: #007850;
+  --green-soft: #e1f2ea;
+  --amber: #a56200;
+  --amber-soft: #fff3d6;
+  --red: #b8172f;
+  --red-soft: #fce5e8;
+  --font-display: 'Lora', Georgia, serif;
+  --font-body: 'Poppins', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.65;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+
+/* ===== HERO ===== */
+.hero {
+  padding: 70px 0 40px;
+  border-bottom: 2px solid var(--ink);
+}
+.hero__kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--pink);
+  padding: 4px 10px;
+  border: 1px solid var(--pink);
+  border-radius: 2px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(36px, 5.5vw, 58px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+.hero h1 em {
+  color: var(--pink);
+  font-style: italic;
+}
+.hero__lead {
+  font-size: 17px;
+  color: var(--ink-mid);
+  max-width: 700px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+.hero__meta {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-soft);
+  font-size: 13px;
+  color: var(--ink-dim);
+}
+.hero__meta strong { color: var(--ink); font-weight: 600; }
+
+/* ===== TOC ===== */
+.toc {
+  padding: 36px 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+.toc h2 {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 22px;
+}
+.toc__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.toc__item {
+  background: var(--bg);
+  padding: 14px 16px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: background 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.toc__item:hover { background: var(--pink-soft); }
+.toc__item-num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--pink);
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+.toc__item-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* ===== BLOQUES ===== */
+.block {
+  padding: 70px 0 30px;
+  border-bottom: 1px solid var(--border);
+}
+.block__header { margin-bottom: 40px; }
+.block__num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--pink);
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.block__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(30px, 4.2vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin-bottom: 14px;
+}
+.block__subtitle {
+  color: var(--ink-mid);
+  font-size: 16px;
+  max-width: 720px;
+  line-height: 1.6;
+}
+
+/* ===== CAPÍTULOS · USB ===== */
+.chapter {
+  margin-bottom: 48px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--pink);
+  border-radius: 2px;
+}
+.chapter__header {
+  padding: 22px 26px;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.chapter__tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--pink);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 3px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.chapter__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.2;
+  color: var(--ink);
+  flex: 1;
+}
+.chapter__meta {
+  font-size: 11px;
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  letter-spacing: 0.5px;
+}
+.chapter__body { padding: 26px; }
+.chapter__body p { margin-bottom: 12px; color: var(--ink-mid); line-height: 1.7; }
+.chapter__body p:last-child { margin-bottom: 0; }
+.chapter__body strong { color: var(--ink); font-weight: 600; }
+
+.chapter__body h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  margin: 22px 0 10px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border);
+}
+.chapter__body h4:first-child { padding-top: 0; border-top: 0; margin-top: 0; }
+
+.chapter__body h5 {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--pink);
+  margin: 16px 0 8px;
+  letter-spacing: 0.3px;
+}
+
+.chapter__body ol,
+.chapter__body ul {
+  padding-left: 20px;
+  margin: 8px 0 14px;
+  color: var(--ink-mid);
+}
+.chapter__body ol li,
+.chapter__body ul li { margin-bottom: 6px; line-height: 1.6; }
+
+/* ===== CÓDIGO Y COMANDOS ===== */
+.chapter__body code {
+  font-family: var(--font-mono);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--amber);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.cmd {
+  font-family: var(--font-mono);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--amber);
+  padding: 12px 16px;
+  border-radius: 3px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink);
+  white-space: pre-wrap;
+  margin: 10px 0 16px;
+  overflow-x: auto;
+  position: relative;
+}
+.cmd::before {
+  content: 'COMANDO';
+  position: absolute;
+  top: -8px;
+  left: 10px;
+  background: var(--bg);
+  color: var(--amber);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  padding: 0 6px;
+  font-weight: 700;
+}
+
+/* ===== STEPS / PASOS NUMERADOS GRANDES ===== */
+.steps {
+  margin: 16px 0 20px;
+  counter-reset: step;
+  padding: 0;
+  list-style: none;
+}
+.steps > li {
+  counter-increment: step;
+  padding: 14px 16px 14px 56px;
+  position: relative;
+  background: var(--bg-soft);
+  border: 1px solid var(--border-soft);
+  border-left: 3px solid var(--blue);
+  margin-bottom: 8px;
+  border-radius: 3px;
+  color: var(--ink-mid);
+  line-height: 1.6;
+}
+.steps > li::before {
+  content: counter(step);
+  position: absolute;
+  left: 14px;
+  top: 12px;
+  width: 28px;
+  height: 28px;
+  background: var(--blue);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+}
+.steps > li strong { color: var(--ink); }
+
+/* ===== CALLOUTS ===== */
+.note {
+  margin: 14px 0;
+  padding: 12px 16px;
+  border-radius: 3px;
+  font-size: 14px;
+  line-height: 1.6;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  border: 1px solid;
+}
+.note__icon {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 1px;
+  flex-shrink: 0;
+  padding: 2px 7px;
+  border-radius: 2px;
+  color: #fff;
+}
+.note p { margin: 0 !important; }
+.note--warn { background: var(--amber-soft); border-color: var(--amber); }
+.note--warn .note__icon { background: var(--amber); }
+.note--warn p { color: #6e4400 !important; }
+.note--danger { background: var(--red-soft); border-color: var(--red); }
+.note--danger .note__icon { background: var(--red); }
+.note--danger p { color: #7d0f22 !important; }
+.note--ok { background: var(--green-soft); border-color: var(--green); }
+.note--ok .note__icon { background: var(--green); }
+.note--ok p { color: #004d33 !important; }
+.note--tip { background: var(--blue-soft); border-color: var(--blue); }
+.note--tip .note__icon { background: var(--blue); }
+.note--tip p { color: #142a8a !important; }
+
+/* ===== TABLAS ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  font-size: 13px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+th {
+  background: var(--bg-card);
+  color: var(--ink);
+  font-weight: 600;
+  text-align: left;
+  padding: 10px 12px;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+td {
+  padding: 9px 12px;
+  color: var(--ink-mid);
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: 0; }
+td code { font-size: 12px; }
+
+/* ===== FLUJO VISUAL (orden operaciones) ===== */
+.flow {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0;
+}
+.flow__step {
+  padding: 12px 16px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border-soft);
+  border-left: 3px solid var(--pink);
+  font-size: 13px;
+  color: var(--ink-mid);
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+.flow__num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--pink);
+  color: #fff;
+  padding: 2px 7px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  padding: 50px 0 30px;
+  text-align: center;
+  color: var(--ink-dim);
+  font-size: 13px;
+}
+.footer__hook {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 19px;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.footer__hook em { color: var(--pink); font-weight: 600; }
+.footer__meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: 1px; color: var(--ink-soft); }
+
+/* ===== PRINT / PDF ===== */
+@media print {
+  @page { size: A4; margin: 18mm 14mm; }
+  body { font-size: 10.5pt; line-height: 1.45; }
+  .container { max-width: 100%; padding: 0; }
+  .hero, .toc, .block { page-break-inside: avoid; }
+  .hero { padding: 18px 0 24px; }
+  .hero h1 { font-size: 26pt; }
+  .toc { padding: 20px 0; background: #fff; page-break-after: always; }
+  .block { padding: 22px 0; page-break-before: always; }
+  .chapter { page-break-inside: avoid; margin-bottom: 20px; }
+  .chapter__header { padding: 12px 16px; }
+  .chapter__body { padding: 14px 16px; }
+  .steps > li { page-break-inside: avoid; }
+  .cmd { page-break-inside: avoid; }
+  .note { page-break-inside: avoid; }
+  table { page-break-inside: avoid; }
+  .toc__item:hover { background: #fff; }
+}
+
+@media (max-width: 640px) {
+  .hero { padding: 48px 0 28px; }
+  .block { padding: 44px 0 20px; }
+  .chapter__header { padding: 16px 18px; }
+  .chapter__body { padding: 18px; }
+  .steps > li { padding-left: 50px; }
+  .hero__meta { gap: 14px; font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="container">
+    <span class="hero__kicker">Manual operativo interno</span>
+    <h1>Arsenal <em>USBs</em> MedicoPC.<br>Guía operativa.</h1>
+    <p class="hero__lead">Cómo usar cada USB del maletín, paso a paso. Qué script ejecutar en cada situación. Qué hacer antes de formatear, cómo rescatar licencias, cómo instalar Windows limpio, cómo recuperar datos sin perder horas.</p>
+    <div class="hero__meta">
+      <span><strong>Maletín v</strong>1.2.2</span>
+      <span><strong>USB MASTER</strong> verde 32GB</span>
+      <span><strong>USB BACKUP</strong> dorado 16GB</span>
+      <span><strong>USB ARSENAL</strong> rojo · Ventoy</span>
+      <span><strong>Fecha</strong> 24/04/2026</span>
+    </div>
+  </div>
+</section>
+
+<!-- ========== TOC ========== -->
+<section class="toc">
+  <div class="container">
+    <h2>Índice operativo</h2>
+    <div class="toc__grid">
+      <a class="toc__item" href="#inventario"><span class="toc__item-num">00</span><span class="toc__item-title">Inventario · qué lleva cada USB</span></a>
+      <a class="toc__item" href="#antes"><span class="toc__item-num">01</span><span class="toc__item-title">Antes de enchufar nada</span></a>
+      <a class="toc__item" href="#launcher"><span class="toc__item-num">02</span><span class="toc__item-title">Abrir MEDICOPC.exe</span></a>
+
+      <a class="toc__item" href="#s1"><span class="toc__item-num">S1</span><span class="toc__item-title">1_DIAGNOSTICO</span></a>
+      <a class="toc__item" href="#s2"><span class="toc__item-num">S2</span><span class="toc__item-title">2_BACKUP</span></a>
+      <a class="toc__item" href="#s3"><span class="toc__item-num">S3</span><span class="toc__item-title">3_LICENCIAS</span></a>
+      <a class="toc__item" href="#s4"><span class="toc__item-num">S4</span><span class="toc__item-title">4_DRIVERS</span></a>
+      <a class="toc__item" href="#s5"><span class="toc__item-num">S5</span><span class="toc__item-title">5_REPARACION</span></a>
+      <a class="toc__item" href="#s6"><span class="toc__item-num">S6</span><span class="toc__item-title">6_PURGA</span></a>
+      <a class="toc__item" href="#s7"><span class="toc__item-num">S7</span><span class="toc__item-title">7_ENTREGA</span></a>
+      <a class="toc__item" href="#s8"><span class="toc__item-num">S8</span><span class="toc__item-title">8_RED</span></a>
+      <a class="toc__item" href="#s9"><span class="toc__item-num">S9</span><span class="toc__item-title">9_HISTORIAL</span></a>
+
+      <a class="toc__item" href="#t1"><span class="toc__item-num">T1</span><span class="toc__item-title">Tools · ProduKey</span></a>
+      <a class="toc__item" href="#t2"><span class="toc__item-num">T2</span><span class="toc__item-title">Tools · CrystalDiskInfo</span></a>
+      <a class="toc__item" href="#t3"><span class="toc__item-num">T3</span><span class="toc__item-title">Tools · BlueScreenView</span></a>
+
+      <a class="toc__item" href="#arsenal"><span class="toc__item-num">V</span><span class="toc__item-title">USB Arsenal · Ventoy e ISOs</span></a>
+
+      <a class="toc__item" href="#flujo-formateo"><span class="toc__item-num">F1</span><span class="toc__item-title">Flujo · formatear PC completo</span></a>
+      <a class="toc__item" href="#flujo-ssd"><span class="toc__item-num">F2</span><span class="toc__item-title">Flujo · cambiar disco a SSD</span></a>
+      <a class="toc__item" href="#flujo-recup"><span class="toc__item-num">F3</span><span class="toc__item-title">Flujo · recuperación datos N1</span></a>
+      <a class="toc__item" href="#flujo-virus"><span class="toc__item-num">F4</span><span class="toc__item-title">Flujo · PC infectado</span></a>
+      <a class="toc__item" href="#flujo-lento"><span class="toc__item-num">F5</span><span class="toc__item-title">Flujo · PC lento</span></a>
+      <a class="toc__item" href="#flujo-noenciende"><span class="toc__item-num">F6</span><span class="toc__item-title">Flujo · no arranca</span></a>
+
+      <a class="toc__item" href="#troubleshoot"><span class="toc__item-num">X</span><span class="toc__item-title">Solución de problemas</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== BLOQUE 0 ========== -->
+<section class="block" id="inicio">
+  <div class="container">
+    <div class="block__header">
+      <div class="block__num">BLOQUE 0 / 5 · PREPARACIÓN</div>
+      <h2 class="block__title">Antes de empezar.</h2>
+      <p class="block__subtitle">Qué hay en cada USB del maletín, qué comprobar antes de enchufar en el PC del cliente, cómo arrancar el launcher.</p>
+    </div>
+
+    <!-- INVENTARIO -->
+    <article class="chapter" id="inventario">
+      <header class="chapter__header">
+        <span class="chapter__tag">00</span>
+        <h3 class="chapter__title">Inventario · qué lleva cada USB</h3>
+        <span class="chapter__meta">saber antes de actuar</span>
+      </header>
+      <div class="chapter__body">
+
+        <h4>USB MASTER · verde · 32 GB</h4>
+        <p>El principal. Lo usas en el 90 % de visitas. Contiene el launcher MEDICOPC.exe con los 9 scripts operativos + carpeta Tools con utilidades externas.</p>
+        <table>
+          <thead><tr><th>Carpeta / archivo</th><th>Contenido</th><th>Uso típico</th></tr></thead>
+          <tbody>
+            <tr><td><code>MEDICOPC.exe</code></td><td>Launcher gráfico 9 tabs</td><td>Punto de entrada siempre</td></tr>
+            <tr><td><code>Scripts/</code></td><td>9 carpetas con .bat + .ps1</td><td>Los ejecuta el launcher</td></tr>
+            <tr><td><code>Tools/</code></td><td>ProduKey · CrystalDiskInfo · BlueScreenView</td><td>Cuando el launcher no cubre</td></tr>
+            <tr><td><code>VERSION.txt</code></td><td>Versión del maletín + changelog</td><td>Confirmación y soporte</td></tr>
+            <tr><td><code>README.md</code></td><td>Info interna para técnico</td><td>Referencia</td></tr>
+          </tbody>
+        </table>
+
+        <h4>USB BACKUP · dorado · 16 GB</h4>
+        <p>Copia exacta del MASTER. Solo para emergencias si el verde falla, se pierde o se corrompe. No se usa en visita salvo que el MASTER no arranque.</p>
+
+        <h4>USB ARSENAL · rojo · 32 GB · Ventoy</h4>
+        <p>ISOs booteables para PCs que no arrancan o requieren instalar sistema limpio.</p>
+        <table>
+          <thead><tr><th>ISO</th><th>Para qué</th></tr></thead>
+          <tbody>
+            <tr><td>Windows 11 24H2 oficial</td><td>Formateo limpio / instalación OEM</td></tr>
+            <tr><td>Hiren's BootCD PE</td><td>Rescate · reset password · análisis disco sin SO</td></tr>
+            <tr><td>Ubuntu Live</td><td>Rescate datos cuando Windows no arranca</td></tr>
+            <tr><td>Memtest86</td><td>Diagnóstico RAM profundo</td></tr>
+          </tbody>
+        </table>
+
+        <h4>USB ARSENAL BACKUP · azul · 32 GB</h4>
+        <p>Copia del rojo. Solo emergencia.</p>
+
+        <div class="note note--tip"><span class="note__icon">REGLA</span><p>En una visita normal sales con los 4 USBs en el maletín aunque uses solo el verde. Los otros están por si el verde falla o aparece un escenario imprevisto (PC no arranca → Arsenal rojo).</p></div>
+      </div>
+    </article>
+
+    <!-- ANTES DE ENCHUFAR -->
+    <article class="chapter" id="antes">
+      <header class="chapter__header">
+        <span class="chapter__tag">01</span>
+        <h3 class="chapter__title">Antes de enchufar el USB en el PC del cliente</h3>
+        <span class="chapter__meta">2 min · evita sorpresas</span>
+      </header>
+      <div class="chapter__body">
+
+        <ol class="steps">
+          <li><strong>Observar el PC encendido antes de tocar nada.</strong> Fíjate en: ventiladores al máximo sin razón, LEDs placa rojos, pantallas azules al arrancar, olor a quemado, temperatura exterior caliente al tacto.</li>
+          <li><strong>Preguntar al cliente</strong> si ha tocado algo nuevo desde que surgió el problema. Si ha instalado algún antivirus agresivo, puede bloquear las herramientas del USB.</li>
+          <li><strong>Confirmar que el PC está en red eléctrica</strong> (no solo batería en portátil). Scripts largos con batería baja se interrumpen y corrompen.</li>
+          <li><strong>Cerrar aplicaciones abiertas</strong> del cliente para que no interfieran en el diagnóstico (sobre todo juegos, navegadores con 50 pestañas, software de edición).</li>
+          <li><strong>Desconectar del WiFi si hay infección activa</strong> sospechada (ransomware, botnet). Solo reconectar cuando esté controlado.</li>
+          <li><strong>Enchufar el USB MASTER verde</strong> en un puerto USB 3.0 (azul por dentro) para mayor velocidad. Si el PC solo tiene 2.0, sirve igual, solo tarda más en arrancar.</li>
+        </ol>
+
+        <div class="note note--warn"><span class="note__icon">OJO</span><p>Si al enchufar el USB Windows Defender del cliente salta con alerta de alguna Tool (ProduKey, BlueScreenView), <strong>no ignorar ni cancelar el escudo</strong>. Añadir exclusión de la carpeta del USB y continuar. Explicar al cliente con frase corta: "Es una herramienta de administración que Windows marca por defecto. Está verificada, la añado a excepciones mientras trabajo y al terminar la quito."</p></div>
+      </div>
+    </article>
+
+    <!-- LAUNCHER -->
+    <article class="chapter" id="launcher">
+      <header class="chapter__header">
+        <span class="chapter__tag">02</span>
+        <h3 class="chapter__title">Abrir el launcher MEDICOPC.exe</h3>
+        <span class="chapter__meta">30 seg · punto de entrada</span>
+      </header>
+      <div class="chapter__body">
+
+        <ol class="steps">
+          <li><strong>Abrir Explorador de archivos</strong> (Win+E).</li>
+          <li><strong>Ir al USB MASTER</strong> · normalmente aparece como <code>MEDICOPC_MASTER</code> con letra asignada (D:, E:, F: según cliente).</li>
+          <li><strong>Entrar en la carpeta</strong> <code>USB_Arsenal_Master</code>.</li>
+          <li><strong>Doble clic en</strong> <code>MEDICOPC.exe</code>.</li>
+          <li><strong>Aceptar el UAC</strong> (Control de Cuentas de Usuario) si aparece. Siempre necesitas permisos de administrador.</li>
+          <li><strong>Se abre la ventana con 9 tabs + botón "?"</strong> de ayuda arriba derecha.</li>
+        </ol>
+
+        <div class="note note--ok"><span class="note__icon">NAV</span><p>Los 9 tabs están numerados 1-9 + tab 0 de Historial. Se recorren en ese orden en la mayoría de casos. Dentro de cada tab hay botones que lanzan los scripts. El orden de los botones dentro de cada tab también está pensado de más básico a más invasivo.</p></div>
+
+        <h4>Cómo cerrar correctamente</h4>
+        <p>Siempre cerrar MEDICOPC.exe con la X de arriba a la derecha de la ventana. Nunca con Alt+F4 a mitad de un script corriendo. Si un script está en ejecución, esperar a que termine (o cancelar desde dentro del propio script si es largo).</p>
+
+        <h4>Dónde quedan los logs</h4>
+        <p>Cada script genera logs en:</p>
+        <div class="cmd">C:\Users\[UsuarioCliente]\MedicoPC_Logs\
+  [FECHA]_[HORA]_TEST_[NOMBRE_SCRIPT]\
+    output.txt
+    errors.txt
+    resumen.md</div>
+        <p>Al terminar la visita, copia la carpeta <code>MedicoPC_Logs</code> al disco externo del técnico en la carpeta del cliente. Luego se borra del equipo del cliente (privacidad).</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ========== BLOQUE SCRIPTS ========== -->
+<section class="block" id="scripts">
+  <div class="container">
+    <div class="block__header">
+      <div class="block__num">BLOQUE 1 / 5 · SCRIPTS</div>
+      <h2 class="block__title">Los 9 scripts, uno por uno.</h2>
+      <p class="block__subtitle">Qué hace cada uno, cuándo usarlo, paso a paso, qué NO tocar mientras corre.</p>
+    </div>
+
+    <!-- S1 DIAGNOSTICO -->
+    <article class="chapter" id="s1">
+      <header class="chapter__header">
+        <span class="chapter__tag">S1</span>
+        <h3 class="chapter__title">1_DIAGNOSTICO · análisis completo del PC</h3>
+        <span class="chapter__meta">5-15 min · primer paso siempre</span>
+      </header>
+      <div class="chapter__body">
+
+        <h4>Qué hace</h4>
+        <p>Barrido automático del sistema. Recopila información de hardware (CPU, RAM, discos, temperaturas), estado Windows (actualización, servicios, activación), eventos críticos últimos 30 días, y produce un informe tipo semáforo.</p>
+
+        <h4>Cuándo usarlo</h4>
+        <ul>
+          <li>Siempre en primer lugar, nada más abrir MEDICOPC.exe en el PC del cliente.</li>
+          <li>Cuando el cliente dice "va lento" sin concretar más.</li>
+          <li>Antes de cualquier reparación, para tener estado inicial documentado.</li>
+          <li>Para detectar problemas que el cliente no reportó pero que existen (disco con sectores malos, temperaturas altas, Windows sin activar, etc.).</li>
+        </ul>
+
+        <h4>Paso a paso</h4>
+        <ol class="steps">
+          <li><strong>Abrir MEDICOPC.exe</strong>, ir al tab <code>1_DIAGNOSTICO</code>.</li>
+          <li><strong>Elegir modo</strong>:
+            <ul>
+              <li><strong>Automático</strong> (botón principal): corre las 12 pruebas estándar sin interacción. Recomendado en la mayoría de casos.</li>
+              <li><strong>Guiado</strong>: te va preguntando qué pruebas correr según síntoma dominante. Útil cuando el tiempo es limitado y el síntoma es muy específico.</li>
+            </ul>
+          </li>
+          <li><strong>Pulsar "Iniciar"</strong> y esperar. Tarda 5-15 min según velocidad del PC.</li>
+          <li><strong>Durante la ejecución, NO:</strong>
+            <ul>
+              <li>Cerrar la ventana PowerShell que se abre (se interrumpe el análisis).</li>
+              <li>Abrir programas pesados del cliente (altera las mediciones de carga).</li>
+              <li>Desconectar el USB.</li>
+            </ul>
+          </li>
+          <li><strong>Al terminar se abre el informe HTML</strong> en el navegador: verde / amarillo / rojo por cada punto, con explicaciones.</li>
+          <li><strong>Revisar con el cliente al lado</strong>. Explicar los puntos amarillos o rojos sin tecnicismos. Ejemplo: "Aquí pone en amarillo que el disco tiene algunos sectores reasignados, significa que está empezando a envejecer pero aún funciona, recomendaría cambiar en los próximos 6 meses".</li>
+        </ol>
+
+        <h4>Qué NO hace</h4>
+        <ul>
+          <li>No repara nada. Es solo diagnóstico. No formatea, no instala, no cambia configuración.</li>
+          <li>No modifica archivos del cliente. Solo lee.</li>
+          <li>No sube nada a internet. Todo local.</li>
+        </ul>
+
+        <div class="note note--tip"><span class="note__icon">TIP</span><p>Haz una captura del informe final antes de cerrarlo. Si el cliente luego duda o reclama, tienes prueba objetiva del estado inicial antes de cualquier intervención tuya.</p></div>
+      </div>
+    </article>
+
+    <!-- S2 BACKUP -->
+    <article class="chapter" id="s2">
+      <header class="chapter__header">
+        <span class="chapter__tag">S2</span>
+        <h3 class="chapter__title">2_BACKUP · copia de seguridad antes de tocar</h3>
+        <span class="chapter__meta">20-90 min · obligatorio antes de formatear</span>
+      </header>
+      <div class="chapter__body">
+
+        <h4>Qué hace</h4>
+        <p>Copia carpetas críticas del usuario (Escritorio, Documentos, Imágenes, Vídeos, Descargas, Música, AppData clave como perfiles de Chrome/Firefox/Thunderbird) a un destino que tú eliges. Genera un manifiesto con listado completo de archivos + tamaños para poder auditar después.</p>
+
+        <h4>Cuándo usarlo</h4>
+        <ul>
+          <li>Siempre antes de un formateo, aunque el cliente diga que "no tiene nada importante" (mentira 9 de cada 10 veces).</li>
+          <li>Antes de sustituir un disco (HDD → SSD, etc.).</li>
+          <li>Antes de una reparación importante con riesgo teórico sobre datos (ej. fallos de RAM que podrían corromper archivos).</li>
+          <li>Cuando el cliente te lo pide explícitamente ("hazme una copia").</li>
+        </ul>
+
+        <h4>Paso a paso</h4>
+        <ol class="steps">
+          <li><strong>Antes de lanzar</strong>, decidir DÓNDE se guarda el backup:
+            <ul>
+              <li><strong>Disco externo propio del cliente</strong> (Seagate, WD) → mejor opción siempre que tenga espacio. Documentar marca y serial en el informe.</li>
+              <li><strong>Disco nuevo que vas a instalar</strong> (en caso de migración HDD→SSD) → conectarlo como secundario antes de lanzar.</li>
+              <li><strong>Tu disco externo Seagate 4TB del técnico</strong> → solo si el cliente no tiene disco externo propio y lo has autorizado por escrito (firmado).</li>
+            </ul>
+          </li>
+          <li><strong>Conectar el disco destino</strong> y esperar a que Windows lo detecte (aparecer nueva letra en "Este Equipo").</li>
+          <li><strong>Abrir MEDICOPC.exe</strong> → tab <code>2_BACKUP</code>.</li>
+          <li><strong>Elegir:</strong>
+            <ul>
+              <li><strong>Usuario a backupear</strong>: si hay más de uno en el PC, lista desplegable.</li>
+              <li><strong>Ruta destino</strong>: navegar al disco destino + carpeta tipo <code>MedicoPC_Backups_Clientes\2026-XX-XX_[Apellido]\</code>.</li>
+              <li><strong>Qué incluir</strong>: marcar qué carpetas. Por defecto Escritorio + Documentos + Imágenes + Vídeos + Descargas. Opcional: perfiles navegador, AppData específico.</li>
+            </ul>
+          </li>
+          <li><strong>Pulsar "Iniciar backup"</strong>. Se abre ventana PowerShell con progreso.</li>
+          <li><strong>Esperar a que acabe</strong>. El tiempo depende del volumen (regla: ~10 GB / min en USB 3.0 + disco SSD, más lento con HDDs antiguos).</li>
+          <li><strong>Al terminar</strong>, verificar:
+            <ul>
+              <li>El informe final dice <code>0 errores</code>.</li>
+              <li>Abre 3 archivos al azar en el destino (un documento, una foto, un vídeo) para confirmar que no se han corrompido.</li>
+              <li>El fichero <code>manifest.txt</code> existe en la raíz del destino con listado completo.</li>
+            </ul>
+          </li>
+          <li><strong>Firma del cliente</strong>: documento simple confirmando "he visto el backup, lo acepto, son X GB en destino [descripción]".</li>
+        </ol>
+
+        <div class="note note--danger"><span class="note__icon">NUNCA</span><p>No formatees el disco del cliente <strong>sin haber verificado el backup con tus propios ojos</strong>. El script puede decir "OK" pero si el disco estaba muriéndose, la copia puede estar corrupta. Abrir 3 archivos al azar es el seguro que te evita desastres.</p></div>
+
+        <h4>Si el backup falla a mitad</h4>
+        <ul>
+          <li>Normalmente es por sectores defectuosos en el disco origen (el PC ya está tocado).</li>
+          <li>Cambiar a modo "tolerante a errores" dentro del tab. Salta archivos que no puede leer y continúa.</li>
+          <li>Documentar qué archivos se han saltado. Avisar al cliente.</li>
+          <li>Si son muchos archivos dañados → derivar a N2 (laboratorio) directamente, no formatear nada más.</li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- S3 LICENCIAS -->
+    <article class="chapter" id="s3">
+      <header class="chapter__header">
+        <span class="chapter__tag">S3</span>
+        <h3 class="chapter__title">3_LICENCIAS · guardar claves Windows y Office</h3>
+        <span class="chapter__meta">2-3 min · antes de formatear</span>
+      </header>
+      <div class="chapter__body">
+
+        <h4>Qué hace</h4>
+        <p>Extrae las claves de activación Windows (retail o OEM), Office, y otros productos Microsoft instalados. Las guarda en archivo de texto dentro del USB + dentro de la carpeta del cliente en el equipo.</p>
+
+        <h4>Cuándo usarlo</h4>
+        <ul>
+          <li>Antes de cualquier formateo completo. Siempre.</li>
+          <li>Cuando vas a sustituir disco → la licencia Windows OEM puede reactivarse después (si es retail, sí; si es OEM vinculada a BIOS en equipos Windows 10/11 modernos, no hace falta porque se reactiva sola).</li>
+          <li>Cuando el cliente pregunta "¿puedo recuperar mi Office si formateo?" para poder responder con seguridad.</li>
+        </ul>
+
+        <h4>Paso a paso</h4>
+        <ol class="steps">
+          <li><strong>Abrir MEDICOPC.exe</strong> → tab <code>3_LICENCIAS</code>.</li>
+          <li><strong>Pulsar "Extraer licencias"</strong>. Se lanza ProduKey internamente.</li>
+          <li><strong>Aceptar alerta Defender</strong> si aparece (ProduKey es falso positivo conocido, el MASTER está en exclusiones si se configuró pero en PC del cliente puede saltar). Exclusión añadida temporalmente a la carpeta <code>Tools</code>.</li>
+          <li><strong>El script genera</strong> <code>licencias_[nombre_pc]_[fecha].txt</code> con:
+            <ul>
+              <li>Windows Product Key (22 caracteres, formato XXXXX-XXXXX-XXXXX-XXXXX-XXXXX).</li>
+              <li>Office Product Key (si hay Office instalado retail).</li>
+              <li>Versión y edición del sistema.</li>
+              <li>Tipo de activación: OEM, Retail, KMS, MAK.</li>
+            </ul>
+          </li>
+          <li><strong>El archivo se guarda en 2 sitios simultáneos</strong>:
+            <ul>
+              <li><code>MedicoPC_Logs/LICENCIAS/licencias_...txt</code> dentro del PC del cliente (para dejárselo al cliente).</li>
+              <li>Copia automática al USB MASTER en <code>Backup_Licencias_Clientes/[fecha]_[nombre]/</code> (para histórico tuyo).</li>
+            </ul>
+          </li>
+          <li><strong>Tras el formateo y reinstalación</strong>, introducir las claves si Windows o Office las pide (en licencias Digital Entitlement no hacen falta, se reactivan solas).</li>
+        </ol>
+
+        <h4>Tipos de licencia y qué esperar</h4>
+        <table>
+          <thead><tr><th>Tipo</th><th>¿Se reactiva sola tras formateo?</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td>OEM Windows 10/11 moderno</td><td>Sí (Digital Entitlement)</td><td>Vinculada a BIOS. Nada que hacer.</td></tr>
+            <tr><td>OEM antigua (Win 7 / 8)</td><td>Depende</td><td>Guardar clave por si acaso.</td></tr>
+            <tr><td>Retail Windows</td><td>Con la clave</td><td>Guardar clave sí o sí.</td></tr>
+            <tr><td>Retail Office</td><td>Con la clave + cuenta Microsoft</td><td>Guardar clave + recordatorio cuenta.</td></tr>
+            <tr><td>Office 365 / Microsoft 365</td><td>Con cuenta Microsoft</td><td>No hay clave, solo login. Recordárselo al cliente.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="note note--warn"><span class="note__icon">OJO</span><p>Si el PC tiene Office <strong>pirata</strong> o Windows con activador tipo KMSpico, se detecta en este informe. No reinstalar pirata en el formateo nuevo. Ofrecer al cliente activación legítima (Windows OEM 79 € con licencia + Office 365 por cuenta propia del cliente si usa).</p></div>
+      </div>
+    </article>
+
+    <!-- S4 DRIVERS -->
+    <article class="chapter" id="s4">
+      <header class="chapter__header">
+        <span class="chapter__tag">S4</span>
+        <h3 class="chapter__title">4_DRIVERS · inventario y backup de controladores</h3>
+        <span class="chapter__meta">5-10 min · antes de formatear</span>
+      </header>
+      <div class="chapter__body">
+
+        <h4>Qué hace</h4>
+        <p>Lista todos los drivers instalados, identifica fabricante, versión, fecha. Hace una copia completa de los drivers actuales del PC en una carpeta, por si tras un formateo Windows no trae uno específico (típico en portátiles antiguos o hardware exótico).</p>
+
+        <h4>Cuándo usarlo</h4>
+        <ul>
+          <li>Antes de formatear un portátil antiguo (Windows nuevo puede no detectar WiFi / audio / táctil).</li>
+          <li>Ante drivers "raros" no estándar (placas base con chips exóticos, lectores de huellas, cámaras específicas).</li>
+          <li>Cuando el cliente no tiene internet rápido y Windows Update no podrá descargar drivers después.</li>
+          <li>Preventivo siempre que haya riesgo de formateo.</li>
+        </ul>
+
+        <h4>Paso a paso</h4>
+        <ol class="steps">
+          <li><strong>MEDICOPC.exe → tab</strong> <code>4_DRIVERS</code>.</li>
+          <li><strong>Botón "Inventario"</strong>: genera lista HTML de todos los drivers + versiones.</li>
+          <li><strong>Revisar la lista</strong>. Fijarse en drivers etiquetados como "desconocidos" o "sin firmar".</li>
+          <li><strong>Botón "Backup drivers"</strong>: copia todos los drivers instalados a la carpeta indicada (por defecto <code>C:\MedicoPC_Drivers_Backup\</code>). Son típicamente 1-3 GB.</li>
+          <li><strong>Copiar la carpeta al disco externo</strong> del cliente o al USB antes de formatear (se pierde con el formateo).</li>
+          <li><strong>Tras el formateo</strong>, Windows intenta instalar drivers solo. Si falta alguno, Administrador de Dispositivos → botón derecho → Actualizar driver → Buscar en esta carpeta → apuntar al backup.</li>
+        </ol>
+
+        <div class="note note--tip"><span class="note__icon">TIP</span><p>En portátiles de marca (Dell, HP, Lenovo, Asus...) es mejor bajar drivers nuevos desde la web oficial del fabricante tras el formateo. El backup con <code>4_DRIVERS</code> es el plan B por si el cliente no tiene internet bueno o la web del fabricante no sirve el modelo antiguo.</p></div>
+
+        <h4>Drivers críticos que suelen faltar</h4>
+        <ul>
+          <li>WiFi / Bluetooth (si falta → no tienes internet → no puedes bajar más drivers → problema).</li>
+          <li>Tarjeta de red Ethernet (mismo problema).</li>
+          <li>Audio (funcionamiento correcto sin ruidos).</li>
+          <li>Chipset placa base (performance general).</li>
+          <li>Touchpad portátil (gestos multitoque).</li>
+          <li>Lector huellas / cámara IR (si usa).</li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- S5 REPARACION -->
+    <article class="chapter" id="s5">
+      <header class="chapter__header">
+        <span class="chapter__tag">S5</span>
+        <h3 class="chapter__title">5_REPARACION · reparar Windows sin formatear</h3>
+        <span class="chapter__meta">15-60 min · antes del formateo total</span>
+      </header>
+      <div class="chapter__body">
+
+        <h4>Qué hace</h4>
+        <p>Ejecuta reparaciones estándar de Windows: <code>sfc /scannow</code>, <code>DISM /RestoreHealth</code>, <code>chkdsk</code>, reset de componentes Windows Update, limpieza de archivos corruptos. Todo desde interfaz gráfica, sin teclear comandos.</p>
+
+        <h4>Cuándo usarlo</h4>
+        <ul>
+          <li>Cuando el cliente dice "va mal pero no quiero formatear".</li>
+          <li>Windows Update bloqueado.</li>
+          <li>Sistema que congela o da errores al azar.</li>
+          <li>Antes de plantear formateo, intentar recuperar Windows existente.</li>
+          <li>Tras limpiar virus, para reparar daños del sistema.</li>
+        </ul>
+
+        <h4>Paso a paso</h4>
+        <ol class="steps">
+          <li><strong>Importante</strong>: tener el backup ya hecho (S2) antes de reparaciones agresivas.</li>
+          <li><strong>MEDICOPC.exe → tab</strong> <code>5_REPARACION</code>.</li>
+          <li><strong>Elegir nivel de reparación</strong>:
+            <ul>
+              <li><strong>Nivel 1 (seguro)</strong>: SFC + DISM básico. 10-20 min. Arregla mayoría de corrupciones.</li>
+              <li><strong>Nivel 2 (intermedio)</strong>: Nivel 1 + reset Windows Update + limpieza temp + chkdsk. 30-45 min.</li>
+              <li><strong>Nivel 3 (agresivo)</strong>: Nivel 2 + DISM RestoreHealth completo + reset Store + reset red. 45-60 min. Último recurso antes de formatear.</li>
+            </ul>
+          </li>
+          <li><strong>Pulsar iniciar</strong> y dejar correr. NO cancelar a mitad.</li>
+          <li><strong>Al acabar reiniciar</strong> el equipo obligatoriamente.</li>
+          <li><strong>Probar los síntomas</strong> que trajeron al cliente. Si mejoraron → no formateas. Si siguen igual → plantear formateo.</li>
+        </ol>
+
+        <div class="note note--warn"><span class="note__icon">TIEMPO</span><p>Si el cliente tiene prisa (ej. "lo necesito esta tarde para trabajar"), mejor saltarse la reparación y formatear directamente. La reparación intenta salvar horas al cliente a largo plazo pero puede consumir 60 min de tu visita sin garantía de éxito.</p></div>
+      </div>
+    </article>
+
+    <!-- S6 PURGA -->
+    <article class="chapter" id="s6">
+      <header class="chapter__header">
+        <span class="chapter__tag">S6</span>
+        <h3 class="chapter__title">6_PURGA · eliminar bloatware y basura</h3>
+        <span class="chapter__meta">10-20 min · limpieza profunda</span>
+      </header>
+      <div class="chapter__body">
+
+        <h4>Qué hace</h4>
+        <p>Elimina programas basura preinstalados (bloatware de HP, Dell, Lenovo), apps Windows 11 innecesarias (Candy Crush, Xbox, News, etc.), extensiones de navegador dudosas, toolbars pegadas al navegador y tareas programadas fantasma.</p>
+
+        <h4>Cuándo usarlo</h4>
+        <ul>
+          <li>PC nuevo de marca con bloatware de fábrica (mejor hacerlo tras formateo con Windows OEM limpio del fabricante).</li>
+          <li>PC que "se enciende con 30 cosas abiertas" (autoarranque).</li>
+          <li>Cliente que reporta publicidad rara en navegador (adware).</li>
+          <li>Parte del Pack Senior al configurar PC del abuelo/la.</li>
+        </ul>
+
+        <h4>Paso a paso</h4>
+        <ol class="steps">
+          <li><strong>Abrir el tab</strong> <code>6_PURGA</code> en MEDICOPC.exe.</li>
+          <li><strong>Primer botón: "Escanear"</strong>. Lista todo lo que considera bloatware/basura. Se abre ventana con checkboxes.</li>
+          <li><strong>Revisar la lista ANTES de purgar</strong>. A veces marca apps legítimas que el cliente usa. Ejemplos:
+            <ul>
+              <li>Candy Crush → quitar sin duda.</li>
+              <li>Spotify preinstalado → preguntar al cliente si lo usa.</li>
+              <li>OneNote → preguntar antes (puede tenerlo sincronizado con su cuenta).</li>
+            </ul>
+          </li>
+          <li><strong>Desmarcar lo que el cliente quiera conservar</strong>. Con duda, preguntar, no asumir.</li>
+          <li><strong>Botón "Purgar seleccionados"</strong>. Ejecuta desinstalación limpia + limpieza registro + limpieza carpetas residuales.</li>
+          <li><strong>Reiniciar al terminar</strong>.</li>
+          <li><strong>Verificar tras reinicio</strong>: que Windows arranca bien y el escritorio del cliente está limpio.</li>
+        </ol>
+
+        <div class="note note--danger"><span class="note__icon">CUIDADO</span><p>En empresas, muchas "apps innecesarias" pueden ser instaladas por IT corporativo. En particulares rara vez, pero si trabajas en un PC de cliente que <strong>también usa para su empresa</strong> (teletrabajo), preguntar antes. Si quitas herramientas corporativas puede ser un lío con el departamento IT del cliente.</p></div>
+      </div>
+    </article>
+
+    <!-- S7 ENTREGA -->
+    <article class="chapter" id="s7">
+      <header class="chapter__header">
+        <span class="chapter__tag">S7</span>
+        <h3 class="chapter__title">7_ENTREGA · 16 comprobaciones + punto de restauración</h3>
+        <span class="chapter__meta">8-12 min · SIEMPRE antes de cerrar visita</span>
+      </header>
+      <div class="chapter__body">
+
+        <h4>Qué hace</h4>
+        <p>Ejecuta las 16 comprobaciones finales del PC tras reparación + crea un punto de restauración Windows (usando WMI, no Checkpoint-Computer por el bug del rate limit 24h). Genera informe HTML con semáforo que se entrega al cliente.</p>
+
+        <h4>Cuándo usarlo</h4>
+        <ul>
+          <li>Siempre al terminar una visita, antes de cerrar con el cliente.</li>
+          <li>Como prueba objetiva para el informe de entrega.</li>
+          <li>Para demostrar al cliente que el PC está "100% sano" delante suyo.</li>
+        </ul>
+
+        <h4>Paso a paso</h4>
+        <ol class="steps">
+          <li><strong>MEDICOPC.exe → tab</strong> <code>7_ENTREGA</code>.</li>
+          <li><strong>Pulsar "Ejecutar las 16 comprobaciones"</strong>. Tarda 8-12 min.</li>
+          <li><strong>Durante la ejecución</strong> el script:
+            <ul>
+              <li>Crea el punto de restauración Windows (nombre: "MedicoPC_Pre-Entrega_[fecha]").</li>
+              <li>Comprueba SMART del disco principal.</li>
+              <li>Mide temperaturas idle.</li>
+              <li>Valida RAM funcional.</li>
+              <li>Confirma red Ethernet y WiFi.</li>
+              <li>Revisa audio, cámara, USB, batería.</li>
+              <li>Chequea Defender, firewall, actualizaciones.</li>
+              <li>Mide tiempo de arranque desde botón hasta escritorio.</li>
+            </ul>
+          </li>
+          <li><strong>Al acabar se abre el informe HTML</strong> en navegador, con semáforo por check.</li>
+          <li><strong>Imprimir / guardar como PDF</strong> el informe:
+            <ul>
+              <li>Ctrl+P en navegador → "Guardar como PDF".</li>
+              <li>Nombre sugerido: <code>7_ENTREGA_[Apellido]_[fecha].pdf</code>.</li>
+              <li>Guardar en carpeta del cliente (Drive local + copia al técnico).</li>
+            </ul>
+          </li>
+          <li><strong>Mostrar el informe al cliente en pantalla grande</strong>. Explicar cada línea en lenguaje sencillo. Especialmente los amarillos (si hay) — ser honesto: "Esto está en amarillo porque tu batería tiene X ciclos, sigue funcionando pero en 12 meses te tocará cambiar".</li>
+        </ol>
+
+        <div class="note note--ok"><span class="note__icon">POTENCIA</span><p>El script 7_ENTREGA es la herramienta más potente que tienes para justificar tu precio. El cliente ve delante suyo 16 puntos verdes y entiende que pagar 89 € no es por "15 minutos de limpieza" sino por un trabajo profesional medido y documentado.</p></div>
+
+        <h4>Bug corregido en v1.2.0</h4>
+        <p>En versiones anteriores el script usaba <code>Checkpoint-Computer</code> de PowerShell que fallaba con error "No se encuentra ninguna sobrecarga para ToString" por el límite de 1 punto de restauración por 24h. En v1.2.0 se cambió a <code>Invoke-CimMethod SystemRestore.CreateRestorePoint</code> + desactivación del <code>SystemRestorePointCreationFrequency=0</code>. Si ves que falla en tu maletín, comprueba que <code>VERSION.txt</code> dice ≥ 1.2.0.</p>
+      </div>
+    </article>
+
+    <!-- S8 RED -->
+    <article class="chapter" id="s8">
+      <header class="chapter__header">
+        <span class="chapter__tag">S8</span>
+        <h3 class="chapter__title">8_RED · diagnóstico de red y velocidad</h3>
+        <span class="chapter__meta">3-5 min · cuando "va lento internet"</span>
+      </header>
+      <div class="chapter__body">
+
+        <h4>Qué hace</h4>
+        <p>Mide velocidad real de descarga, subida, latencia, pérdida de paquetes. Usa Cloudflare como servidor primario y Hetzner como fallback (nueva funcionalidad v1.2.0 del maletín). Detecta si el router está degradado, si el WiFi está saturado, si hay problemas DNS.</p>
+
+        <h4>Cuándo usarlo</h4>
+        <ul>
+          <li>Cliente dice "me va lento internet en este PC".</li>
+          <li>Tras cambio de operador / router.</li>
+          <li>Para descartar que un problema de "PC lento" sea en realidad red lenta.</li>
+          <li>Documentar velocidad contratada vs real (útil para reclamaciones al operador).</li>
+        </ul>
+
+        <h4>Paso a paso</h4>
+        <ol class="steps">
+          <li><strong>MEDICOPC.exe → tab</strong> <code>8_RED</code>.</li>
+          <li><strong>Cerrar cualquier descarga en curso</strong> (Windows Update, Steam, torrents, etc.) para que la medición sea limpia.</li>
+          <li><strong>Botón "Iniciar test"</strong>. Tarda 2-3 min.</li>
+          <li><strong>El script prueba secuencialmente</strong>:
+            <ul>
+              <li>Cloudflare speedtest (primario).</li>
+              <li>Si Cloudflare devuelve menos de 50 Mbps, reintenta con Hetzner para descartar que el servidor CF esté degradado.</li>
+              <li>Si Hetzner &gt; 1.5x Cloudflare → Cloudflare estaba degradado, usa Hetzner como real.</li>
+              <li>Si Cloudflare falla por completo, va directo a Hetzner.</li>
+            </ul>
+          </li>
+          <li><strong>Informe final</strong> con:
+            <ul>
+              <li>Bajada real (Mbps).</li>
+              <li>Subida real (Mbps).</li>
+              <li>Ping / latencia (ms).</li>
+              <li>Jitter.</li>
+              <li>Pérdida de paquetes (%).</li>
+              <li>Fuente usada (CF / Hetzner / ambos).</li>
+              <li>Comparativa con la velocidad contratada si el cliente la ha indicado antes.</li>
+            </ul>
+          </li>
+          <li><strong>Interpretación rápida</strong>:
+            <table>
+              <thead><tr><th>Escenario</th><th>Diagnóstico</th></tr></thead>
+              <tbody>
+                <tr><td>Velocidad real &lt; 30 % de contratada</td><td>Problema operador o router. Llamar ISP.</td></tr>
+                <tr><td>Velocidad real 70-100 % por Ethernet, 30 % por WiFi</td><td>Problema WiFi. Cambiar canal, reubicar router.</td></tr>
+                <tr><td>Ping &gt; 50 ms local</td><td>Router sobrecargado. Reiniciar router.</td></tr>
+                <tr><td>Pérdida paquetes &gt; 2 %</td><td>Cable mal, interferencias WiFi, problema ISP.</td></tr>
+              </tbody>
+            </table>
+          </li>
+        </ol>
+
+        <div class="note note--tip"><span class="note__icon">EXTRA</span><p>En la tarifa NO está incluida la configuración de router del operador (no es competencia del técnico informático, y cada operador tiene sus propios procedimientos y apps). Si el cliente pide tocar el router, acotar: "Configuración básica sí puedo, pero si hay que llamar al operador por portabilidad o problemas de línea, eso corresponde al operador no a mí".</p></div>
+      </div>
+    </article>
+
+    <!-- S9 HISTORIAL -->
+    <article class="chapter" id="s9">
+      <header class="chapter__header">
+        <span class="chapter__tag">S9</span>
+        <h3 class="chapter__title">9_HISTORIAL · eventos críticos últimos 30 días</h3>
+        <span class="chapter__meta">2-4 min · investigación</span>
+      </header>
+      <div class="chapter__body">
+
+        <h4>Qué hace</h4>
+        <p>Extrae del Visor de Eventos de Windows los errores críticos, avisos de hardware, pantallazos azules, cuelgues de apps, fallos de arranque, eventos Defender, y los presenta en timeline ordenada por fecha.</p>
+
+        <h4>Cuándo usarlo</h4>
+        <ul>
+          <li>Cliente dice "me da pantalla azul de vez en cuando" → identificar frecuencia y patrón.</li>
+          <li>Investigación de fallos intermitentes.</li>
+          <li>Tras una reparación, para confirmar que los errores han dejado de producirse.</li>
+          <li>Antes de asumir "el cliente se está inventando el problema" — los logs no mienten.</li>
+        </ul>
+
+        <h4>Paso a paso</h4>
+        <ol class="steps">
+          <li><strong>MEDICOPC.exe → tab</strong> <code>9_HISTORIAL</code>.</li>
+          <li><strong>Elegir periodo</strong>: 7 días / 30 días (por defecto) / 90 días.</li>
+          <li><strong>Botón "Extraer"</strong>. Tarda 1-2 min.</li>
+          <li><strong>Informe HTML timeline</strong> con:
+            <ul>
+              <li>Fecha y hora de cada evento.</li>
+              <li>Tipo (Error / Crítico / Aviso).</li>
+              <li>Fuente (Kernel, app, driver, Defender).</li>
+              <li>Descripción breve.</li>
+              <li>Frecuencia (eventos repetidos agrupados).</li>
+            </ul>
+          </li>
+          <li><strong>Patrones a buscar</strong>:
+            <ul>
+              <li>Mismo error recurrente cada X horas → driver o hardware fallando.</li>
+              <li>Cluster de errores en una fecha concreta → instalación de algo rompió algo.</li>
+              <li>Errores de disco repetidos (evento ID 7 / 11 / 51) → disco muriendo.</li>
+              <li>Eventos WHEA-Logger → hardware (RAM / CPU) con fallos.</li>
+              <li>Kernel-Power 41 → apagones bruscos (fuente, batería, sobrecalentamiento).</li>
+            </ul>
+          </li>
+          <li><strong>Guardar el informe</strong> en la carpeta del cliente para soporte futuro.</li>
+        </ol>
+
+        <div class="note note--tip"><span class="note__icon">INVESTIGACIÓN</span><p>Este script es oro para diagnósticos "raros". Si el cliente dice "me reinicia solo a veces" y en el historial ves 12 Kernel-Power 41 en los últimos 7 días, ya no es "a veces", es un problema serio que tienes que diagnosticar (fuente, RAM, calor).</p></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ========== BLOQUE TOOLS ========== -->
+<section class="block" id="tools">
+  <div class="container">
+    <div class="block__header">
+      <div class="block__num">BLOQUE 2 / 5 · TOOLS</div>
+      <h2 class="block__title">Tools externas.</h2>
+      <p class="block__subtitle">Programas que el launcher no engloba. Se lanzan con doble clic manual desde la carpeta Tools del USB cuando hace falta información extra.</p>
+    </div>
+
+    <!-- T1 PRODUKEY -->
+    <article class="chapter" id="t1">
+      <header class="chapter__header">
+        <span class="chapter__tag">T1</span>
+        <h3 class="chapter__title">ProduKey · recuperar claves producto</h3>
+        <span class="chapter__meta">Nirsoft · falso positivo Defender conocido</span>
+      </header>
+      <div class="chapter__body">
+
+        <h4>Qué hace</h4>
+        <p>Extrae las claves de Windows, Office y otros productos Microsoft instalados. Utilidad gratuita de Nirsoft, muy respetada en el mundo técnico desde hace 20 años.</p>
+
+        <h4>Cuándo usarlo</h4>
+        <ul>
+          <li>Si el tab <code>3_LICENCIAS</code> del launcher falla o se queda colgado.</li>
+          <li>Cuando necesitas ver la clave en tiempo real delante del cliente (doble clic directo es más rápido).</li>
+          <li>Cuando el cliente quiere que le entregues la clave en papel impreso.</li>
+        </ul>
+
+        <h4>Paso a paso</h4>
+        <ol class="steps">
+          <li><strong>Ir al USB MASTER → carpeta</strong> <code>Tools</code>.</li>
+          <li><strong>Doble clic en</strong> <code>ProduKey.exe</code> (hay versión x64 y x86, elegir x64 si el PC es 64 bits).</li>
+          <li><strong>Aceptar UAC</strong>.</li>
+          <li><strong>Si Defender bloquea</strong>: añadir exclusión temporal de la carpeta <code>Tools</code> del USB. En el PC del técnico está ya excluido, en el del cliente puede saltar.</li>
+          <li><strong>Se abre ventana</strong> con lista de productos Microsoft instalados y sus claves en columnas.</li>
+          <li><strong>Exportar</strong>: File → Save Selected Items → elegir formato texto.</li>
+          <li><strong>Guardar en carpeta del cliente</strong> + USB si aplica.</li>
+          <li><strong>Cerrar ProduKey</strong>.</li>
+        </ol>
+
+        <div class="note note--warn"><span class="note__icon">DEFENDER</span><p>ProduKey sale como "HackTool:Win32/ProductKey" en Defender. Es falso positivo 100% confirmado. Defender marca así a cualquier herramienta que lea claves del registro, aunque la finalidad sea legítima. Está en exclusiones del PC del técnico. En PC del cliente hay que añadir la carpeta <code>Tools</code> como exclusión mientras trabajas, y quitarla al terminar.</p></div>
+      </div>
+    </article>
+
+    <!-- T2 CRYSTALDISKINFO -->
+    <article class="chapter" id="t2">
+      <header class="chapter__header">
+        <span class="chapter__tag">T2</span>
+        <h3 class="chapter__title">CrystalDiskInfo · salud de discos</h3>
+        <span class="chapter__meta">estándar de oro para SMART</span>
+      </header>
+      <div class="chapter__body">
+
+        <h4>Qué hace</h4>
+        <p>Lee los datos SMART de todos los discos conectados (HDD y SSD) y presenta estado de salud: Bueno / Precaución / Malo. Junto con temperaturas, horas encendido, ciclos de carga, errores reasignados, etc.</p>
+
+        <h4>Cuándo usarlo</h4>
+        <ul>
+          <li>Siempre que haya sospecha de disco tocado (lentitud, bloqueos, ruidos).</li>
+          <li>Antes de presupuestar cambio de SSD, para justificar la recomendación.</li>
+          <li>En entrega al cliente, captura final para mostrar que el disco nuevo está perfecto.</li>
+          <li>Para dar al cliente recomendación preventiva: "tu disco tiene 4 años y 30 000 horas, en 12 meses convendría cambiarlo".</li>
+        </ul>
+
+        <h4>Paso a paso</h4>
+        <ol class="steps">
+          <li><strong>USB MASTER → Tools → carpeta</strong> <code>CrystalDiskInfo9_8_0</code>.</li>
+          <li><strong>Doble clic en</strong> <code>DiskInfo64.exe</code> (si el PC es 64 bits, que suele ser siempre hoy).</li>
+          <li><strong>Aceptar UAC</strong>.</li>
+          <li><strong>Se abre ventana</strong> con pestañas por cada disco detectado.</li>
+          <li><strong>Interpretar</strong>:
+            <ul>
+              <li><strong>Bueno (azul)</strong>: disco sano. Puede tener años encendido pero SMART OK.</li>
+              <li><strong>Precaución (amarillo)</strong>: empieza a fallar. Avisar al cliente, recomendar cambio en meses.</li>
+              <li><strong>Malo (rojo)</strong>: falla inminente. Recomendar cambio YA. Si hay datos sin backup, sacarlos antes de tocar nada.</li>
+            </ul>
+          </li>
+          <li><strong>Atributos críticos a mirar</strong>:
+            <ul>
+              <li><code>05 · Reallocated Sectors Count</code>: si &gt; 0 → sectores reasignados, disco envejeciendo. Si crece en visitas sucesivas → muere pronto.</li>
+              <li><code>C5 · Current Pending Sectors</code>: sectores pendientes de reasignar, &gt; 0 es aviso rojo.</li>
+              <li><code>C6 · Uncorrectable Sectors</code>: errores no corregibles, siempre debería ser 0.</li>
+              <li><code>09 · Power On Hours</code>: horas encendido. HDD: &gt; 20 000 empieza a ser viejo. SSD: se mira más el TBW.</li>
+              <li><code>0A · Spin Retry Count</code> (solo HDD): intentos de arrancar el motor del disco. &gt; 0 = mecánica fallando.</li>
+              <li><code>F1 · Total LBAs Written</code> (SSD): total escrito en vida del SSD. Comparar con TBW del fabricante.</li>
+            </ul>
+          </li>
+          <li><strong>Captura del resultado</strong> para el informe entrega.</li>
+          <li><strong>Cerrar</strong>.</li>
+        </ol>
+
+        <div class="note note--ok"><span class="note__icon">PRO</span><p>Mostrar CrystalDiskInfo al cliente ante una recomendación de cambio de disco es convincente sin necesidad de explicar jerga. Ver "Estado: Precaución" en rojo/amarillo es evidencia visual que cualquiera entiende. Justifica los 55 € del SSD + 30 € de mano de obra sin discusión.</p></div>
+      </div>
+    </article>
+
+    <!-- T3 BLUESCREENVIEW -->
+    <article class="chapter" id="t3">
+      <header class="chapter__header">
+        <span class="chapter__tag">T3</span>
+        <h3 class="chapter__title">BlueScreenView · analizar pantallazos azules</h3>
+        <span class="chapter__meta">Nirsoft · diagnóstico BSOD</span>
+      </header>
+      <div class="chapter__body">
+
+        <h4>Qué hace</h4>
+        <p>Lee los archivos minidump (<code>.dmp</code>) que Windows genera cuando hay pantallazo azul y muestra qué driver o módulo fue el responsable. Te permite identificar la causa raíz sin leer volcados de memoria hexadecimal.</p>
+
+        <h4>Cuándo usarlo</h4>
+        <ul>
+          <li>Cliente reporta pantallazos azules aleatorios.</li>
+          <li>Tras instalación de driver nuevo que causa inestabilidad.</li>
+          <li>Investigación de bloqueos post-actualización Windows.</li>
+          <li>Cuando <code>9_HISTORIAL</code> muestra eventos WHEA-Logger o Kernel-Power sin más detalles.</li>
+        </ul>
+
+        <h4>Paso a paso</h4>
+        <ol class="steps">
+          <li><strong>USB MASTER → Tools →</strong> <code>bluescreenview-x64</code> (versión 64 bits).</li>
+          <li><strong>Doble clic en</strong> <code>BlueScreenView.exe</code>.</li>
+          <li><strong>Aceptar UAC</strong>.</li>
+          <li><strong>Si Defender bloquea</strong>: igual que ProduKey, Nirsoft marcado por defecto. Excluir temporalmente.</li>
+          <li><strong>Se abre ventana</strong> con lista de todos los pantallazos azules registrados + archivos <code>.dmp</code>.</li>
+          <li><strong>Por cada evento</strong>, analizar:
+            <ul>
+              <li>Fecha y hora.</li>
+              <li>Bug Check Code (ej. <code>IRQL_NOT_LESS_OR_EQUAL</code>).</li>
+              <li>Caused By Driver (columna crítica, el driver culpable).</li>
+              <li>Caused By Address (dirección memoria del fallo).</li>
+            </ul>
+          </li>
+          <li><strong>Identificar patrones</strong>:
+            <ul>
+              <li>Mismo driver repetido → actualizar o reinstalar ese driver específico.</li>
+              <li>Drivers de tarjeta gráfica (<code>nvlddmkm.sys</code>, <code>atikmdag.sys</code>) → reinstalar GPU con DDU.</li>
+              <li>Drivers de red (<code>netio.sys</code>) → problema tarjeta red o driver.</li>
+              <li><code>ntoskrnl.exe</code> solo → es el núcleo Windows, suele significar RAM defectuosa. Lanzar Memtest86 desde USB Arsenal.</li>
+              <li><code>memory_management</code> como Bug Check → RAM.</li>
+              <li><code>kernel_security_check_failure</code> → RAM o disco con errores.</li>
+            </ul>
+          </li>
+          <li><strong>Exportar informe</strong>: File → Save Selected Items → HTML.</li>
+          <li><strong>Guardar en carpeta del cliente</strong>.</li>
+        </ol>
+
+        <div class="note note--tip"><span class="note__icon">TRADUCCIÓN</span><p>Al cliente no le explicas "<code>nvlddmkm.sys</code> causó <code>IRQL_NOT_LESS_OR_EQUAL</code>". Le dices: "El pantallazo viene del driver de tu tarjeta gráfica, lo reinstalo limpio y se acaba el problema". El nombre técnico se queda en el informe para tu auditoría y para el próximo técnico si lo hubiera.</p></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ========== BLOQUE USB ARSENAL ========== -->
+<section class="block" id="arsenal-block">
+  <div class="container">
+    <div class="block__header">
+      <div class="block__num">BLOQUE 3 / 5 · ARSENAL</div>
+      <h2 class="block__title">USB Arsenal · ISOs booteables.</h2>
+      <p class="block__subtitle">Cuando el PC no arranca Windows, cuando hay que formatear, cuando necesitas un sistema externo para rescatar datos.</p>
+    </div>
+
+    <article class="chapter" id="arsenal">
+      <header class="chapter__header">
+        <span class="chapter__tag">V</span>
+        <h3 class="chapter__title">Arrancar desde USB Arsenal (Ventoy)</h3>
+        <span class="chapter__meta">10-30 min · según tarea</span>
+      </header>
+      <div class="chapter__body">
+
+        <h4>Qué es Ventoy</h4>
+        <p>Programa que permite meter varias ISOs en un mismo USB y elegir cuál arrancar al boot. Se instala una vez en el USB y luego solo copias las ISOs a la raíz. El propio USB Arsenal rojo ya tiene Ventoy instalado.</p>
+
+        <h4>Cuándo usarlo</h4>
+        <ul>
+          <li>PC no arranca Windows → rescate con Hiren's o Ubuntu Live.</li>
+          <li>Instalación limpia de Windows 11 tras formateo total.</li>
+          <li>Diagnóstico profundo RAM → Memtest86 necesita su propio arranque.</li>
+          <li>Reset de contraseña Windows local → Hiren's BootCD PE.</li>
+        </ul>
+
+        <h4>Paso a paso</h4>
+        <ol class="steps">
+          <li><strong>Enchufar USB Arsenal rojo</strong> en un puerto USB preferiblemente 3.0 (azul).</li>
+          <li><strong>Apagar el PC</strong> completamente.</li>
+          <li><strong>Encender</strong> pulsando la tecla de <strong>Boot Menu</strong> repetidamente. Varía por fabricante:
+            <table>
+              <thead><tr><th>Marca PC</th><th>Tecla Boot Menu</th></tr></thead>
+              <tbody>
+                <tr><td>Lenovo</td><td>F12 o Fn+F12</td></tr>
+                <tr><td>HP</td><td>F9 o Esc</td></tr>
+                <tr><td>Dell</td><td>F12</td></tr>
+                <tr><td>Asus</td><td>F8 o Esc</td></tr>
+                <tr><td>Acer</td><td>F12 (a veces activar en BIOS primero)</td></tr>
+                <tr><td>MSI</td><td>F11</td></tr>
+                <tr><td>Samsung</td><td>F12 o Esc</td></tr>
+                <tr><td>PC sobremesa genérico</td><td>F8, F11 o F12 (probar)</td></tr>
+              </tbody>
+            </table>
+          </li>
+          <li><strong>En el menú Boot</strong>, seleccionar el USB Arsenal (nombre tipo "USB: Kingston DataTraveler" o similar). Usar teclas de dirección + Enter.</li>
+          <li><strong>Arranca Ventoy</strong>. Menú azul con lista de ISOs disponibles.</li>
+          <li><strong>Seleccionar ISO</strong> y Enter. Normalmente preguntará "modo Normal" o "modo UEFI", usar Normal en el 99% de casos.</li>
+          <li><strong>Arranca el sistema/instalador</strong> elegido.</li>
+        </ol>
+
+        <h4>Uso de cada ISO</h4>
+
+        <h5>Windows 11 24H2</h5>
+        <ul>
+          <li>Instalación limpia tras formateo. Crear partición nueva o usar existente.</li>
+          <li>Ignorar requisito cuenta Microsoft con OOBE\BYPASSNRO (Shift+F10 en la pantalla "conectar a internet").</li>
+          <li>Cuenta local preferible salvo que el cliente quiera sincronización.</li>
+        </ul>
+
+        <h5>Hiren's BootCD PE</h5>
+        <ul>
+          <li>Rescate. Arranca un mini Windows desde USB, con explorador, herramientas diagnóstico, y utilidades de recuperación.</li>
+          <li>Reset contraseña Windows local: herramientas incluidas tipo Offline NT Password.</li>
+          <li>Análisis disco con el PC apagado.</li>
+          <li>Copiar datos a otro disco externo sin arrancar Windows del cliente.</li>
+        </ul>
+
+        <h5>Ubuntu Live</h5>
+        <ul>
+          <li>Cuando Hiren's no detecta hardware exótico. Ubuntu suele reconocer más variedad de placas WiFi.</li>
+          <li>Rescate datos cuando el disco del cliente es legible pero Windows no arranca.</li>
+          <li>Montar disco del cliente desde Ubuntu + copiar a disco externo.</li>
+          <li>Probar si es problema hardware o software: si Ubuntu funciona bien, problema es de Windows, no del PC.</li>
+        </ul>
+
+        <h5>Memtest86</h5>
+        <ul>
+          <li>Diagnóstico RAM profundo. Arranca fuera de Windows.</li>
+          <li>Dejar correr mínimo una pasada completa (1-3 horas según cantidad de RAM).</li>
+          <li>Cualquier error = RAM defectuosa, sustituir.</li>
+          <li>Útil para pantallazos azules recurrentes sin driver identificado.</li>
+        </ul>
+
+        <div class="note note--warn"><span class="note__icon">BIOS</span><p>Si al pulsar F12 (o la tecla del fabricante) el PC arranca Windows ignorando el USB, probablemente tiene <strong>Fast Boot</strong> activado en BIOS. Entrar a BIOS (tecla Supr o F2 al encender), desactivar "Fast Boot" y "Secure Boot" (solo si la ISO no está firmada). Reiniciar y probar otra vez.</p></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ========== BLOQUE FLUJOS ========== -->
+<section class="block" id="flujos">
+  <div class="container">
+    <div class="block__header">
+      <div class="block__num">BLOQUE 4 / 5 · FLUJOS</div>
+      <h2 class="block__title">Flujos operativos completos.</h2>
+      <p class="block__subtitle">Los 6 casos más habituales, secuencia exacta de lo que haces en cada uno con los USBs, de principio a fin.</p>
+    </div>
+
+    <!-- F1 FORMATEO -->
+    <article class="chapter" id="flujo-formateo">
+      <header class="chapter__header">
+        <span class="chapter__tag">F1</span>
+        <h3 class="chapter__title">Formatear PC completo con backup</h3>
+        <span class="chapter__meta">2-4 h · tarifa 89 €</span>
+      </header>
+      <div class="chapter__body">
+
+        <h4>Contexto</h4>
+        <p>Cliente quiere Windows limpio, tiene datos importantes que conservar. Tarifa: Formateo + Backup 89 € (opcional + Instalación Windows OEM 79 € si no tiene licencia activa).</p>
+
+        <h4>Secuencia</h4>
+        <div class="flow">
+          <div class="flow__step"><span class="flow__num">1</span>Enchufar USB MASTER verde al PC.</div>
+          <div class="flow__step"><span class="flow__num">2</span>Ejecutar <code>1_DIAGNOSTICO</code> para estado inicial.</div>
+          <div class="flow__step"><span class="flow__num">3</span>Ejecutar <code>3_LICENCIAS</code> — guardar claves Windows/Office del cliente.</div>
+          <div class="flow__step"><span class="flow__num">4</span>Ejecutar <code>4_DRIVERS</code> — backup drivers por si acaso.</div>
+          <div class="flow__step"><span class="flow__num">5</span>Ejecutar <code>2_BACKUP</code> — copia a disco externo propio del cliente o Seagate técnico.</div>
+          <div class="flow__step"><span class="flow__num">6</span>Verificar 3 archivos aleatorios del backup antes de seguir.</div>
+          <div class="flow__step"><span class="flow__num">7</span>Firma del cliente conforme backup realizado.</div>
+          <div class="flow__step"><span class="flow__num">8</span>Apagar PC. Enchufar USB ARSENAL rojo.</div>
+          <div class="flow__step"><span class="flow__num">9</span>Arrancar desde USB con tecla Boot (F12/F11). Elegir Windows 11 24H2.</div>
+          <div class="flow__step"><span class="flow__num">10</span>Instalación: Borrar todas las particiones, crear una nueva, instalar Windows.</div>
+          <div class="flow__step"><span class="flow__num">11</span>En OOBE bypass cuenta Microsoft (Shift+F10 → <code>OOBE\BYPASSNRO</code>). Cuenta local con nombre del cliente.</div>
+          <div class="flow__step"><span class="flow__num">12</span>Primer arranque: configurar región, teclado, hora.</div>
+          <div class="flow__step"><span class="flow__num">13</span>Windows Update completo (puede durar 1-2h). Drivers se instalan automáticamente.</div>
+          <div class="flow__step"><span class="flow__num">14</span>Si algún driver falta (raro en W11 moderno), usar backup del paso 4.</div>
+          <div class="flow__step"><span class="flow__num">15</span>Restaurar datos del backup del paso 5 a Escritorio, Documentos, etc.</div>
+          <div class="flow__step"><span class="flow__num">16</span>Reinstalar software básico que tenía el cliente (Chrome, Office según licencia).</div>
+          <div class="flow__step"><span class="flow__num">17</span>Ejecutar <code>6_PURGA</code> para eliminar bloatware (aunque W11 limpio trae poco, repasa).</div>
+          <div class="flow__step"><span class="flow__num">18</span>Ejecutar <code>7_ENTREGA</code> para 16 checks + informe final.</div>
+          <div class="flow__step"><span class="flow__num">19</span>Demo al cliente del problema original resuelto.</div>
+          <div class="flow__step"><span class="flow__num">20</span>Cobro + firma + foto estado final + entrega informe PDF por WhatsApp.</div>
+        </div>
+
+        <div class="note note--warn"><span class="note__icon">CRÍTICO</span><p>El paso 5 (backup) nunca se salta. Aunque el cliente jure que no tiene nada importante. Si se salta y luego aparece algo, la responsabilidad es tuya. Con el backup hecho y firmado, eres intocable.</p></div>
+      </div>
+    </article>
+
+    <!-- F2 SSD -->
+    <article class="chapter" id="flujo-ssd">
+      <header class="chapter__header">
+        <span class="chapter__tag">F2</span>
+        <h3 class="chapter__title">Cambiar disco a SSD + clonar sistema</h3>
+        <span class="chapter__meta">1.5-2.5 h · tarifa 30 € m.o. + 49 € clonado + SSD</span>
+      </header>
+      <div class="chapter__body">
+
+        <h4>Contexto</h4>
+        <p>PC con HDD lento, cliente quiere SSD sin perder Windows ni reinstalar todo. Tarifa: 30 € instalación + 49 € clonado + pieza (SSD 500GB 55 € / 1TB 89 €).</p>
+
+        <h4>Secuencia</h4>
+        <div class="flow">
+          <div class="flow__step"><span class="flow__num">1</span>Enchufar USB MASTER verde.</div>
+          <div class="flow__step"><span class="flow__num">2</span>Ejecutar <code>1_DIAGNOSTICO</code>. Confirmar que el HDD actual está legible (si no, puede ser N1 recuperación antes, no clonado).</div>
+          <div class="flow__step"><span class="flow__num">3</span>Verificar SMART con <code>CrystalDiskInfo</code>. Si HDD en rojo → cuidado, el clonado puede fallar.</div>
+          <div class="flow__step"><span class="flow__num">4</span>Ejecutar <code>2_BACKUP</code> de seguridad adicional (por si el clonado falla).</div>
+          <div class="flow__step"><span class="flow__num">5</span>Conectar el SSD nuevo al PC:
+            <ul style="margin-left: 28px;">
+              <li>Si es sobremesa: instalar en bahía libre + SATA + alimentación.</li>
+              <li>Si es portátil M.2: instalar ya en slot interno (tendrás que abrir el portátil). Después del clonado arrancarás desde él.</li>
+              <li>Si es portátil SATA 2.5: conectar SSD a caja externa USB-SATA temporalmente para el clonado.</li>
+            </ul>
+          </div>
+          <div class="flow__step"><span class="flow__num">6</span>Lanzar software de clonado (Macrium Reflect Free, Clonezilla, o el que traiga el fabricante del SSD como Samsung Data Migration, WD Acronis, etc.).</div>
+          <div class="flow__step"><span class="flow__num">7</span>Clonar HDD origen → SSD destino. Tardan 30-90 min según volumen.</div>
+          <div class="flow__step"><span class="flow__num">8</span>Apagar PC. Desconectar HDD antiguo. Si es portátil, retirar HDD de la bahía.</div>
+          <div class="flow__step"><span class="flow__num">9</span>Encender con solo el SSD. Debería arrancar Windows como siempre pero más rápido.</div>
+          <div class="flow__step"><span class="flow__num">10</span>Si no arranca: entrar BIOS, cambiar orden de boot priorizando el SSD.</div>
+          <div class="flow__step"><span class="flow__num">11</span>Verificar en Windows: C: es ahora el SSD, Administrador de Discos muestra tamaño correcto.</div>
+          <div class="flow__step"><span class="flow__num">12</span>Si el SSD es más grande que el HDD original, expandir la partición C: al tamaño completo (Administrador de discos → Extender volumen).</div>
+          <div class="flow__step"><span class="flow__num">13</span>Verificar tiempos de arranque con <code>7_ENTREGA</code>. Arranque típico tras SSD: 15-25 seg.</div>
+          <div class="flow__step"><span class="flow__num">14</span>El HDD antiguo: ofrecerlo al cliente (lo guarda por si acaso) o llevarlo para borrado seguro y reciclaje.</div>
+          <div class="flow__step"><span class="flow__num">15</span>Cobro + informe + demo velocidad (antes vs después).</div>
+        </div>
+
+        <div class="note note--ok"><span class="note__icon">EFECTO WOW</span><p>Enseñar al cliente el tiempo de arranque antes y después es el momento más mágico del servicio. Un PC que tardaba 3 min arrancando ahora en 20 seg es un antes/después que el cliente presume delante de sus amigos. Máximo generador de boca-oreja.</p></div>
+      </div>
+    </article>
+
+    <!-- F3 RECUP -->
+    <article class="chapter" id="flujo-recup">
+      <header class="chapter__header">
+        <span class="chapter__tag">F3</span>
+        <h3 class="chapter__title">Recuperación datos N1 · disco legible</h3>
+        <span class="chapter__meta">3-8 h · tarifa 110 € · Pack Rescate 199 €</span>
+      </header>
+      <div class="chapter__body">
+
+        <h4>Contexto</h4>
+        <p>Cliente ha perdido datos (borrados accidentalmente, formateó sin querer, ransomware con datos no cifrados) y el disco sigue funcionando físicamente. Tarifa 110 € solo recuperación. Pack Rescate 199 € si combina diagnóstico + N1 + formateo + backup.</p>
+
+        <h4>Secuencia</h4>
+        <div class="flow">
+          <div class="flow__step"><span class="flow__num">1</span><strong>NO arrancar Windows del disco afectado.</strong> Cada encendido puede sobrescribir datos borrados.</div>
+          <div class="flow__step"><span class="flow__num">2</span>Conectar el disco afectado como <strong>secundario</strong> al PC del técnico (vía caja USB-SATA o directamente al sobremesa).</div>
+          <div class="flow__step"><span class="flow__num">3</span>Verificar SMART con <code>CrystalDiskInfo</code>. Si está en rojo → peligro físico, derivar a N2.</div>
+          <div class="flow__step"><span class="flow__num">4</span>Clonar imagen 1:1 del disco origen con <code>ddrescue</code> o similar (desde Ubuntu Live arrancado con USB Arsenal). Tardan 1-6h según tamaño.</div>
+          <div class="flow__step"><span class="flow__num">5</span>Desconectar el disco origen. Trabajar solo con la imagen.</div>
+          <div class="flow__step"><span class="flow__num">6</span>Montar la imagen con herramienta (TestDisk, R-Studio, Recuva sobre la imagen).</div>
+          <div class="flow__step"><span class="flow__num">7</span>Escanear con TestDisk si el problema es partición perdida/corrupta.</div>
+          <div class="flow__step"><span class="flow__num">8</span>Escanear con PhotoRec si son archivos borrados específicos (fotos, documentos).</div>
+          <div class="flow__step"><span class="flow__num">9</span>Recuperar a un disco externo con espacio suficiente (nunca al mismo disco origen).</div>
+          <div class="flow__step"><span class="flow__num">10</span>Verificar integridad de archivos recuperados (abrir muestra).</div>
+          <div class="flow__step"><span class="flow__num">11</span>Generar informe detallado de qué se recuperó, qué no, qué estaba fragmentado.</div>
+          <div class="flow__step"><span class="flow__num">12</span>Entregar disco externo al cliente + informe.</div>
+          <div class="flow__step"><span class="flow__num">13</span>Educar al cliente: regla 3-2-1 de backup (P23 de procedimientos cliente). Ofrecer Servicio Senior 129 € para prevenir.</div>
+        </div>
+
+        <div class="note note--danger"><span class="note__icon">HONESTIDAD</span><p>Nunca prometas "te recupero todo seguro". Si el cliente encuentra 200 fotos de las 500 que creía tener, gestionar expectativas desde el inicio: "Voy a intentar recuperar lo máximo posible, puede ser todo o parcial según estado del disco". Mejor cliente sorprendido al alza que decepcionado a la baja.</p></div>
+      </div>
+    </article>
+
+    <!-- F4 VIRUS -->
+    <article class="chapter" id="flujo-virus">
+      <header class="chapter__header">
+        <span class="chapter__tag">F4</span>
+        <h3 class="chapter__title">PC infectado · malware o ransomware</h3>
+        <span class="chapter__meta">2-4 h · tarifa 89 € formateo / 199 € Rescate</span>
+      </header>
+      <div class="chapter__body">
+
+        <h4>Contexto</h4>
+        <p>Ventanas de publicidad, navegador secuestrado, archivos cifrados por ransomware, rendimiento extremadamente lento por minería cryptocurrency, archivos que no se abren. Dos escenarios: infección activa limpiable (poco frecuente hoy) o ransomware / infección grave que requiere formateo.</p>
+
+        <h4>Secuencia</h4>
+        <div class="flow">
+          <div class="flow__step"><span class="flow__num">1</span><strong>Aislar el PC</strong>: desconectar de red (cable + WiFi). Aplica especialmente si es ransomware activo.</div>
+          <div class="flow__step"><span class="flow__num">2</span>Enchufar USB MASTER verde.</div>
+          <div class="flow__step"><span class="flow__num">3</span>Ejecutar <code>1_DIAGNOSTICO</code> + <code>9_HISTORIAL</code> para evaluar alcance.</div>
+          <div class="flow__step"><span class="flow__num">4</span>Identificar el tipo:
+            <ul style="margin-left: 28px;">
+              <li><strong>Adware / PUPs</strong> (publicidad, toolbars): puede limpiarse sin formatear con <code>6_PURGA</code> agresivo + Malwarebytes.</li>
+              <li><strong>Rootkit / virus profundo</strong>: formateo casi obligatorio. Limpieza nunca garantiza 100%.</li>
+              <li><strong>Ransomware con datos cifrados</strong>: ver si hay decryptor gratuito en <a href="https://nomoreransom.org">nomoreransom.org</a>. Si no hay → formateo + restauración desde backup del cliente (si lo tiene). NUNCA pagar el rescate.</li>
+            </ul>
+          </div>
+          <div class="flow__step"><span class="flow__num">5</span>Si decidido formatear: <code>3_LICENCIAS</code> guardar claves.</div>
+          <div class="flow__step"><span class="flow__num">6</span><code>2_BACKUP</code> muy cuidadoso. Escanear cada archivo con Malwarebytes antes de copiar. No meter malware en el backup.</div>
+          <div class="flow__step"><span class="flow__num">7</span>Formateo completo siguiendo flujo F1.</div>
+          <div class="flow__step"><span class="flow__num">8</span>Restaurar datos solo tras escaneo completo del backup.</div>
+          <div class="flow__step"><span class="flow__num">9</span>Configurar seguridad: Defender activo, UAC normal, evitar cuentas admin para uso diario, formación básica phishing.</div>
+          <div class="flow__step"><span class="flow__num">10</span><strong>Cambiar contraseñas críticas del cliente</strong> (email, banca) desde OTRO dispositivo — las del PC infectado pueden estar comprometidas.</div>
+          <div class="flow__step"><span class="flow__num">11</span>Si es cliente senior → ofrecer Pack Senior con Formación 1h incluida (129 €).</div>
+        </div>
+
+        <div class="note note--warn"><span class="note__icon">RANSOMWARE</span><p>Si es ransomware activo encriptando en tiempo real → apagar el PC inmediatamente tirando del cable. No apagar normal (el ransomware puede completar tareas). Reiniciar en modo seguro sin red, o mejor arrancar desde USB Arsenal con Ubuntu Live para evaluar sin ejecutar Windows.</p></div>
+      </div>
+    </article>
+
+    <!-- F5 LENTO -->
+    <article class="chapter" id="flujo-lento">
+      <header class="chapter__header">
+        <span class="chapter__tag">F5</span>
+        <h3 class="chapter__title">PC lento sin síntoma específico</h3>
+        <span class="chapter__meta">1-2.5 h · tarifa 89 € Limpieza Completa + extras</span>
+      </header>
+      <div class="chapter__body">
+
+        <h4>Contexto</h4>
+        <p>El clásico "va lento desde hace unos meses". Causas múltiples posibles: disco fragmentado/viejo, polvo + temperaturas, malware leve, autoarranque cargado, RAM insuficiente. Enfoque: diagnosticar causa dominante primero.</p>
+
+        <h4>Secuencia</h4>
+        <div class="flow">
+          <div class="flow__step"><span class="flow__num">1</span>USB MASTER → <code>1_DIAGNOSTICO</code> completo.</div>
+          <div class="flow__step"><span class="flow__num">2</span>Revisar el informe. Buscar el <strong>cuello de botella dominante</strong>:
+            <ul style="margin-left: 28px;">
+              <li>Si <code>CrystalDiskInfo</code> marca disco en amarillo/rojo → cambio SSD es la solución (F2).</li>
+              <li>Si temperaturas CPU &gt; 85°C → limpieza física + pasta es la solución.</li>
+              <li>Si RAM al 90% en idle → insuficiente, upgrade.</li>
+              <li>Si autoarranque con 40 apps → <code>6_PURGA</code> + msconfig.</li>
+              <li>Si todo parece OK pero va lento → malware oculto (escaneo profundo).</li>
+            </ul>
+          </div>
+          <div class="flow__step"><span class="flow__num">3</span>Aplicar la solución correspondiente. Lo habitual es combinar Limpieza Completa (89 €) con otros:
+            <ul style="margin-left: 28px;">
+              <li>SSD: +30 € mano + 49 € clonado + pieza.</li>
+              <li>RAM: +30 € mano + pieza.</li>
+              <li>Ambos: presupuestar completo.</li>
+            </ul>
+          </div>
+          <div class="flow__step"><span class="flow__num">4</span>Ejecutar <code>6_PURGA</code> para limpiar bloatware aprovechando.</div>
+          <div class="flow__step"><span class="flow__num">5</span>Configurar Autoarranque limpio (msconfig, Autoruns).</div>
+          <div class="flow__step"><span class="flow__num">6</span>Limpieza temporales, caché, archivos Windows basura.</div>
+          <div class="flow__step"><span class="flow__num">7</span><code>7_ENTREGA</code> para demo tiempos arranque antes/después.</div>
+        </div>
+
+        <div class="note note--tip"><span class="note__icon">UPSELL</span><p>El "PC lento" es el servicio donde más upsell razonable hay. Cliente trae por limpieza 89 €, te vas con 89 + 55 SSD + 30 mano + 49 clonado = 223 €, pero el cliente queda 10x más satisfecho porque el resultado es espectacular. Explica siempre el porqué: "El polvo lo quito con los 89 €, pero el ordenador sigue teniendo 8 años y un disco viejo, con SSD el cambio es inmediato".</p></div>
+      </div>
+    </article>
+
+    <!-- F6 NO ARRANCA -->
+    <article class="chapter" id="flujo-noenciende">
+      <header class="chapter__header">
+        <span class="chapter__tag">F6</span>
+        <h3 class="chapter__title">PC no arranca · no da señal</h3>
+        <span class="chapter__meta">variable · tarifa 25 € + según reparación</span>
+      </header>
+      <div class="chapter__body">
+
+        <h4>Contexto</h4>
+        <p>El cliente pulsa el botón y no pasa nada, o pasa algo pero no llega a Windows. Hay muchas causas posibles, hay que ir descartando en orden.</p>
+
+        <h4>Secuencia</h4>
+        <div class="flow">
+          <div class="flow__step"><span class="flow__num">1</span>Observación visual:
+            <ul style="margin-left: 28px;">
+              <li>¿Botón power enciende LED? ¿Ventiladores giran?</li>
+              <li>¿Llega a pantalla BIOS / logo fabricante?</li>
+              <li>¿Llega a logo Windows y se queda ahí?</li>
+              <li>¿Pantalla azul al arrancar (BSOD loop)?</li>
+            </ul>
+          </div>
+          <div class="flow__step"><span class="flow__num">2</span>Según el síntoma:
+            <ul style="margin-left: 28px;">
+              <li><strong>No enciende nada</strong>: fuente o placa muerta. Probar fuente sola con tester. Si fuente OK → placa.</li>
+              <li><strong>Enciende pero no da señal</strong>: RAM, GPU, o conexión monitor. Probar con 1 solo módulo RAM.</li>
+              <li><strong>Da BIOS pero no arranca Windows</strong>: disco o Windows corrupto.</li>
+              <li><strong>Llega a Windows y pantalla azul repetida</strong>: BSOD loop, arrancar desde USB Arsenal y analizar.</li>
+            </ul>
+          </div>
+          <div class="flow__step"><span class="flow__num">3</span>Si Windows no arranca pero BIOS sí:
+            <ul style="margin-left: 28px;">
+              <li>Arrancar con USB Arsenal rojo (Hirens o Ubuntu Live).</li>
+              <li>Si el disco se detecta desde el live → problema de Windows → reparación (<code>5_REPARACION</code> desde Windows PE) o formateo.</li>
+              <li>Si el disco no se detecta → fallo hardware disco → N1 recuperación o derivar N2 si tiene datos críticos.</li>
+            </ul>
+          </div>
+          <div class="flow__step"><span class="flow__num">4</span>Si no llega ni a BIOS:
+            <ul style="margin-left: 28px;">
+              <li>LEDs de placa (modo debug) + beeps POST si hay → identifica componente.</li>
+              <li>Pila CMOS vieja → cambiar por una nueva CR2032 (2 €, ganancia inmediata si era eso).</li>
+              <li>Reset BIOS: jumper en placa o retirar pila 5 min.</li>
+              <li>Probar con un módulo RAM a la vez en slot primario.</li>
+              <li>Desconectar periféricos no esenciales.</li>
+            </ul>
+          </div>
+          <div class="flow__step"><span class="flow__num">5</span>Si nada funciona → placa probablemente muerta:
+            <ul style="margin-left: 28px;">
+              <li>Presupuesto cambio placa: 120-180 € mano de obra + placa compatible (variable, 80-200 €).</li>
+              <li>En portátiles &gt; 5 años, valorar si compensa vs PC nuevo. A menudo no.</li>
+              <li>Si hay daño electrónico nivel 1 reparable (DC jack, condensadores, puertos USB) → considerar antes de descartar la placa entera.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="note note--ok"><span class="note__icon">PRO</span><p>La pila CMOS muerta es la causa más infravalorada de PCs que "no arrancan". Vale 2 € la pila nueva, se cambia en 30 seg, y resuelve el 5-10% de casos de "no arranca". Revisarla temprano.</p></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ========== BLOQUE TROUBLESHOOTING ========== -->
+<section class="block" id="troubleshoot-block">
+  <div class="container">
+    <div class="block__header">
+      <div class="block__num">BLOQUE 5 / 5 · PROBLEMAS</div>
+      <h2 class="block__title">Cuando el maletín mismo falla.</h2>
+      <p class="block__subtitle">Solución de problemas del propio arsenal. Qué hacer si un script se cuelga, el USB no arranca, Defender bloquea todo.</p>
+    </div>
+
+    <article class="chapter" id="troubleshoot">
+      <header class="chapter__header">
+        <span class="chapter__tag">X</span>
+        <h3 class="chapter__title">Solución de problemas frecuentes</h3>
+        <span class="chapter__meta">mantener la calma · plan B siempre</span>
+      </header>
+      <div class="chapter__body">
+
+        <h4>MEDICOPC.exe no abre</h4>
+        <ul>
+          <li>Comprobar que has hecho doble clic sobre el <code>.exe</code>, no sobre el <code>.pyw</code>.</li>
+          <li>Si Windows dice "no se puede ejecutar", clic derecho → Propiedades → "Desbloquear" → Aceptar.</li>
+          <li>Si UAC bloquea, clic derecho → "Ejecutar como administrador".</li>
+          <li>Si el USB MASTER verde falla completo → enchufar el BACKUP dorado.</li>
+        </ul>
+
+        <h4>Un script se queda colgado</h4>
+        <ul>
+          <li>Esperar 5 min más. Algunos scripts (sobre todo <code>2_BACKUP</code> con discos llenos) parecen colgados pero siguen copiando.</li>
+          <li>Si realmente está parado, cerrar la ventana PowerShell con X (no Alt+F4).</li>
+          <li>Abrir Administrador de Tareas (Ctrl+Shift+Esc), buscar procesos PowerShell huérfanos, cerrar.</li>
+          <li>Revisar el log parcial en <code>MedicoPC_Logs</code> para ver hasta dónde llegó.</li>
+          <li>Relanzar el script o pasar a manual (doble clic a la Tool correspondiente).</li>
+        </ul>
+
+        <h4>Defender bloquea scripts o Tools</h4>
+        <ul>
+          <li>En PC del técnico: exclusión ya configurada en la carpeta Tools de OneDrive.</li>
+          <li>En PC del cliente: añadir exclusión temporal de la letra del USB (<code>D:\USB_Arsenal_Master\Tools</code> o similar) + carpeta <code>MedicoPC_Logs</code>.</li>
+          <li>Al terminar la visita, quitar exclusiones del PC del cliente para no dejar agujeros de seguridad.</li>
+        </ul>
+
+        <h4>USB no arranca como boot</h4>
+        <ul>
+          <li>Reiniciar y pulsar tecla Boot del fabricante (F8/F9/F11/F12 según marca). Si no aparece en el menú:</li>
+          <li>Entrar a BIOS (Supr o F2).</li>
+          <li>Desactivar Fast Boot.</li>
+          <li>Desactivar Secure Boot (solo si la ISO no está firmada, ej. algunas versiones antiguas).</li>
+          <li>Activar USB Boot prioritario.</li>
+          <li>Guardar y salir (F10).</li>
+          <li>Si persiste, probar en otro puerto USB 2.0 (no 3.0) — algunos PCs antiguos no bootean desde 3.0.</li>
+        </ul>
+
+        <h4>Informe HTML no se abre al acabar script</h4>
+        <ul>
+          <li>Abrir manualmente desde <code>MedicoPC_Logs\[CARPETA_DEL_TEST]\informe.html</code>.</li>
+          <li>Si no existe, el script no llegó a terminar, relanzar.</li>
+        </ul>
+
+        <h4>Disco externo del técnico no aparece</h4>
+        <ul>
+          <li>Conectar en otro puerto USB. Algunos puertos traseros están desactivados.</li>
+          <li>Alimentación externa si el disco la requiere (algunos 3.5" necesitan).</li>
+          <li>En Administrador de Discos, comprobar si aparece pero sin letra asignada — asignar letra manualmente.</li>
+          <li>Probar en otro PC para descartar que se haya averiado el disco.</li>
+        </ul>
+
+        <h4>Cliente asustado porque "el PC está haciendo cosas raras"</h4>
+        <ul>
+          <li>Tranquilizar: "Es el script trabajando. Hace análisis en segundo plano. Va bien."</li>
+          <li>Si el cliente insiste en parar, respetar y explicar consecuencias: "Si paramos ahora, el diagnóstico queda incompleto y puede que no identifique el problema".</li>
+          <li>Nunca continuar un script contra la voluntad del cliente aunque se vaya a dejar el PC peor.</li>
+        </ul>
+
+        <div class="note note--ok"><span class="note__icon">META</span><p>La única regla dura del maletín: <strong>mejor documentar un caso raro y pasar a manual, que reventar algo por intentar forzar el script</strong>. El maletín es tu asistente, no tu sustituto.</p></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="container">
+    <p class="footer__hook">Si el USB no sirve, <em>el técnico sí</em>.</p>
+    <p class="footer__meta">MEDICOPC · MANUAL USBs V1.0 · 24.04.2026 · MADRID</p>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', e => {
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
