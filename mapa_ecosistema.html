@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0b12">
+<title>Mapa del Ecosistema · MedicoPC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0b12;
+  --bg-soft: #141422;
+  --bg-card: #1a1a2a;
+  --bg-hover: #22223a;
+  --border: #2a2a40;
+  --border-soft: #1f1f30;
+  --ink: #f3f3fa;
+  --ink-dim: #a0a0b8;
+  --ink-soft: #707088;
+  --pink: #e8185a;
+  --pink-dim: rgba(232, 24, 90, 0.12);
+  --blue: #5082ff;
+  --blue-dim: rgba(80, 130, 255, 0.10);
+  --green: #00c882;
+  --green-dim: rgba(0, 200, 130, 0.10);
+  --amber: #f0b43c;
+  --amber-dim: rgba(240, 180, 60, 0.10);
+  --red: #ff4560;
+  --red-dim: rgba(255, 69, 96, 0.10);
+  --purple: #b870ff;
+  --purple-dim: rgba(184, 112, 255, 0.10);
+  --font-display: 'Lora', Georgia, serif;
+  --font-body: 'Poppins', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: 1.6;
+  font-size: 14.5px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== HEADER ===== */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(11, 11, 18, 0.94);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+}
+.topbar__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.brand__logo {
+  width: 36px; height: 36px;
+  background: var(--pink);
+  border-radius: 8px;
+  display: grid; place-items: center;
+  color: #fff; font-weight: 700; font-size: 20px;
+  box-shadow: 0 4px 12px rgba(232, 24, 90, 0.35);
+}
+.brand__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 18px;
+}
+.brand__sub {
+  color: var(--ink-dim);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 2px;
+}
+.nav {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.nav a {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-dim);
+  text-decoration: none;
+  padding: 6px 11px;
+  border-radius: 6px;
+  border: 1px solid var(--border-soft);
+  transition: all 0.15s;
+}
+.nav a:hover {
+  background: var(--bg-hover);
+  color: var(--ink);
+  border-color: var(--border);
+}
+
+/* ===== INTRO ===== */
+.intro {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 24px 8px;
+}
+.intro h1 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+.intro h1 span { color: var(--pink); }
+.intro p {
+  color: var(--ink-dim);
+  font-size: 15px;
+  max-width: 760px;
+}
+.intro .meta {
+  margin-top: 14px;
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-family: var(--font-mono);
+}
+
+/* ===== SECTION ===== */
+.sec {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 8px;
+}
+.sec__head {
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.sec__num {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--pink);
+  font-size: 13px;
+}
+.sec__title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.sec__sub {
+  color: var(--ink-dim);
+  font-size: 13px;
+  margin-left: auto;
+}
+
+/* ===== CARDS ===== */
+.grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+}
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--pink);
+  border-radius: 10px;
+  padding: 16px 18px;
+  transition: all 0.15s;
+}
+.card:hover {
+  border-color: var(--border);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+.card--blue { border-left-color: var(--blue); }
+.card--green { border-left-color: var(--green); }
+.card--amber { border-left-color: var(--amber); }
+.card--red { border-left-color: var(--red); }
+.card--purple { border-left-color: var(--purple); }
+
+.card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.card__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--ink);
+}
+.card__tag {
+  font-size: 9.5px;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+  font-weight: 600;
+}
+.tag--live { background: var(--green-dim); color: var(--green); }
+.tag--dev { background: var(--blue-dim); color: var(--blue); }
+.tag--idle { background: var(--amber-dim); color: var(--amber); }
+.tag--dead { background: var(--red-dim); color: var(--red); }
+.tag--personal { background: var(--purple-dim); color: var(--purple); }
+.tag--physical { background: var(--pink-dim); color: var(--pink); }
+
+.card__desc {
+  color: var(--ink-dim);
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.kv {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-soft);
+}
+.kv__row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 12px;
+}
+.kv__key {
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  min-width: 66px;
+  padding-top: 2px;
+  flex-shrink: 0;
+}
+.kv__val {
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  word-break: break-all;
+  line-height: 1.5;
+}
+.kv__val a {
+  color: var(--blue);
+  text-decoration: none;
+}
+.kv__val a:hover { text-decoration: underline; }
+.kv__val.note {
+  font-family: var(--font-body);
+  color: var(--ink-dim);
+  font-size: 12px;
+  word-break: normal;
+}
+
+/* ===== QUICKFIND ===== */
+.quickfind {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-top: 14px;
+}
+.quickfind h3 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  margin-bottom: 14px;
+  color: var(--pink);
+}
+.qf-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.qf-row {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) 2fr;
+  gap: 18px;
+  font-size: 13px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-soft);
+  align-items: baseline;
+}
+.qf-row:last-child { border-bottom: 0; }
+.qf-q {
+  color: var(--ink-dim);
+  font-weight: 500;
+}
+.qf-a {
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.qf-a strong { color: var(--pink); font-weight: 600; }
+
+/* ===== FOOTER ===== */
+.foot {
+  max-width: 1200px;
+  margin: 48px auto 0;
+  padding: 24px 24px 48px;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 12px;
+  border-top: 1px solid var(--border-soft);
+}
+.foot b { color: var(--pink); font-weight: 600; }
+
+@media (max-width: 600px) {
+  .intro h1 { font-size: 24px; }
+  .sec__title { font-size: 20px; }
+  .grid { grid-template-columns: 1fr; }
+  .kv__row { flex-direction: column; gap: 2px; }
+  .kv__key { min-width: auto; }
+  .qf-row { grid-template-columns: 1fr; gap: 4px; padding: 12px 0; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar__inner">
+    <div class="brand">
+      <div class="brand__logo">+</div>
+      <div>
+        <div class="brand__title">Mapa del Ecosistema</div>
+        <div class="brand__sub">MedicoPC · Dónde vive cada cosa</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="#produccion">Producción</a>
+      <a href="#repos">Repos</a>
+      <a href="#usbs">USBs</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#carpetas">Carpetas</a>
+      <a href="#claves">Archivos clave</a>
+      <a href="#quickfind">¿Dónde está…?</a>
+    </nav>
+  </div>
+</header>
+
+<section class="intro">
+  <h1>Aquí vive todo <span>MedicoPC</span></h1>
+  <p>Una sola página para cuando te pierdas. Qué hay en producción, dónde están los repos, qué USB lleva qué, cada servicio externo y las rutas clave del ordenador. Si no está aquí, no existe.</p>
+  <div class="meta">Actualizado: 24/04/2026 noche · Sesión cierre de día</div>
+</section>
+
+<!-- ======= 1. PRODUCCIÓN ======= -->
+<section class="sec" id="produccion">
+  <div class="sec__head">
+    <span class="sec__num">01</span>
+    <h2 class="sec__title">Lo que está en producción ahora mismo</h2>
+    <span class="sec__sub">Cosas vivas que ve un cliente o usas tú</span>
+  </div>
+  <div class="grid">
+    <div class="card card--green">
+      <div class="card__head">
+        <div class="card__title">medicopc.es</div>
+        <span class="card__tag tag--live">LIVE</span>
+      </div>
+      <div class="card__desc">Web comercial del negocio. Primera cara del cliente cuando busca.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">URL</span><span class="kv__val"><a href="https://medicopc.es" target="_blank">medicopc.es</a></span></div>
+        <div class="kv__row"><span class="kv__key">Hosting</span><span class="kv__val">GitHub Pages</span></div>
+        <div class="kv__row"><span class="kv__key">SSL</span><span class="kv__val note">Activo · candado limpio</span></div>
+        <div class="kv__row"><span class="kv__key">Repo</span><span class="kv__val">gpicomanville-svg/medicopc-web</span></div>
+      </div>
+    </div>
+
+    <div class="card card--green">
+      <div class="card__head">
+        <div class="card__title">Hub Centro de Mando</div>
+        <span class="card__tag tag--live">LIVE</span>
+      </div>
+      <div class="card__desc">Tu centro interno con tablero, facturación, docs y herramientas. Solo tú lo usas.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">URL</span><span class="kv__val"><a href="https://gpicomanville-svg.github.io/medicopc-hub/" target="_blank">gpicomanville-svg.github.io/medicopc-hub/</a></span></div>
+        <div class="kv__row"><span class="kv__key">Tabs</span><span class="kv__val note">Tablero · Facturación · Web · Herramientas (5 subs) · Docs (6)</span></div>
+        <div class="kv__row"><span class="kv__key">Repo</span><span class="kv__val">gpicomanville-svg/medicopc-hub</span></div>
+      </div>
+    </div>
+
+    <div class="card card--green">
+      <div class="card__head">
+        <div class="card__title">Email hola@medicopc.es</div>
+        <span class="card__tag tag--live">LIVE</span>
+      </div>
+      <div class="card__desc">Email oficial del negocio. Recibe y responde desde aquí.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Webmail</span><span class="kv__val"><a href="https://mail.zoho.eu" target="_blank">mail.zoho.eu</a></span></div>
+        <div class="kv__row"><span class="kv__key">Provider</span><span class="kv__val note">Zoho Mail (plan free)</span></div>
+        <div class="kv__row"><span class="kv__key">MX</span><span class="kv__val">mx/mx2/mx3.zoho.eu</span></div>
+      </div>
+    </div>
+
+    <div class="card card--green">
+      <div class="card__head">
+        <div class="card__title">MCP MedicoPC</div>
+        <span class="card__tag tag--live">LIVE</span>
+      </div>
+      <div class="card__desc">Tu herramienta de trabajo técnico. Dentro de Claude Desktop. Tarifa v3 + 22 piezas + presupuestos + PDFs.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Dónde</span><span class="kv__val note">Solo Claude Desktop (casa)</span></div>
+        <div class="kv__row"><span class="kv__key">Versión</span><span class="kv__val">v2.4.0 (commit 06d851a)</span></div>
+        <div class="kv__row"><span class="kv__key">Tarifa</span><span class="kv__val note">v3 vigor oficial 01/06/2026</span></div>
+      </div>
+    </div>
+
+    <div class="card card--green">
+      <div class="card__head">
+        <div class="card__title">MCP Personal</div>
+        <span class="card__tag tag--live">LIVE</span>
+      </div>
+      <div class="card__desc">Cerebro externo personal (gastos, tareas, ideas, hábitos). 4 tools.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">URL</span><span class="kv__val">mcp-personal.medicopc.workers.dev/sse</span></div>
+        <div class="kv__row"><span class="kv__key">Hosting</span><span class="kv__val note">Cloudflare Workers (gratis)</span></div>
+        <div class="kv__row"><span class="kv__key">Versión</span><span class="kv__val">v0.1.1 · OAuth móvil pendiente (v0.3)</span></div>
+      </div>
+    </div>
+
+    <div class="card card--green">
+      <div class="card__head">
+        <div class="card__title">Notion (cerebro)</div>
+        <span class="card__tag tag--live">LIVE</span>
+      </div>
+      <div class="card__desc">Master Context, Daily, 6 DBs Vida Personal. Fuente de verdad de todo lo estratégico.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">URL</span><span class="kv__val"><a href="https://notion.so" target="_blank">notion.so</a></span></div>
+        <div class="kv__row"><span class="kv__key">Master</span><span class="kv__val note">🧠 Contexto Claude Master</span></div>
+        <div class="kv__row"><span class="kv__key">Daily</span><span class="kv__val note">🚀 Centro Ops Doctor PC</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= 2. REPOS GIT ======= -->
+<section class="sec" id="repos">
+  <div class="sec__head">
+    <span class="sec__num">02</span>
+    <h2 class="sec__title">Repos git</h2>
+    <span class="sec__sub">Dónde edita Claude Code</span>
+  </div>
+  <div class="grid">
+    <div class="card card--blue">
+      <div class="card__head">
+        <div class="card__title">medicopc-web</div>
+        <span class="card__tag tag--live">ACTIVO</span>
+      </div>
+      <div class="card__desc">Web comercial medicopc.es. Editar aquí cuando cambie la web.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Local</span><span class="kv__val">C:\Users\gpico\OneDrive\MedicoPC\Web\deploy_medicopc_es\</span></div>
+        <div class="kv__row"><span class="kv__key">GitHub</span><span class="kv__val">gpicomanville-svg/medicopc-web</span></div>
+        <div class="kv__row"><span class="kv__key">Sirve</span><span class="kv__val">medicopc.es</span></div>
+        <div class="kv__row"><span class="kv__key">Último</span><span class="kv__val">commit 689ddc3 (fix mixed content)</span></div>
+      </div>
+    </div>
+
+    <div class="card card--blue">
+      <div class="card__head">
+        <div class="card__title">medicopc-hub</div>
+        <span class="card__tag tag--live">ACTIVO</span>
+      </div>
+      <div class="card__desc">Hub centro de mando interno.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Local</span><span class="kv__val">C:\Users\gpico\Downloads\medicopc-hub\</span></div>
+        <div class="kv__row"><span class="kv__key">GitHub</span><span class="kv__val">gpicomanville-svg/medicopc-hub</span></div>
+        <div class="kv__row"><span class="kv__key">Sirve</span><span class="kv__val">gpicomanville-svg.github.io/medicopc-hub/</span></div>
+        <div class="kv__row"><span class="kv__key">Último</span><span class="kv__val">commit d622f06 (fix rutas relativas)</span></div>
+        <div class="kv__row"><span class="kv__key">Nota</span><span class="kv__val note">⚠ Ruta Downloads no ideal. Sin urgencia moverla.</span></div>
+      </div>
+    </div>
+
+    <div class="card card--blue">
+      <div class="card__head">
+        <div class="card__title">remote-diagnostic-mcp</div>
+        <span class="card__tag tag--live">ACTIVO</span>
+      </div>
+      <div class="card__desc">Servidor MCP que consume Claude Desktop. Tarifa v3 + piezas + presupuestos.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Local</span><span class="kv__val">C:\Users\gpico\Documents\doctorpc\remote-diagnostic-mcp\</span></div>
+        <div class="kv__row"><span class="kv__key">Build</span><span class="kv__val">npm run build → dist/index.js</span></div>
+        <div class="kv__row"><span class="kv__key">Versión</span><span class="kv__val">v2.4.0</span></div>
+        <div class="kv__row"><span class="kv__key">Tarifa</span><span class="kv__val">tarifa_v2.json (contenido v3)</span></div>
+      </div>
+    </div>
+
+    <div class="card card--blue">
+      <div class="card__head">
+        <div class="card__title">mcp-personal</div>
+        <span class="card__tag tag--live">ACTIVO</span>
+      </div>
+      <div class="card__desc">MCP personal para vida privada. Se despliega en Cloudflare Workers.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Local</span><span class="kv__val">C:\Users\gpico\OneDrive\Personal\mcp-personal\</span></div>
+        <div class="kv__row"><span class="kv__key">Deploy</span><span class="kv__val">Cloudflare Workers</span></div>
+        <div class="kv__row"><span class="kv__key">Versión</span><span class="kv__val">v0.1.1</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= 3. USBs FÍSICOS ======= -->
+<section class="sec" id="usbs">
+  <div class="sec__head">
+    <span class="sec__num">03</span>
+    <h2 class="sec__title">USBs físicos + disco cliente</h2>
+    <span class="sec__sub">4 USBs + 1 disco externo</span>
+  </div>
+  <div class="grid">
+    <div class="card" style="border-left-color: #00c882;">
+      <div class="card__head">
+        <div class="card__title">🟢 MASTER 32GB</div>
+        <span class="card__tag tag--physical">USB</span>
+      </div>
+      <div class="card__desc">El que te llevas a cada visita cliente. Maletín + launcher + Tools.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Label</span><span class="kv__val">MEDICOPC_MASTER</span></div>
+        <div class="kv__row"><span class="kv__key">Contenido</span><span class="kv__val note">USB_Arsenal_Master v1.2.2 + 9 scripts + MEDICOPC.exe + Tools (ProduKey, CrystalDiskInfo, BlueScreenView)</span></div>
+        <div class="kv__row"><span class="kv__key">Uso</span><span class="kv__val note">📍 En la mochila siempre</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="border-left-color: #f0b43c;">
+      <div class="card__head">
+        <div class="card__title">🟡 MASTER BACKUP 16GB</div>
+        <span class="card__tag tag--physical">USB</span>
+      </div>
+      <div class="card__desc">Copia idéntica del Master. Si el verde se pierde o rompe, este toma el relevo.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Label</span><span class="kv__val">MEDICOPC_MASTER_BACKUP</span></div>
+        <div class="kv__row"><span class="kv__key">Contenido</span><span class="kv__val note">Copia idéntica del verde</span></div>
+        <div class="kv__row"><span class="kv__key">Uso</span><span class="kv__val note">🏠 En casa, cajón seguro</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="border-left-color: #ff4560;">
+      <div class="card__head">
+        <div class="card__title">🔴 ARSENAL 32GB</div>
+        <span class="card__tag tag--physical">USB</span>
+      </div>
+      <div class="card__desc">Ventoy con ISOs booteables. Cuando el PC del cliente no arranca.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Label</span><span class="kv__val">MEDICOPC_ARSENAL</span></div>
+        <div class="kv__row"><span class="kv__key">Contenido</span><span class="kv__val note">Ventoy + W11 24H2 + W10 22H2 (bajando hoy) + Hirens PE + Ubuntu + Memtest</span></div>
+        <div class="kv__row"><span class="kv__key">Uso</span><span class="kv__val note">📍 En la mochila cuando hay sospecha "no arranca"</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="border-left-color: #5082ff;">
+      <div class="card__head">
+        <div class="card__title">🔵 ARSENAL BACKUP 32GB</div>
+        <span class="card__tag tag--physical">USB</span>
+      </div>
+      <div class="card__desc">Duplicado del rojo Arsenal por si se rompe o formatea mal.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Label</span><span class="kv__val">MEDICOPC_ARSENAL_BACKUP</span></div>
+        <div class="kv__row"><span class="kv__key">Contenido</span><span class="kv__val note">Ventoy duplicado idéntico al rojo</span></div>
+        <div class="kv__row"><span class="kv__key">Uso</span><span class="kv__val note">🏠 En casa, cajón seguro</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="border-left-color: #b870ff;">
+      <div class="card__head">
+        <div class="card__title">💾 Seagate 4TB</div>
+        <span class="card__tag tag--physical">DISCO</span>
+      </div>
+      <div class="card__desc">Disco externo compartido. Backups de clientes antes de tocar sus PCs.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Label</span><span class="kv__val">MEDICOPC_BACKUPS_CLIENTES</span></div>
+        <div class="kv__row"><span class="kv__key">Carpeta</span><span class="kv__val">MedicoPC_Backups_Clientes\</span></div>
+        <div class="kv__row"><span class="kv__key">Uso</span><span class="kv__val note">🏠 En casa, solo backups cliente</span></div>
+        <div class="kv__row"><span class="kv__key">Ojo</span><span class="kv__val note">⚠ Compartido con mujer (carpetas PATT/ y SOFTWARE/ intocables)</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= 4. SERVICIOS EXTERNOS ======= -->
+<section class="sec" id="servicios">
+  <div class="sec__head">
+    <span class="sec__num">04</span>
+    <h2 class="sec__title">Servicios externos</h2>
+    <span class="sec__sub">Cuentas de terceros que usas</span>
+  </div>
+  <div class="grid">
+    <div class="card card--green">
+      <div class="card__head">
+        <div class="card__title">DonDominio</div>
+        <span class="card__tag tag--live">ACTIVO</span>
+      </div>
+      <div class="card__desc">Registrador del dominio medicopc.es. Titular: tú (GP-847206).</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">URL</span><span class="kv__val"><a href="https://dondominio.com" target="_blank">dondominio.com</a></span></div>
+        <div class="kv__row"><span class="kv__key">Dominio</span><span class="kv__val">medicopc.es · expira 19/04/2027</span></div>
+        <div class="kv__row"><span class="kv__key">Pago</span><span class="kv__val note">Manual, no auto-renovación</span></div>
+      </div>
+    </div>
+
+    <div class="card card--green">
+      <div class="card__head">
+        <div class="card__title">GitHub</div>
+        <span class="card__tag tag--live">ACTIVO</span>
+      </div>
+      <div class="card__desc">Donde viven todos los repos git. Plan free suficiente.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Usuario</span><span class="kv__val">@gpicomanville-svg</span></div>
+        <div class="kv__row"><span class="kv__key">URL</span><span class="kv__val"><a href="https://github.com/gpicomanville-svg" target="_blank">github.com/gpicomanville-svg</a></span></div>
+        <div class="kv__row"><span class="kv__key">Pages</span><span class="kv__val note">Sirve medicopc.es y hub</span></div>
+      </div>
+    </div>
+
+    <div class="card card--green">
+      <div class="card__head">
+        <div class="card__title">Zoho Mail</div>
+        <span class="card__tag tag--live">ACTIVO</span>
+      </div>
+      <div class="card__desc">Email hola@medicopc.es. Plan free.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Webmail</span><span class="kv__val"><a href="https://mail.zoho.eu" target="_blank">mail.zoho.eu</a></span></div>
+        <div class="kv__row"><span class="kv__key">Buzón</span><span class="kv__val">hola@medicopc.es</span></div>
+        <div class="kv__row"><span class="kv__key">Activo desde</span><span class="kv__val">19/04/2026</span></div>
+      </div>
+    </div>
+
+    <div class="card card--green">
+      <div class="card__head">
+        <div class="card__title">Cloudflare Workers</div>
+        <span class="card__tag tag--live">ACTIVO</span>
+      </div>
+      <div class="card__desc">Donde corre el MCP Personal. Plan free.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Worker</span><span class="kv__val">mcp-personal.medicopc.workers.dev</span></div>
+        <div class="kv__row"><span class="kv__key">Uso</span><span class="kv__val note">MCP Personal endpoint SSE</span></div>
+      </div>
+    </div>
+
+    <div class="card card--green">
+      <div class="card__head">
+        <div class="card__title">Notion</div>
+        <span class="card__tag tag--live">ACTIVO</span>
+      </div>
+      <div class="card__desc">Cerebro del negocio y vida personal. Master Context + Daily + 6 DBs.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">URL</span><span class="kv__val"><a href="https://notion.so" target="_blank">notion.so</a></span></div>
+        <div class="kv__row"><span class="kv__key">Plan</span><span class="kv__val note">Free personal</span></div>
+      </div>
+    </div>
+
+    <div class="card card--green">
+      <div class="card__head">
+        <div class="card__title">Anthropic · Claude</div>
+        <span class="card__tag tag--live">ACTIVO</span>
+      </div>
+      <div class="card__desc">IA principal. Plan Max 20x.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Plan</span><span class="kv__val">Max 20x · 180€/mes</span></div>
+        <div class="kv__row"><span class="kv__key">Consumo</span><span class="kv__val note">~5% semana a tope Opus · sobra margen</span></div>
+        <div class="kv__row"><span class="kv__key">Default</span><span class="kv__val">Opus 4.7</span></div>
+      </div>
+    </div>
+
+    <div class="card card--green">
+      <div class="card__head">
+        <div class="card__title">OneDrive</div>
+        <span class="card__tag tag--live">ACTIVO</span>
+      </div>
+      <div class="card__desc">Sync personal. Carpetas MedicoPC y Personal.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Cuenta</span><span class="kv__val note">Personal Microsoft</span></div>
+        <div class="kv__row"><span class="kv__key">Uso</span><span class="kv__val note">Almacén + sync entre sobremesa y portátil</span></div>
+      </div>
+    </div>
+
+    <div class="card card--red">
+      <div class="card__head">
+        <div class="card__title">Netlify</div>
+        <span class="card__tag tag--dead">PAUSADO</span>
+      </div>
+      <div class="card__desc">14 proyectos viejos pausados por exceso plan free. Basura acumulada, nada en producción real.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">URL</span><span class="kv__val"><a href="https://app.netlify.com" target="_blank">app.netlify.com</a></span></div>
+        <div class="kv__row"><span class="kv__key">Estado</span><span class="kv__val note">Pendiente borrar 14 proyectos (sin prisa)</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= 5. CARPETAS LOCALES ======= -->
+<section class="sec" id="carpetas">
+  <div class="sec__head">
+    <span class="sec__num">05</span>
+    <h2 class="sec__title">Carpetas locales importantes</h2>
+    <span class="sec__sub">Dónde vive qué en tu sobremesa</span>
+  </div>
+  <div class="grid">
+    <div class="card card--amber">
+      <div class="card__head">
+        <div class="card__title">OneDrive\MedicoPC\</div>
+        <span class="card__tag tag--physical">TRABAJO</span>
+      </div>
+      <div class="card__desc">Raíz del negocio en local. Sync automático con la nube.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">USB_Arsenal_Master\</span><span class="kv__val note">Maletín v1.2.2 con 9 scripts + launcher. Se copia a los USBs.</span></div>
+        <div class="kv__row"><span class="kv__key">Web\deploy_medicopc_es\</span><span class="kv__val note">Repo git de medicopc.es. AQUÍ edita Claude Code la web.</span></div>
+        <div class="kv__row"><span class="kv__key">Plantillas\</span><span class="kv__val note">MedicoPC_Cliente_Template (LEEME + logo para entregar al cliente)</span></div>
+        <div class="kv__row"><span class="kv__key">Skills\</span><span class="kv__val note">Skills Opus futuros (reparaciones, protocolos)</span></div>
+      </div>
+    </div>
+
+    <div class="card card--amber">
+      <div class="card__head">
+        <div class="card__title">Documents\doctorpc\</div>
+        <span class="card__tag tag--physical">CÓDIGO</span>
+      </div>
+      <div class="card__desc">Código serio del MCP MedicoPC. Fuera de OneDrive para evitar conflictos de sync.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">remote-diagnostic-mcp\</span><span class="kv__val note">Repo MCP v2.4.0 con tarifa v3</span></div>
+        <div class="kv__row"><span class="kv__key">BACKUP_mcp_*.zip</span><span class="kv__val note">Backup pre-refactor (13.9 MB)</span></div>
+      </div>
+    </div>
+
+    <div class="card card--amber">
+      <div class="card__head">
+        <div class="card__title">Downloads\</div>
+        <span class="card__tag tag--idle">TEMPORAL</span>
+      </div>
+      <div class="card__desc">Sitio de paso. HTMLs generados por Claude aterrizan aquí, luego se mueven.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">medicopc-hub\</span><span class="kv__val note">⚠ Repo git del hub. Pendiente mover a Documents\doctorpc\ (sin urgencia)</span></div>
+        <div class="kv__row"><span class="kv__key">Prefijos</span><span class="kv__val note">MedicoPC_ · G_ · IP_ · HUB_</span></div>
+      </div>
+    </div>
+
+    <div class="card card--amber">
+      <div class="card__head">
+        <div class="card__title">OneDrive\Personal\</div>
+        <span class="card__tag tag--personal">PERSONAL</span>
+      </div>
+      <div class="card__desc">Cosas personales, no del negocio.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">mcp-personal\</span><span class="kv__val note">Repo MCP Personal v0.1.1</span></div>
+      </div>
+    </div>
+
+    <div class="card card--amber">
+      <div class="card__head">
+        <div class="card__title">C:\MedicoPC_Logs\</div>
+        <span class="card__tag tag--idle">RUNTIME</span>
+      </div>
+      <div class="card__desc">Logs que generan los scripts del maletín al ejecutarse.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Uso</span><span class="kv__val note">Se llena solo cuando corres scripts en sobremesa de pruebas</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= 6. ARCHIVOS CLAVE ======= -->
+<section class="sec" id="claves">
+  <div class="sec__head">
+    <span class="sec__num">06</span>
+    <h2 class="sec__title">Archivos clave</h2>
+    <span class="sec__sub">Los 10 documentos que importan</span>
+  </div>
+  <div class="grid">
+    <div class="card card--purple">
+      <div class="card__head">
+        <div class="card__title">🧠 Master Context</div>
+        <span class="card__tag tag--live">NOTION</span>
+      </div>
+      <div class="card__desc">Cerebro del negocio. Se lee al decir "Hola Claude". Se actualiza al decir "Guarda sesión".</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Dónde</span><span class="kv__val note">Notion · 🧠 Contexto Claude — Master</span></div>
+      </div>
+    </div>
+
+    <div class="card card--purple">
+      <div class="card__head">
+        <div class="card__title">🚀 Daily MedicoPC</div>
+        <span class="card__tag tag--live">NOTION</span>
+      </div>
+      <div class="card__desc">Centro de operaciones. Enlace a Dailies por proyecto.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Dónde</span><span class="kv__val note">Notion · 🚀 Daily — Centro de Operaciones</span></div>
+      </div>
+    </div>
+
+    <div class="card card--pink">
+      <div class="card__head">
+        <div class="card__title">📄 tarifa_v2.json</div>
+        <span class="card__tag tag--live">MCP</span>
+      </div>
+      <div class="card__desc">Tarifa v3 aplicada (nombre archivo legacy). Fuente única de precios.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Ruta</span><span class="kv__val">Documents\doctorpc\remote-diagnostic-mcp\tarifa_v2.json</span></div>
+        <div class="kv__row"><span class="kv__key">Vigor</span><span class="kv__val">01/06/2026</span></div>
+      </div>
+    </div>
+
+    <div class="card card--pink">
+      <div class="card__head">
+        <div class="card__title">🧰 MEDICOPC.exe</div>
+        <span class="card__tag tag--live">MALETÍN</span>
+      </div>
+      <div class="card__desc">Launcher del maletín. Python + Tkinter compilado con PyInstaller.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Fuente</span><span class="kv__val">MEDICOPC.pyw · build_exe.bat</span></div>
+        <div class="kv__row"><span class="kv__key">Versión</span><span class="kv__val">v1.2.2</span></div>
+      </div>
+    </div>
+
+    <div class="card card--blue">
+      <div class="card__head">
+        <div class="card__title">📘 6 Docs operativos</div>
+        <span class="card__tag tag--live">HUB</span>
+      </div>
+      <div class="card__desc">Consulta rápida en móvil en casa del cliente. Tab Docs del hub.</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">manual_maletin</span><span class="kv__val note">9 scripts + uso del launcher</span></div>
+        <div class="kv__row"><span class="kv__key">procedimientos_cliente</span><span class="kv__val note">26 procedimientos P1-P26 (oscuro + blanco imprimible)</span></div>
+        <div class="kv__row"><span class="kv__key">manual_usbs</span><span class="kv__val note">9 scripts + 3 tools + Arsenal + 6 flujos</span></div>
+        <div class="kv__row"><span class="kv__key">plantillas_whatsapp</span><span class="kv__val note">16 plantillas con botón copiar</span></div>
+        <div class="kv__row"><span class="kv__key">chuleta_campo</span><span class="kv__val note">2 hojas A4 bolsillo</span></div>
+      </div>
+    </div>
+
+    <div class="card card--blue">
+      <div class="card__head">
+        <div class="card__title">🗺️ Este mapa</div>
+        <span class="card__tag tag--live">HUB</span>
+      </div>
+      <div class="card__desc">El que estás leyendo. Se actualiza con el comando "actualiza el mapa".</div>
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Archivo</span><span class="kv__val">mapa_ecosistema.html</span></div>
+        <div class="kv__row"><span class="kv__key">Ubicación</span><span class="kv__val note">Tab "Mapa" del hub (cuando se integre)</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= 7. QUICKFIND ======= -->
+<section class="sec" id="quickfind">
+  <div class="sec__head">
+    <span class="sec__num">07</span>
+    <h2 class="sec__title">¿Dónde está…?</h2>
+    <span class="sec__sub">Respuesta rápida a las dudas típicas</span>
+  </div>
+  <div class="quickfind">
+    <h3>Si te pierdes, busca aquí</h3>
+    <div class="qf-grid">
+      <div class="qf-row"><span class="qf-q">¿Dónde edito la web medicopc.es?</span><span class="qf-a">Repo <strong>medicopc-web</strong> en OneDrive\MedicoPC\Web\deploy_medicopc_es\</span></div>
+      <div class="qf-row"><span class="qf-q">¿Dónde edito el hub?</span><span class="qf-a">Repo <strong>medicopc-hub</strong> en Downloads\medicopc-hub\</span></div>
+      <div class="qf-row"><span class="qf-q">¿Dónde está el MCP MedicoPC?</span><span class="qf-a">Documents\doctorpc\<strong>remote-diagnostic-mcp</strong>\</span></div>
+      <div class="qf-row"><span class="qf-q">¿Cómo actualizo el MCP?</span><span class="qf-a">Tocar src\*.ts → <strong>npm run build</strong> → reiniciar Claude Desktop</span></div>
+      <div class="qf-row"><span class="qf-q">¿Dónde veo mis emails de negocio?</span><span class="qf-a"><strong>mail.zoho.eu</strong> (hola@medicopc.es)</span></div>
+      <div class="qf-row"><span class="qf-q">¿Cómo cambio el DNS del dominio?</span><span class="qf-a"><strong>dondominio.com</strong> → Dominios → medicopc.es → Parking & Zona DNS</span></div>
+      <div class="qf-row"><span class="qf-q">¿Dónde está el manual del maletín?</span><span class="qf-a">Hub → tab <strong>Docs</strong> → Manual del maletín</span></div>
+      <div class="qf-row"><span class="qf-q">¿Qué USB llevo a la visita?</span><span class="qf-a">🟢 <strong>MASTER</strong> siempre · 🔴 <strong>ARSENAL</strong> si sospechas "no arranca"</span></div>
+      <div class="qf-row"><span class="qf-q">¿Dónde guardo el backup del cliente?</span><span class="qf-a">💾 <strong>Seagate 4TB</strong> → MedicoPC_Backups_Clientes\[cliente]\</span></div>
+      <div class="qf-row"><span class="qf-q">¿Cuál es la URL del hub?</span><span class="qf-a"><strong>gpicomanville-svg.github.io/medicopc-hub/</strong></span></div>
+      <div class="qf-row"><span class="qf-q">¿Cuál es la URL del MCP Personal?</span><span class="qf-a">mcp-personal.<strong>medicopc.workers.dev</strong>/sse</span></div>
+      <div class="qf-row"><span class="qf-q">¿Dónde apunto una idea del negocio?</span><span class="qf-a">Claude Desktop → <strong>"apunta_idea"</strong> (MCP Personal)</span></div>
+      <div class="qf-row"><span class="qf-q">¿Dónde reviso cómo va el día?</span><span class="qf-a">Claude Desktop → <strong>"que_tengo_hoy"</strong> o Daily en Notion</span></div>
+      <div class="qf-row"><span class="qf-q">¿Dónde cierro la sesión Claude?</span><span class="qf-a">Decir <strong>"Guarda sesión"</strong> → actualiza Master + memorias</span></div>
+      <div class="qf-row"><span class="qf-q">¿Dónde compro piezas?</span><span class="qf-a">Bajo demanda: Amazon · PCComponentes · Coolmod · Aliexpress</span></div>
+      <div class="qf-row"><span class="qf-q">¿Qué hay en stock fijo?</span><span class="qf-a">Pasta térmica · pads · pila CR2032 ×5 · cable SATA ×2 (~40€)</span></div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <p><b>MedicoPC</b> · Mapa del Ecosistema v1.0</p>
+  <p style="margin-top:6px;">Si no lo arreglamos, no cobramos.</p>
+  <p style="margin-top:12px; color: var(--ink-soft); font-size: 11px;">Actualiza este mapa diciendo a Claude: <em>"actualiza el mapa"</em></p>
+</footer>
+
+</body>
+</html>

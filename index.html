@@ -58,6 +58,7 @@ html,body{height:100%;overflow:hidden;background:#0b0b12;font-family:'Segoe UI',
     <button class="tab" data-tab="web"><span class="tab-icon">🌐</span>Web</button>
     <button class="tab" data-tab="herramientas"><span class="tab-icon">🛠️</span>Herramientas</button>
     <button class="tab" data-tab="docs"><span class="tab-icon">📋</span>Docs</button>
+    <button class="tab" data-external onclick="window.open('mapa_ecosistema.html','_blank','noopener')"><span class="tab-icon">🗺️</span>Mapa</button>
     <div class="spacer"></div>
     <span class="meta" id="clock"></span>
   </div>
@@ -142,7 +143,7 @@ const TOOL_URLS={
   inventario:'MedicoPC_InventarioPyme.html'
 };
 
-const tabs=document.querySelectorAll('.tab');
+const tabs=document.querySelectorAll('.tab:not([data-external])');
 let active=localStorage.getItem('mpc_hub_tab')||'tablero';
 let activeTool=localStorage.getItem('mpc_hub_tool')||'diagnostico';
 activate(active);
