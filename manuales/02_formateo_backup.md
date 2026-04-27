@@ -1,4 +1,4 @@
-# Formateo + Backup y restauración — 90€
+# Formateo + Backup y restauración — 80€
 
 **ID tarifa:** `pack_formateo_backup`
 **Bloque:** B Mantenimiento · Software
@@ -101,7 +101,7 @@
    - Carpeta `Documentos` con sus archivos.
 2. Mostrar lista de **apps que NO se restauran automático** (Office, Photoshop, juegos Steam, etc.) — el cliente las reinstala con su cuenta. Ofrecer instalar las top 3-5 vía winget si quiere (incluido en pack).
 3. **`Scripts\14_ENTREGA\entrega.bat`** → 3 entregables.
-4. **Cobrar 90€** + recargo zona si aplica.
+4. **Cobrar 80€** + recargo zona si aplica.
 5. Trigger **"hemos terminado"** en Claude.
 
 ---

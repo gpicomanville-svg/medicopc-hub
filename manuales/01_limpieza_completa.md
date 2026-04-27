@@ -1,4 +1,4 @@
-# Limpieza Completa — 90€
+# Limpieza Completa — 80€
 
 **ID tarifa:** `pack_limpieza_completa`
 **Bloque:** B Mantenimiento · Software
@@ -74,7 +74,7 @@
    - Cartel pago Bizum PDF (A4 con QR, número, monto).
    - Factura simplificada PDF (cumple AEAT art. 7).
    - Texto WhatsApp con tono cálido al portapapeles.
-3. **Cobrar 90€** efectivo o Bizum. Si zona M30/M40/lejana → +20/30/45€.
+3. **Cobrar 80€** efectivo o Bizum. Si zona M30/M40/lejana → +20/30/45€.
 4. Trigger en chat Claude: **"hemos terminado"** → dispara `register_session` + `cerrar_entrega` (BBDD + factura registrada).
 5. Pegar el WhatsApp al cliente con el botón de su teléfono.
 
