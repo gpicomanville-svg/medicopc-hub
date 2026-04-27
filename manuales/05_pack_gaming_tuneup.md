@@ -1,4 +1,4 @@
-# Pack Gaming Tune-Up — 160€
+# Pack Gaming Tune-Up — 150€
 
 **ID tarifa:** `pack_gaming_tuneup`
 **Bloque:** F Packs temáticos
@@ -125,7 +125,7 @@
    - "Esta app arranca con Windows sola, controla tus ventiladores. Si quieres más silencio, baja la curva en esta zona [señalar]. Si quieres más rendimiento al jugar, sube la zona alta".
 3. **Si undervolt aplicado**: "Tu GPU ahora consume menos voltaje. Funciona igual o mejor. Si en algún juego tienes crashes (raro porque es perfil conservador), me llamas y revierto sin coste".
 4. **`Scripts\14_ENTREGA\entrega.bat`** → 3 entregables.
-5. **Cobrar 160€** + recargo zona.
+5. **Cobrar 150€** + recargo zona.
 6. Trigger **"hemos terminado"** en Claude.
 
 ---
