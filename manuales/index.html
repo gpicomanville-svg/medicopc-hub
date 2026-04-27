@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manuales operativos · MedicoPC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Poppins:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+  :root {
+    --bg: #0b0b12;
+    --bg-2: #12121c;
+    --bg-3: #1a1a26;
+    --border: #232334;
+    --text: #e8e8f0;
+    --text-dim: #a0a0b0;
+    --text-muted: #6a6a7a;
+    --rosa: #e8185a;
+    --azul: #5082ff;
+    --azul-deep: #1d3fce;
+    --verde: #00c882;
+    --amber: #f0b43c;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Poppins', system-ui, sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Header */
+  .top-bar {
+    height: 56px;
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    gap: 16px;
+  }
+
+  .back-link {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.15s;
+  }
+  .back-link:hover { color: var(--azul); }
+
+  .top-title {
+    font-family: 'Lora', serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--text);
+  }
+  .top-title .accent { color: var(--rosa); }
+
+  .menu-toggle {
+    display: none;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: auto;
+  }
+
+  /* Layout */
+  .layout {
+    display: flex;
+    min-height: calc(100vh - 56px);
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 320px;
+    background: var(--bg-2);
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    overflow-y: auto;
+    position: sticky;
+    top: 56px;
+    height: calc(100vh - 56px);
+    flex-shrink: 0;
+  }
+
+  .sidebar-title {
+    font-family: 'Lora', serif;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    padding: 0 24px 12px;
+  }
+
+  .nav-list {
+    list-style: none;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: background 0.15s, border-color 0.15s;
+    text-decoration: none;
+    color: var(--text-dim);
+  }
+
+  .nav-item:hover {
+    background: var(--bg-3);
+    color: var(--text);
+  }
+
+  .nav-item.active {
+    background: var(--bg-3);
+    border-left-color: var(--rosa);
+    color: var(--text);
+  }
+
+  .nav-item.active .nav-name { color: var(--text); }
+
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .nav-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--bg-3);
+    padding: 2px 6px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .nav-item.active .nav-id { background: var(--bg); color: var(--azul); }
+
+  .nav-name {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.3;
+  }
+
+  .nav-price {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--amber);
+    flex-shrink: 0;
+  }
+
+  /* Content */
+  .content {
+    flex: 1;
+    padding: 40px 56px 80px;
+    max-width: 880px;
+    overflow-x: hidden;
+  }
+
+  .content-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    text-align: center;
+    color: var(--text-muted);
+  }
+  .content-empty h2 {
+    font-family: 'Lora', serif;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+  .content-empty .accent { color: var(--rosa); }
+
+  /* Markdown rendering */
+  .markdown { color: var(--text); }
+
+  .markdown h1 {
+    font-family: 'Lora', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--rosa);
+  }
+
+  .markdown h2 {
+    font-family: 'Lora', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--azul);
+    margin: 32px 0 12px;
+    padding-top: 8px;
+  }
+
+  .markdown h3 {
+    font-family: 'Lora', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--verde);
+    margin: 24px 0 8px;
+  }
+
+  .markdown h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--amber);
+    margin: 20px 0 8px;
+  }
+
+  .markdown p {
+    margin: 12px 0;
+    color: var(--text);
+  }
+
+  .markdown strong { color: var(--text); font-weight: 600; }
+  .markdown em { color: var(--text-dim); font-style: italic; }
+
+  .markdown ul, .markdown ol {
+    margin: 12px 0 12px 24px;
+    color: var(--text);
+  }
+
+  .markdown li {
+    margin: 6px 0;
+    line-height: 1.65;
+  }
+
+  .markdown li::marker { color: var(--azul); }
+
+  .markdown a {
+    color: var(--azul);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--azul-deep);
+  }
+  .markdown a:hover { color: var(--rosa); border-bottom-color: var(--rosa); }
+
+  .markdown code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    background: var(--bg-3);
+    color: var(--amber);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  .markdown pre {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+  .markdown pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: var(--text);
+  }
+
+  .markdown blockquote {
+    border-left: 3px solid var(--amber);
+    background: var(--bg-2);
+    padding: 12px 16px;
+    margin: 16px 0;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .markdown hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+
+  .markdown table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  .markdown th, .markdown td {
+    text-align: left;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+  }
+  .markdown th {
+    background: var(--bg-3);
+    color: var(--azul);
+    font-weight: 600;
+  }
+  .markdown td { color: var(--text); }
+
+  /* Loading state */
+  .loading {
+    color: var(--text-muted);
+    font-style: italic;
+    padding: 40px 0;
+    text-align: center;
+  }
+
+  /* Mobile */
+  @media (max-width: 880px) {
+    .menu-toggle { display: block; }
+
+    .sidebar {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      transform: translateX(-100%);
+      transition: transform 0.25s ease;
+      z-index: 40;
+      box-shadow: 4px 0 24px rgba(0,0,0,0.4);
+    }
+
+    .sidebar.open { transform: translateX(0); }
+
+    .content {
+      padding: 24px 20px 60px;
+      width: 100%;
+    }
+
+    .markdown h1 { font-size: 24px; }
+    .markdown h2 { font-size: 19px; }
+    .markdown h3 { font-size: 16px; }
+
+    .top-title { font-size: 16px; }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+  <h1 class="top-title">Manuales operativos · <span class="accent">MedicoPC</span></h1>
+  <button class="menu-toggle" id="menuToggle" aria-label="Menú">☰</button>
+</header>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-title">Servicios</div>
+    <nav class="nav-list" id="navList">
+      <a href="#01_limpieza_completa" class="nav-item" data-file="01_limpieza_completa">
+        <div class="nav-left">
+          <span class="nav-id">01</span>
+          <span class="nav-name">Limpieza Completa</span>
+        </div>
+        <span class="nav-price">90€</span>
+      </a>
+      <a href="#02_formateo_backup" class="nav-item" data-file="02_formateo_backup">
+        <div class="nav-left">
+          <span class="nav-id">02</span>
+          <span class="nav-name">Formateo + Backup</span>
+        </div>
+        <span class="nav-price">90€</span>
+      </a>
+      <a href="#03_migracion" class="nav-item" data-file="03_migracion">
+        <div class="nav-left">
+          <span class="nav-id">03</span>
+          <span class="nav-name">Migración PC</span>
+        </div>
+        <span class="nav-price">100€</span>
+      </a>
+      <a href="#04_recuperacion_n1" class="nav-item" data-file="04_recuperacion_n1">
+        <div class="nav-left">
+          <span class="nav-id">04</span>
+          <span class="nav-name">Recuperación N1</span>
+        </div>
+        <span class="nav-price">130€</span>
+      </a>
+      <a href="#05_pack_gaming_tuneup" class="nav-item" data-file="05_pack_gaming_tuneup">
+        <div class="nav-left">
+          <span class="nav-id">05</span>
+          <span class="nav-name">Pack Gaming Tune-Up</span>
+        </div>
+        <span class="nav-price">160€</span>
+      </a>
+      <a href="#06_pack_rescate" class="nav-item" data-file="06_pack_rescate">
+        <div class="nav-left">
+          <span class="nav-id">06</span>
+          <span class="nav-name">Pack Rescate</span>
+        </div>
+        <span class="nav-price">200€</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="content" id="content">
+    <div class="content-empty" id="emptyState">
+      <h2>Manuales operativos <span class="accent">MedicoPC</span></h2>
+      <p>Selecciona un servicio en el menú para ver su procedimiento.</p>
+    </div>
+  </main>
+</div>
+
+<script>
+  const navItems = document.querySelectorAll('.nav-item');
+  const content = document.getElementById('content');
+  const sidebar = document.getElementById('sidebar');
+  const menuToggle = document.getElementById('menuToggle');
+
+  // Configurar marked
+  marked.setOptions({
+    breaks: true,
+    gfm: true
+  });
+
+  function setActive(file) {
+    navItems.forEach(it => {
+      it.classList.toggle('active', it.dataset.file === file);
+    });
+  }
+
+  async function loadManual(file) {
+    if (!file) return;
+
+    content.innerHTML = '<div class="loading">Cargando manual…</div>';
+    setActive(file);
+
+    try {
+      const res = await fetch(`${file}.md`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const md = await res.text();
+      const html = marked.parse(md);
+      content.innerHTML = `<article class="markdown">${html}</article>`;
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    } catch (err) {
+      content.innerHTML = `
+        <div class="content-empty">
+          <h2>Error cargando ${file}.md</h2>
+          <p style="color: var(--rosa); margin-top: 8px;">${err.message}</p>
+          <p style="margin-top: 16px;">Verifica que el archivo existe en la misma carpeta.</p>
+        </div>`;
+    }
+  }
+
+  function handleHash() {
+    const hash = window.location.hash.slice(1);
+    if (hash) {
+      loadManual(hash);
+      // Cerrar sidebar en móvil tras seleccionar
+      if (window.innerWidth <= 880) sidebar.classList.remove('open');
+    }
+  }
+
+  window.addEventListener('hashchange', handleHash);
+  window.addEventListener('DOMContentLoaded', handleHash);
+
+  menuToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+  });
+
+  // Cerrar sidebar al click fuera (móvil)
+  document.addEventListener('click', (e) => {
+    if (window.innerWidth <= 880 &&
+        sidebar.classList.contains('open') &&
+        !sidebar.contains(e.target) &&
+        !menuToggle.contains(e.target)) {
+      sidebar.classList.remove('open');
+    }
+  });
+</script>
+
+</body>
+</html>
